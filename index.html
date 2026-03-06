@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor de España: The Hoops Challenge</title>
+    <!-- Phaser 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;800&display=swap');
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #2b2d42;
+            overflow: hidden;
+            font-family: 'Nunito', sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Contenedor del juego */
+        #game-container {
+            width: 100vw;
+            height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fcf9f2;
+            position: relative;
+        }
+
+        /* UI Overlays (Estilo Cartoon) */
+        .ui-overlay {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        #score-board {
+            top: 20px;
+            right: 20px;
+            background: #fff;
+            border: 4px solid #333;
+            border-radius: 20px;
+            padding: 15px 25px;
+            box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.1);
+            font-family: 'Fredoka One', cursive;
+            font-size: 24px;
+            color: #333;
+            text-align: right;
+            transition: transform 0.2s;
+        }
+
+        .score-text {
+            display: block;
+            margin: 5px 0;
+        }
+
+        #score-aciertos {
+            color: #4CAF50;
+        }
+
+        #score-fallos {
+            color: #F44336;
+        }
+
+        /* Contenedor del HUD inferior */
+        #hud-container {
+            width: 100vw;
+            height: 25vh;
+            background-color: #8d99ae;
+            border-top: 10px solid #2b2d42;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            position: relative;
+        }
+
+        /* Dashboard estilo panel de control */
+        #dashboard {
+            display: flex;
+            align-items: center;
+            background: #edf2f4;
+            border: 6px solid #2b2d42;
+            border-radius: 30px;
+            padding: 10px 30px;
+            box-shadow: 8px 8px 0px #2b2d42;
+            gap: 30px;
+            max-width: 90%;
+        }
+
+        /* Imagen del plato animada */
+        .food-preview {
+            width: 120px;
+            height: 120px;
+            background: #fff;
+            border: 6px dashed #ef233c;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            box-shadow: inset 0px 0px 15px rgba(0, 0, 0, 0.2);
+            animation: pulse-border 2s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulse-border {
+            0% {
+                border-color: #ef233c;
+            }
+
+            50% {
+                border-color: #d90429;
+                transform: scale(1.05);
+            }
+
+            100% {
+                border-color: #ef233c;
+            }
+        }
+
+        .dashboard-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .dash-title {
+            font-family: 'Fredoka One', cursive;
+            color: #ef233c;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: -5px;
+        }
+
+        .dash-subtitle {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            color: #8d99ae;
+            font-size: 14px;
+        }
+
+        .highlight-food {
+            font-family: 'Fredoka One', cursive;
+            color: #2b2d42;
+            font-size: 38px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px #fff;
+            margin-bottom: 5px;
+        }
+
+        #game-over-screen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: auto;
+        }
+
+        #game-over-box {
+            background: #fff;
+            border: 6px solid #43aa8b;
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 64px;
+            color: #f94144;
+            margin: 0 0 20px 0;
+        }
+
+        p.final-score {
+            font-size: 36px;
+            font-weight: 800;
+            color: #333;
+        }
+
+        button {
+            margin-top: 30px;
+            background: #f9c74f;
+            border: 4px solid #333;
+            border-radius: 20px;
+            padding: 15px 40px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 28px;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #333;
+            transition: all 0.1s;
+        }
+
+        button:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #333;
+        }
+
+        /* Marcador Friki / Moderno */
+        #game-stats {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .stat-box {
+            background: #ffffff;
+            border: 4px solid #333;
+            border-radius: 20px;
+            padding: 10px 20px;
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
+            font-family: 'Fredoka One', cursive;
+            font-size: 26px;
+            text-align: right;
+            user-select: none;
+        }
+
+        .vidas-box {
+            color: #f94144;
+        }
+
+        .comodines-box {
+            color: #f9c74f;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .comodines-box:active {
+            transform: scale(0.95);
+        }
+
+        .comodines-box:hover {
+            background-color: #fcf9f2;
+        }
+
+        .score-points {
+            background: #2b2d42;
+            color: #fcf9f2;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 4px solid #333;
+            font-family: 'Fredoka One', cursive;
+            font-size: 24px;
+            text-align: center;
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
+        }
+
+        .comodin-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .comodin-hint {
+            background: #2b2d42;
+            color: #fcf9f2;
+            border: 3px dashed #ef233c;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-family: 'Numito', sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 2px 2px 0px #ef233c;
+            user-select: none;
+            cursor: default;
+            animation: bounce-in 0.5s;
+        }
+
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+
+            80% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Botón de Edición */
+        #edit-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: #43aa8b;
+            padding: 10px 20px;
+            font-size: 18px;
+            z-index: 100;
+        }
+
+        /* Tooltip de mapa */
+        #tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Fredoka One', cursive;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.1s;
+            transform: translate(-50%, -100%);
+            margin-top: -10px;
+            z-index: 50;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="game-container"></div>
+    <div id="tooltip">Provincia</div>
+
+    <div id="game-stats">
+        <div class="score-points">Reinos Conquistados: <span id="score-aciertos">0</span>/50</div>
+        <div class="stat-box vidas-box" title="Vidas Restantes">
+            <span id="ui-vidas">🥘🥘🥘🥘🥘🥘🥘🥘</span><br>
+            <span style="font-size:14px; color:#333;">Vidas</span>
+        </div>
+        <div class="stat-box comodines-box" title="Usar Comodín (Pista)"
+            onclick="event.stopPropagation(); usarComodin();">
+            <span id="ui-comodines">🛸🛸🛸🛸🛸</span><br>
+            <span style="font-size:14px; color:#333;">Comodín</span>
+        </div>
+    </div>
+
+    <button id="edit-btn" onclick="toggleEditMode()">Activar Modo Edición</button>
+
+    <div id="hud-container">
+        <div id="dashboard">
+            <div class="food-preview">
+                <div id="food-image">🍽️</div>
+            </div>
+            <div class="dashboard-info">
+                <div class="dash-title">Preparando Lanzamiento...</div>
+                <div class="dash-subtitle">¿DÓNDE ENCESTAMOS ESTE PLATO?</div>
+                <div class="highlight-food" id="current-food">Cargando...</div>
+                <div id="comodin-container" class="comodin-options" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-over-screen">
+        <div id="game-over-box">
+            <h1>¡Juego Terminado!</h1>
+            <p class="final-score">Aciertos: <span id="final-aciertos">0</span>/50</p>
+            <button onclick="location.reload()">Jugar de Nuevo</button>
+        </div>
+    </div>
+
+    <script>
+        // DATOS (Cargados desde JSON externo)
+        let provincesData = [];
+
+        // Variables globales
+        let gameQueue = [];
+        let currentTarget = null;
+        let aciertos = 0;
+        let fallos = 0;
+        let vidas = 8;
+        let comodines = 5;
+
+        let isShooting = false;
+        let hoverIndex = 0; // Para teclado
+        let isEditMode = false; // Modo edición
+
+        const domAciertos = document.getElementById('score-aciertos');
+        const domFallos = document.getElementById('score-fallos');
+        const domVidas = document.getElementById('ui-vidas');
+        const domComodines = document.getElementById('ui-comodines');
+        const domCurrentFood = document.getElementById('current-food');
+        const domFoodImage = document.getElementById('food-image');
+        const domComodinOptions = document.getElementById('comodin-container');
+        const domTooltip = document.getElementById('tooltip');
+        const domGameOver = document.getElementById('game-over-screen');
+        const domFinalAciertos = document.getElementById('final-aciertos');
+
+        // Configuración de Phaser
+        const config = {
+            type: Phaser.AUTO,
+            width: 1920,
+            height: 1080,
+            parent: 'game-container',
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            },
+            transparent: true // Para que se vea el background del body
+        };
+
+        const game = new Phaser.Game(config);
+
+        function preload() {
+            // Cargar imagen de mapa local
+            this.load.image('mapa_espana', 'Gemini_Generated_Image.png');
+
+            // Cargar archivo JSON local
+            this.load.json('proximosDatos', 'provincesData_actualizado.json');
+
+            // Aquí se cargarían el resto de assets reales
+            // this.load.image('plato_base', 'assets/plato.png');
+            // this.load.audio('swish', 'assets/swish.mp3');
+            // this.load.audio('fail', 'assets/fail.mp3');
+        }
+
+        let provinceSprites = [];
+        let projectile;
+        let launcher;
+
+        function create() {
+            // Referencia local del JSON
+            provincesData = this.cache.json.get('proximosDatos');
+
+            // Preparamos la cola de juego inicial
+            gameQueue = Phaser.Utils.Array.Shuffle([...provincesData]);
+
+            // Fondo / Mapa decorativo
+            let mapBg = this.add.image(960, 540, 'mapa_espana');
+            // Forzamos a que cubra el tamaño de diseño 1920x1080
+            mapBg.setDisplaySize(1920, 1080);
+            // Coloco la profundidad al fondo
+            mapBg.setDepth(-10);
+
+            // Dibujar provincias como textos interactivos
+            provincesData.forEach((prov, i) => {
+                let pGroup = this.add.container(prov.x, prov.y);
+
+                // Texto completo de la provincia
+                let text = this.add.text(0, 0, prov.name, {
+                    fontFamily: 'Fredoka One',
+                    fontSize: '22px',
+                    color: '#ffffff',
+                    stroke: '#333333',
+                    strokeThickness: 5
+                }).setOrigin(0.5);
+
+                pGroup.add(text);
+
+                // Área interactiva reducida para mayor precisión y menor solapamiento
+                let w = text.width + 20; // Hitbox ajustado (10px padding por lado)
+                let h = text.height + 20;
+                let hitArea = new Phaser.Geom.Rectangle(-w / 2, -h / 2, w, h);
+                pGroup.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains);
+                pGroup.input.cursor = 'pointer';
+
+                // Guardar la escala original para restaurarla
+                pGroup.baseScale = 1.0;
+
+                // Efectos de Hover con el ratón
+                pGroup.on('pointerover', () => {
+                    if (isShooting) return;
+                    highlightProvince(pGroup, text, this);
+                    showTooltip(prov.name, pGroup.x, pGroup.y);
+                    hoverIndex = i; // Sincroniza ratón con nav teclado
+                });
+
+                pGroup.on('pointerout', () => {
+                    if (isShooting || isEditMode) return;
+                    resetProvince(pGroup, text, this);
+                    hideTooltip();
+                });
+
+                // Disparo (Click)
+                pGroup.on('pointerdown', () => {
+                    if (isEditMode) return;
+                    if (!isShooting) shootAt(prov, pGroup);
+                    hideTooltip();
+                });
+
+                // --- Lógica Drag & Drop (Modo Edición) ---
+                this.input.setDraggable(pGroup);
+
+                pGroup.on('dragstart', function (pointer, dragX, dragY) {
+                    if (!isEditMode) return;
+                    this.setDepth(100);
+                    text.setTint(0xf94144); // Color rojo al arrastrar
+                });
+
+                pGroup.on('drag', function (pointer, dragX, dragY) {
+                    if (!isEditMode) return;
+                    this.x = dragX;
+                    this.y = dragY;
+                    hideTooltip(); // Ocultar tooltip mientras arrastramos
+                });
+
+                pGroup.on('dragend', function (pointer, dragX, dragY, dropped) {
+                    if (!isEditMode) return;
+                    this.setDepth(0);
+                    text.clearTint();
+                    // Actualizar el objeto original con las nuevas coordenadas
+                    this.provinceData.x = Math.round(this.x);
+                    this.provinceData.y = Math.round(this.y);
+                });
+
+                // Guardar datos
+                pGroup.provinceData = prov;
+                pGroup.mainText = text;
+                provinceSprites.push(pGroup);
+            });
+
+            // Lanzador (Abajo centro)
+            launcher = this.add.container(960, 1080);
+            let launcherBase = this.add.polygon(0, -20, [0, -40, -40, 20, 40, 20], 0x333333);
+            let launcherArc = this.add.circle(0, -10, 30, 0xf9c74f);
+            launcher.add([launcherBase, launcherArc]);
+
+            // Teclado
+            this.input.keyboard.on('keydown-RIGHT', () => navigateKeyboard(1));
+            this.input.keyboard.on('keydown-LEFT', () => navigateKeyboard(-1));
+            this.input.keyboard.on('keydown-UP', () => navigateKeyboard(-5));
+            this.input.keyboard.on('keydown-DOWN', () => navigateKeyboard(5));
+            this.input.keyboard.on('keydown-ENTER', () => {
+                if (!isShooting && provinceSprites[hoverIndex]) {
+                    shootAt(provinceSprites[hoverIndex].provinceData, provinceSprites[hoverIndex]);
+                }
+            });
+
+            // Resaltar el primer elemento inicialmente
+            if (provinceSprites.length > 0) highlightProvince(provinceSprites[0], provinceSprites[0].mainText, this);
+
+            // Iniciar juego
+            nextRound();
+        }
+
+        function update() {
+            // Lógica por frame si es necesaria
+        }
+
+        // --- FUNCIONES LOGICAS ---
+
+        function nextRound() {
+            if (gameQueue.length === 0) {
+                gameOver();
+                return;
+            }
+            currentTarget = gameQueue.pop();
+            domCurrentFood.innerText = currentTarget.food;
+
+            // Asignar emoji animado según el plato (esto puede mejorarse con un mapa o emojis dedicados)
+            const emojisDisponibles = ['🥘', '🦐', '🥩', '🧀', '🐟', '🐙', '🍗', '🌶️', '🍮', '🥟'];
+            let randomEmoji = emojisDisponibles[Math.floor(Math.random() * emojisDisponibles.length)];
+
+            // Emoji personalizado según palabra clave en el nombre del plato
+            let foodNameLow = currentTarget.food.toLowerCase();
+            if (foodNameLow.includes('pulpo')) randomEmoji = '🐙';
+            else if (foodNameLow.includes('queso') || foodNameLow.includes('torta')) randomEmoji = '🧀';
+            else if (foodNameLow.includes('jamón') || foodNameLow.includes('ternasco') || foodNameLow.includes('chuletón') || foodNameLow.includes('lechazo')) randomEmoji = '🥩';
+            else if (foodNameLow.includes('pollo')) randomEmoji = '🍗';
+            else if (foodNameLow.includes('langostino') || foodNameLow.includes('gamba')) randomEmoji = '🦐';
+            else if (foodNameLow.includes('pimiento')) randomEmoji = '🌶️';
+            else if (foodNameLow.includes('bacalao') || foodNameLow.includes('sardina')) randomEmoji = '🐟';
+            else if (foodNameLow.includes('paella')) randomEmoji = '🥘';
+            else if (foodNameLow.includes('crema') || foodNameLow.includes('xuixo') || foodNameLow.includes('turrón') || foodNameLow.includes('mazapán') || foodNameLow.includes('miguelitos') || foodNameLow.includes('ensaimada') || foodNameLow.includes('sobao') || foodNameLow.includes('piononos')) randomEmoji = '🍮';
+
+            domFoodImage.innerText = randomEmoji;
+
+            domComodinOptions.style.display = 'none'; // Ocultar pistas
+            domComodinOptions.innerHTML = '';
+            isShooting = false;
+
+            // Recrear proyectil base
+            createProjectile(game.scene.scenes[0]);
+        }
+
+        function createProjectile(scene) {
+            if (projectile) projectile.destroy();
+            projectile = scene.add.container(960, 1080); // Posición inicial (Catapulta)
+
+            let pBase = scene.add.circle(0, 0, 80, 0xffffff);
+            pBase.setStrokeStyle(8, 0xffba08);
+
+            let pText = scene.add.text(0, 0, "🍽️", { fontSize: '60px' }).setOrigin(0.5);
+
+            projectile.add([pBase, pText]);
+            projectile.setScale(1);
+            projectile.setDepth(20); // Asegurar que está por encima del mapa
+        }
+
+        function shootAt(targetProv, targetSprite) {
+            isShooting = true;
+            let scene = game.scene.scenes[0];
+
+            // 1. Animación de trayectoria principal X/Y base (más lenta)
+            scene.tweens.add({
+                targets: projectile,
+                x: targetProv.x,
+                y: targetProv.y,
+                scaleX: 0.2, // Simula profundidad
+                scaleY: 0.2,
+                angle: 720,  // Da dos vueltas completas
+                duration: 1500, // 1.5s (lento)
+                ease: 'Sine.easeOut',
+                onComplete: () => {
+                    checkResult(targetProv, targetSprite, scene);
+                }
+            });
+
+            // 2. Efecto de salto en arco (parábola falsa sobre el eje Y)
+            scene.tweens.add({
+                targets: projectile,
+                y: targetProv.y - 250, // Salto visual más alto que antes
+                duration: 750, // Mitad del tiempo total (1500/2)
+                yoyo: true, // Sube y luego baja
+                ease: 'Sine.easeOut'
+            });
+        }
+
+        function checkResult(selectedProv, targetSprite, scene) {
+            if (selectedProv.id === currentTarget.id) {
+                // ACIERTO
+                aciertos++;
+                domAciertos.innerText = aciertos;
+
+                // Efecto Swish
+                let swishText = scene.add.text(selectedProv.x, selectedProv.y - 50, '¡SWISH!', {
+                    fontFamily: 'Fredoka One', fontSize: '48px', color: '#4CAF50', stroke: '#fff', strokeThickness: 6
+                }).setOrigin(0.5).setDepth(30);
+
+                scene.tweens.add({
+                    targets: swishText, y: '-=100', alpha: 0, scale: 1.5, duration: 1000,
+                    onComplete: () => swishText.destroy()
+                });
+
+                // Efecto confeti de partículas (con primitives)
+                let particles = scene.add.particles(selectedProv.x, selectedProv.y, 'circle', {
+                    color: [0xf94144, 0xf9c74f, 0x43aa8b, 0xffffff],
+                    colorRandom: true,
+                    speed: { min: -200, max: 200 },
+                    angle: { min: 0, max: 360 },
+                    scale: { start: 0.3, end: 0 },
+                    lifespan: 1000,
+                    quantity: 20
+                });
+
+                targetSprite.mainText.setTint(0x4CAF50); // Verde para acierto
+
+                // Animación de UI
+                domAciertos.parentElement.style.transform = 'scale(1.2)';
+                setTimeout(() => { domAciertos.parentElement.style.transform = 'scale(1)'; }, 200);
+
+                // Ocultar proyectil y pasar turno
+                projectile.destroy();
+                setTimeout(nextRound, 1000);
+
+            } else {
+                // FALLO
+                fallos++;
+                vidas--;
+                updateVidasUI();
+
+                targetSprite.mainText.setTint(0xF44336); // Rojo para fallo
+
+                // Efecto rebote rojo y caída
+                projectile.first.setStrokeStyle(8, 0xF44336);
+                scene.tweens.add({
+                    targets: projectile,
+                    y: 1200, // Cae fuera de pantalla
+                    x: selectedProv.x + (Math.random() > 0.5 ? 150 : -150), // Desvío
+                    duration: 600,
+                    ease: 'Power2',
+                    onComplete: () => {
+                        targetSprite.mainText.clearTint(); // reset color
+                        if (vidas <= 0) {
+                            gameOver();
+                        } else {
+                            nextRound();
+                        }
+                    }
+                });
+            }
+        }
+
+        function highlightProvince(group, text, scene) {
+            // Quitar resalte a todos primero
+            provinceSprites.forEach(p => resetProvince(p, p.mainText, scene));
+
+            // Animación suave de aumento y color
+            if (group.hoverTween) group.hoverTween.stop();
+            group.hoverTween = scene.tweens.add({
+                targets: group,
+                scaleX: 1.3,
+                scaleY: 1.3,
+                duration: 200,
+                ease: 'Back.easeOut'
+            });
+
+            group.setDepth(15);
+            text.setTint(0xffba08); // Tintar de dorado
+            text.setShadow(0, 4, '#000000', 4, true, true);
+        }
+
+        function resetProvince(group, text, scene) {
+            if (!scene) scene = game.scene.scenes[0];
+
+            if (group.scaleX !== 1.0) {
+                if (group.hoverTween) group.hoverTween.stop();
+
+                // Restaurar escala original suavemente
+                scene.tweens.add({
+                    targets: group,
+                    scaleX: 1.0,
+                    scaleY: 1.0,
+                    duration: 150,
+                    ease: 'Sine.easeOut'
+                });
+
+                group.setDepth(0);
+                text.clearTint();
+                text.setShadow(0, 0, 'rgba(0,0,0,0)', 0);
+            }
+        }
+
+        function navigateKeyboard(offset) {
+            if (isShooting) return;
+
+            hoverIndex = (hoverIndex + offset) % provinceSprites.length;
+            if (hoverIndex < 0) hoverIndex = provinceSprites.length - 1;
+
+            let target = provinceSprites[hoverIndex];
+            highlightProvince(target, target.mainText, game.scene.scenes[0]);
+            showTooltip(target.provinceData.name, target.x, target.y);
+        }
+
+        function showTooltip(text, x, y) {
+            // Convertir coordenadas del mundo Phaser al DOM (simplificado usando scale.displayScale)
+            let scaleX = game.scale.displayScale.x;
+            let scaleY = game.scale.displayScale.y;
+
+            let rect = game.canvas.getBoundingClientRect();
+            let domX = rect.left + (x * scaleX);
+            let domY = rect.top + (y * scaleY) - 50; // Offset arriba
+
+            domTooltip.innerText = text;
+            domTooltip.style.left = domX + 'px';
+            domTooltip.style.top = domY + 'px';
+            domTooltip.style.opacity = 1;
+        }
+
+        function hideTooltip() {
+            domTooltip.style.opacity = 0;
+        }
+
+        function gameOver() {
+            domFinalAciertos.innerText = aciertos;
+
+            if (vidas <= 0) {
+                document.querySelector('#game-over-box h1').innerText = "¡Te quedaste sin Vidas!";
+                document.querySelector('#game-over-box p.final-score').innerHTML = `Lograste <span id="final-aciertos">${aciertos}</span> platos.`;
+            } else {
+                document.querySelector('#game-over-box h1').innerText = "¡Ganaste!";
+            }
+
+            domGameOver.style.display = 'flex';
+        }
+
+        // --- LÓGICA COMODINES Y VIDAS ---
+        function updateVidasUI() {
+            // Vidas = Paella 🥘, Gastadas = Plato vacío 🍽️
+            domVidas.innerText = "🥘".repeat(vidas) + "🍽️".repeat(8 - vidas);
+        }
+
+        function updateComodinesUI() {
+            // Comodín = OVNI 🛸, Gastado = Prohibido 🚫
+            domComodines.innerText = "🛸".repeat(comodines) + "🚫".repeat(5 - comodines);
+        }
+
+        function usarComodin() {
+            if (isShooting || isEditMode || comodines <= 0 || !currentTarget) return;
+            if (domComodinOptions.style.display === 'flex') return; // Ya usado en este turno
+
+            comodines--;
+            updateComodinesUI();
+
+            // Clonamos el objeto Data para no alterarlo
+            let misProvincias = JSON.parse(JSON.stringify(provincesData));
+
+            // Seleccionar 1 provincia al azar incorrecta
+            let falsas = Phaser.Utils.Array.Shuffle(misProvincias)
+                .filter(p => p.id !== currentTarget.id)
+                .slice(0, 1);
+
+            let opciones = Phaser.Utils.Array.Shuffle([currentTarget, falsas[0]]);
+
+            domComodinOptions.innerHTML = '';
+            opciones.forEach(opc => {
+                let hint = document.createElement('span');
+                hint.className = 'comodin-hint';
+                hint.innerText = opc.name;
+                hint.onclick = () => { alert("¡Pista activada!\nAhora busca '" + opc.name + "' en el mapa y haz clic allí para lanzar."); };
+                domComodinOptions.appendChild(hint);
+            });
+
+            domComodinOptions.style.display = 'flex';
+
+            // Forzar que el click vuelva al contenedor de Phaser si estábamos en el DOM
+            if (game && game.canvas) game.canvas.focus();
+        }
+
+        // --- MODO EDICIÓN ---
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btn = document.getElementById('edit-btn');
+
+            if (isEditMode) {
+                btn.innerText = "Guardar y Exportar JSON";
+                btn.style.background = "#f94144";
+                document.getElementById('hud-container').style.display = "none";
+                alert("MODO EDICIÓN ACTIVADO:\nArrastra los nombres de las provincias a su posición correcta en el mapa. Cuando termines, pulsa 'Guardar y Exportar JSON'.");
+            } else {
+                btn.innerText = "Activar Modo Edición";
+                btn.style.background = "#43aa8b";
+                document.getElementById('hud-container').style.display = "flex";
+
+                // Exportar Data
+                exportJSONData();
+            }
+        }
+
+        function exportJSONData() {
+            // Actualizamos solo los IDs, nombres, coords y color.
+            const updatedData = provincesData.map(p => {
+                return {
+                    id: p.id,
+                    name: p.name,
+                    food: p.food,
+                    x: p.x,
+                    y: p.y,
+                    color: p.color
+                };
+            });
+
+            const jsonString = JSON.stringify(updatedData, null, 4);
+
+            // 1. Mostrar por consola por si acaso
+            console.log("NUEVAS COORDENADAS JSON:", jsonString);
+
+            // 2. Descargar archivo automáticamente
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "provincesData_actualizado.json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert("El archivo JSON con las nuevas posiciones se ha descargado.\nAbre tu archivo index.html original y reemplaza todo el bloque 'const provincesData = [...]' con el contenido de este archivo descargado.");
+        }
+
+    </script>
+</body>
+
+</html>

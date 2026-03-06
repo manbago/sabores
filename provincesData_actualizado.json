@@ -1,0 +1,402 @@
+[
+    {
+        "id": 1,
+        "name": "A Coruña",
+        "food": "Pulpo a la Gallega",
+        "x": 584,
+        "y": 109,
+        "color": 11066076
+    },
+    {
+        "id": 2,
+        "name": "Lugo",
+        "food": "Queso Tetilla",
+        "x": 688,
+        "y": 152,
+        "color": 4553629
+    },
+    {
+        "id": 3,
+        "name": "Ourense",
+        "food": "Pan de Cea",
+        "x": 677,
+        "y": 243,
+        "color": 9485933
+    },
+    {
+        "id": 4,
+        "name": "Pontevedra",
+        "food": "Albariño",
+        "x": 580,
+        "y": 196,
+        "color": 4434571
+    },
+    {
+        "id": 5,
+        "name": "Asturias",
+        "food": "Fabada",
+        "x": 819,
+        "y": 107,
+        "color": 16369487
+    },
+    {
+        "id": 6,
+        "name": "Cantabria",
+        "food": "Sobao Pasiego",
+        "x": 974,
+        "y": 136,
+        "color": 16291358
+    },
+    {
+        "id": 7,
+        "name": "Vizcaya",
+        "food": "Bacalao al Pil-Pil",
+        "x": 1090,
+        "y": 99,
+        "color": 15954476
+    },
+    {
+        "id": 8,
+        "name": "Guipúzcoa",
+        "food": "Pintxos",
+        "x": 1170,
+        "y": 128,
+        "color": 16335172
+    },
+    {
+        "id": 9,
+        "name": "Álava",
+        "food": "Perretxikos",
+        "x": 1098,
+        "y": 175,
+        "color": 5731728
+    },
+    {
+        "id": 10,
+        "name": "Navarra",
+        "food": "Pimientos del Piquillo",
+        "x": 1207,
+        "y": 191,
+        "color": 5083278
+    },
+    {
+        "id": 11,
+        "name": "Huesca",
+        "food": "Ternasco",
+        "x": 1311,
+        "y": 234,
+        "color": 2588065
+    },
+    {
+        "id": 12,
+        "name": "Zaragoza",
+        "food": "Pollo al Chilindrón",
+        "x": 1229,
+        "y": 319,
+        "color": 9485933
+    },
+    {
+        "id": 13,
+        "name": "Teruel",
+        "food": "Jamón de Teruel",
+        "x": 1238,
+        "y": 437,
+        "color": 16369487
+    },
+    {
+        "id": 14,
+        "name": "Lleida",
+        "food": "Caracoles a la Llauna",
+        "x": 1422,
+        "y": 235,
+        "color": 16291358
+    },
+    {
+        "id": 15,
+        "name": "Girona",
+        "food": "Xuixo",
+        "x": 1564,
+        "y": 232,
+        "color": 16335172
+    },
+    {
+        "id": 16,
+        "name": "Barcelona",
+        "food": "Crema Catalana",
+        "x": 1494,
+        "y": 295,
+        "color": 4434571
+    },
+    {
+        "id": 17,
+        "name": "Tarragona",
+        "food": "Calçots",
+        "x": 1409,
+        "y": 373,
+        "color": 11066076
+    },
+    {
+        "id": 18,
+        "name": "Castellón",
+        "food": "Langostinos de Vinaròs",
+        "x": 1335,
+        "y": 480,
+        "color": 4553629
+    },
+    {
+        "id": 19,
+        "name": "Valencia",
+        "food": "Paella",
+        "x": 1264,
+        "y": 567,
+        "color": 15954476
+    },
+    {
+        "id": 20,
+        "name": "Alicante",
+        "food": "Turrón",
+        "x": 1303,
+        "y": 685,
+        "color": 16369487
+    },
+    {
+        "id": 21,
+        "name": "Murcia",
+        "food": "Zarangollo",
+        "x": 1205,
+        "y": 729,
+        "color": 5083278
+    },
+    {
+        "id": 22,
+        "name": "Almería",
+        "food": "Migas",
+        "x": 1147,
+        "y": 840,
+        "color": 9485933
+    },
+    {
+        "id": 23,
+        "name": "Granada",
+        "food": "Piononos",
+        "x": 1022,
+        "y": 824,
+        "color": 16335172
+    },
+    {
+        "id": 24,
+        "name": "Málaga",
+        "food": "Espeto de Sardinas",
+        "x": 922,
+        "y": 884,
+        "color": 16291358
+    },
+    {
+        "id": 25,
+        "name": "Cádiz",
+        "food": "Tortillita de Camarones",
+        "x": 803,
+        "y": 922,
+        "color": 4434571
+    },
+    {
+        "id": 26,
+        "name": "Huelva",
+        "food": "Gamba Blanca",
+        "x": 711,
+        "y": 821,
+        "color": 11066076
+    },
+    {
+        "id": 27,
+        "name": "Sevilla",
+        "food": "Gazpacho",
+        "x": 812,
+        "y": 813,
+        "color": 16369487
+    },
+    {
+        "id": 28,
+        "name": "Córdoba",
+        "food": "Salmorejo",
+        "x": 898,
+        "y": 750,
+        "color": 4553629
+    },
+    {
+        "id": 29,
+        "name": "Jaén",
+        "food": "Aceite de Oliva",
+        "x": 1016,
+        "y": 739,
+        "color": 9485933
+    },
+    {
+        "id": 30,
+        "name": "Badajoz",
+        "food": "Jamón Ibérico",
+        "x": 766,
+        "y": 662,
+        "color": 15954476
+    },
+    {
+        "id": 31,
+        "name": "Cáceres",
+        "food": "Torta del Casar",
+        "x": 777,
+        "y": 536,
+        "color": 16335172
+    },
+    {
+        "id": 32,
+        "name": "Salamanca",
+        "food": "Hornazo",
+        "x": 786,
+        "y": 395,
+        "color": 5083278
+    },
+    {
+        "id": 33,
+        "name": "Zamora",
+        "food": "Queso Zamorano",
+        "x": 797,
+        "y": 284,
+        "color": 2588065
+    },
+    {
+        "id": 34,
+        "name": "León",
+        "food": "Cecina",
+        "x": 808,
+        "y": 205,
+        "color": 9485933
+    },
+    {
+        "id": 35,
+        "name": "Palencia",
+        "food": "Menestra",
+        "x": 923,
+        "y": 221,
+        "color": 16291358
+    },
+    {
+        "id": 36,
+        "name": "Burgos",
+        "food": "Morcilla",
+        "x": 1009,
+        "y": 254,
+        "color": 16335172
+    },
+    {
+        "id": 37,
+        "name": "Soria",
+        "food": "Torreznos",
+        "x": 1091,
+        "y": 311,
+        "color": 4434571
+    },
+    {
+        "id": 38,
+        "name": "Segovia",
+        "food": "Cochinillo",
+        "x": 978,
+        "y": 356,
+        "color": 16369487
+    },
+    {
+        "id": 39,
+        "name": "Ávila",
+        "food": "Chuletón",
+        "x": 895,
+        "y": 430,
+        "color": 11066076
+    },
+    {
+        "id": 40,
+        "name": "Valladolid",
+        "food": "Lechazo",
+        "x": 910,
+        "y": 317,
+        "color": 4553629
+    },
+    {
+        "id": 41,
+        "name": "Madrid",
+        "food": "Cocido Madrileño",
+        "x": 1002,
+        "y": 444,
+        "color": 15954476
+    },
+    {
+        "id": 42,
+        "name": "Toledo",
+        "food": "Mazapán",
+        "x": 948,
+        "y": 522,
+        "color": 5083278
+    },
+    {
+        "id": 43,
+        "name": "Ciudad Real",
+        "food": "Pisto Manchego",
+        "x": 1001,
+        "y": 629,
+        "color": 9485933
+    },
+    {
+        "id": 44,
+        "name": "Cuenca",
+        "food": "Zarajos",
+        "x": 1141,
+        "y": 517,
+        "color": 16291358
+    },
+    {
+        "id": 45,
+        "name": "Guadalajara",
+        "food": "Miel",
+        "x": 1115,
+        "y": 401,
+        "color": 2588065
+    },
+    {
+        "id": 46,
+        "name": "Albacete",
+        "food": "Miguelitos",
+        "x": 1149,
+        "y": 645,
+        "color": 16335172
+    },
+    {
+        "id": 47,
+        "name": "Baleares",
+        "food": "Ensaimada",
+        "x": 1601,
+        "y": 536,
+        "color": 4434571
+    },
+    {
+        "id": 48,
+        "name": "Las Palmas",
+        "food": "Papas Arrugadas",
+        "x": 431,
+        "y": 999,
+        "color": 16369487
+    },
+    {
+        "id": 49,
+        "name": "Tenerife",
+        "food": "Mojo Picón",
+        "x": 173,
+        "y": 992,
+        "color": 11066076
+    },
+    {
+        "id": 50,
+        "name": "La Rioja",
+        "food": "Patatas a la Riojana",
+        "x": 1103,
+        "y": 234,
+        "color": 15954476
+    }
+]
