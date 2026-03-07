@@ -110,6 +110,16 @@
             box-shadow: inset 0px 0px 15px rgba(0, 0, 0, 0.2);
             animation: pulse-border 2s infinite;
             flex-shrink: 0;
+            overflow: hidden;
+            /* Garantiza que la imagen no se salga del círculo */
+        }
+
+        #food-image {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         @keyframes pulse-border {
@@ -390,6 +400,7 @@
         let isShooting = false;
         let hoverIndex = 0; // Para teclado
         let isEditMode = false; // Modo edición
+        let projectileMaskGraphics; // Gráfico para la máscara del proyectil
 
         const domAciertos = document.getElementById('score-aciertos');
         const domFallos = document.getElementById('score-fallos');
@@ -530,11 +541,35 @@
                 provinceSprites.push(pGroup);
             });
 
-            // Lanzador (Abajo centro)
+            // --- NUEVO LANZADOR CARTOON ---
             launcher = this.add.container(960, 1080);
-            let launcherBase = this.add.polygon(0, -20, [0, -40, -40, 20, 40, 20], 0x333333);
-            let launcherArc = this.add.circle(0, -10, 30, 0xf9c74f);
-            launcher.add([launcherBase, launcherArc]);
+
+            // Base del cañón (Soporte)
+            let cannonBase = this.add.graphics();
+            cannonBase.fillStyle(0x2b2d42, 1);
+            cannonBase.fillRoundedRect(-60, -40, 120, 60, 10);
+            cannonBase.lineStyle(4, 0x111111);
+            cannonBase.strokeRoundedRect(-60, -40, 120, 60, 10);
+
+            // El tubo del cañón
+            let cannonTube = this.add.graphics();
+            // Gradiente o colores cartoon
+            cannonTube.fillStyle(0xef233c, 1); // Rojo principal
+            cannonTube.fillRoundedRect(-40, -120, 80, 130, { tl: 20, tr: 20, bl: 0, br: 0 });
+            cannonTube.lineStyle(6, 0x2b2d42);
+            cannonTube.strokeRoundedRect(-40, -120, 80, 130, { tl: 20, tr: 20, bl: 0, br: 0 });
+
+            // Detalles del cañón (Anillos decorativos)
+            cannonTube.fillStyle(0xd90429, 1);
+            cannonTube.fillRect(-45, -110, 90, 15);
+            cannonTube.fillRect(-45, -60, 90, 10);
+
+            // La "boca" del cañón
+            cannonTube.fillStyle(0x2b2d42, 1);
+            cannonTube.fillEllipse(0, -120, 80, 25);
+
+            launcher.add([cannonBase, cannonTube]);
+            launcher.cannonTube = cannonTube; // Referencia para animación de retroceso
 
             // Teclado
             this.input.keyboard.on('keydown-RIGHT', () => navigateKeyboard(1));
@@ -555,7 +590,28 @@
         }
 
         function update() {
-            // Lógica por frame si es necesaria
+            // 1. Apuntar el cañón al ratón (Solo si no está disparando o modo edición)
+            if (launcher && launcher.cannonTube && !isShooting && !isEditMode) {
+                let pointer = this.input.activePointer;
+                // Calculamos el ángulo entre el centro del lanzador y el ratón
+                let angle = Phaser.Math.Angle.Between(launcher.x, launcher.y, pointer.worldX, pointer.worldY);
+                // Ajustamos +PI/2 porque el cañón está dibujado apuntando hacia arriba (0 rad en dibujo = UP)
+                launcher.cannonTube.rotation = angle + Math.PI / 2;
+
+                // Limitar el ángulo para que no se de la vuelta completa (opcional but nice)
+                // Por ejemplo, que solo apunte entre -80 y 80 grados respecto a "arriba"
+                let targetRot = angle + Math.PI / 2;
+                if (targetRot > 1.4) targetRot = 1.4;
+                if (targetRot < -1.4) targetRot = -1.4;
+                launcher.cannonTube.rotation = targetRot;
+            }
+
+            // 2. Actualizar la posición de la máscara para que siga al proyectil
+            if (projectile && projectileMaskGraphics && isShooting) {
+                projectileMaskGraphics.x = projectile.x;
+                projectileMaskGraphics.y = projectile.y;
+                projectileMaskGraphics.scale = projectile.scale;
+            }
         }
 
         // --- FUNCIONES LOGICAS ---
@@ -583,8 +639,12 @@
             else if (foodNameLow.includes('bacalao') || foodNameLow.includes('sardina')) randomEmoji = '🐟';
             else if (foodNameLow.includes('paella')) randomEmoji = '🥘';
             else if (foodNameLow.includes('crema') || foodNameLow.includes('xuixo') || foodNameLow.includes('turrón') || foodNameLow.includes('mazapán') || foodNameLow.includes('miguelitos') || foodNameLow.includes('ensaimada') || foodNameLow.includes('sobao') || foodNameLow.includes('piononos')) randomEmoji = '🍮';
-
-            domFoodImage.innerText = randomEmoji;
+            if (currentTarget.image) {
+                // Usamos 'contain' para que la imagen se vea completa sin recortes
+                domFoodImage.innerHTML = `<img src="${currentTarget.image}" style="width: 85%; height: 85%; object-fit: contain;">`;
+            } else {
+                domFoodImage.innerText = randomEmoji;
+            }
 
             domComodinOptions.style.display = 'none'; // Ocultar pistas
             domComodinOptions.innerHTML = '';
@@ -596,48 +656,142 @@
 
         function createProjectile(scene) {
             if (projectile) projectile.destroy();
-            projectile = scene.add.container(960, 1080); // Posición inicial (Catapulta)
+            if (projectileMaskGraphics) projectileMaskGraphics.destroy();
 
+            projectile = scene.add.container(960, 1080); // Posición inicial (Catapulta)
+            projectile.setDepth(20);
+
+            // Base blanca del proyectil
             let pBase = scene.add.circle(0, 0, 80, 0xffffff);
             pBase.setStrokeStyle(8, 0xffba08);
+            projectile.add(pBase);
 
-            let pText = scene.add.text(0, 0, "🍽️", { fontSize: '60px' }).setOrigin(0.5);
+            if (currentTarget && currentTarget.image) {
+                const textureKey = `dish_${currentTarget.id}`;
 
-            projectile.add([pBase, pText]);
+                const applyImage = () => {
+                    if (!projectile || !projectile.active) return;
+                    let img = scene.add.image(0, 0, textureKey);
+                    img.setDisplaySize(145, 145);
+
+                    projectileMaskGraphics = scene.make.graphics();
+                    projectileMaskGraphics.fillCircle(0, 0, 72);
+                    projectileMaskGraphics.x = projectile.x;
+                    projectileMaskGraphics.y = projectile.y;
+
+                    let mask = projectileMaskGraphics.createGeometryMask();
+                    img.setMask(mask);
+                    projectile.add(img);
+                };
+
+                if (!scene.textures.exists(textureKey)) {
+                    scene.load.image(textureKey, currentTarget.image);
+                    scene.load.once('complete', applyImage);
+                    scene.load.start();
+                } else {
+                    applyImage();
+                }
+            } else {
+                let txt = scene.add.text(0, 0, "🥘", { fontSize: '60px' }).setOrigin(0.5);
+                projectile.add(txt);
+            }
             projectile.setScale(1);
-            projectile.setDepth(20); // Asegurar que está por encima del mapa
         }
 
         function shootAt(targetProv, targetSprite) {
             isShooting = true;
             let scene = game.scene.scenes[0];
 
-            // 1. Animación de trayectoria principal X/Y base (más lenta)
+            // --- EFECTO DE DISPARO (Muzzle Flash) ---
+            // Calcular posición de la punta del cañón basada en su rotación
+            let rot = launcher.cannonTube.rotation;
+            let muzzleX = launcher.x + Math.sin(rot) * 120;
+            let muzzleY = launcher.y - Math.cos(rot) * 120;
+
+            // Flash de luz rápido
+            let flash = scene.add.circle(muzzleX, muzzleY, 40, 0xffff00).setDepth(30);
+            scene.tweens.add({
+                targets: flash,
+                scale: 2,
+                alpha: 0,
+                duration: 100,
+                onComplete: () => flash.destroy()
+            });
+
+            // Partículas de "humo" / fuego
+            let particles = scene.add.particles(muzzleX, muzzleY, 'circle', {
+                color: [0xffba08, 0xf94144, 0x333333],
+                speed: { min: 100, max: 300 },
+                angle: { min: Phaser.Math.RadToDeg(rot - Math.PI / 2) - 20, max: Phaser.Math.RadToDeg(rot - Math.PI / 2) + 20 },
+                scale: { start: 0.4, end: 0 },
+                lifespan: 500,
+                gravityY: -100,
+                quantity: 15
+            });
+            setTimeout(() => particles.destroy(), 600);
+
+            // Ajustar posición inicial del proyectil para que salga de la boca
+            projectile.x = muzzleX;
+            projectile.y = muzzleY;
+
+            // Animación de RETROCESO del cañón
+            scene.tweens.add({
+                targets: launcher.cannonTube,
+                y: 30,
+                duration: 100,
+                yoyo: true,
+                ease: 'Quad.easeOut'
+            });
+
+            // 1. Animación Horizontal, Escala y Rotación
             scene.tweens.add({
                 targets: projectile,
                 x: targetProv.x,
-                y: targetProv.y,
                 scaleX: 0.2, // Simula profundidad
                 scaleY: 0.2,
                 angle: 720,  // Da dos vueltas completas
                 duration: 1500, // 1.5s (lento)
-                ease: 'Sine.easeOut',
-                onComplete: () => {
-                    checkResult(targetProv, targetSprite, scene);
-                }
+                ease: 'Linear'
             });
 
-            // 2. Efecto de salto en arco (parábola falsa sobre el eje Y)
+            // 2. Animación Vertical coordinada (Parábola)
             scene.tweens.add({
                 targets: projectile,
-                y: targetProv.y - 250, // Salto visual más alto que antes
-                duration: 750, // Mitad del tiempo total (1500/2)
-                yoyo: true, // Sube y luego baja
-                ease: 'Sine.easeOut'
+                y: targetProv.y - 250, // Punto más alto del arco
+                duration: 750, // Mitad del tiempo
+                ease: 'Sine.easeOut',
+                onComplete: () => {
+                    // Fase de CAÍDA: El proyectil baja hacia el objetivo
+                    scene.tweens.add({
+                        targets: projectile,
+                        y: targetProv.y, // Altura exacta del impacto
+                        duration: 750, // Segunda mitad del tiempo
+                        ease: 'Sine.easeIn',
+                        onComplete: () => {
+                            // Al terminar la caída, ejecutamos el impacto
+                            checkResult(targetProv, targetSprite, scene);
+                        }
+                    });
+                }
             });
         }
 
         function checkResult(selectedProv, targetSprite, scene) {
+            // --- DESAPARICIÓN INMEDIATA Y EFECTO DE IMPACTO ---
+            if (projectile) projectile.destroy();
+            if (projectileMaskGraphics) projectileMaskGraphics.destroy();
+
+            // Partículas de "estallido" (Shatter effect)
+            let shatter = scene.add.particles(selectedProv.x, selectedProv.y, 'circle', {
+                color: [0xffffff, 0xffba08, 0xf94144, 0x2b2d42],
+                speed: { min: 50, max: 150 },
+                scale: { start: 0.3, end: 0 },
+                lifespan: 600,
+                quantity: 15,
+                blendMode: 'ADD'
+            });
+            setTimeout(() => shatter.destroy(), 700);
+
             if (selectedProv.id === currentTarget.id) {
                 // ACIERTO
                 aciertos++;
@@ -670,8 +824,6 @@
                 domAciertos.parentElement.style.transform = 'scale(1.2)';
                 setTimeout(() => { domAciertos.parentElement.style.transform = 'scale(1)'; }, 200);
 
-                // Ocultar proyectil y pasar turno
-                projectile.destroy();
                 setTimeout(nextRound, 1000);
 
             } else {
@@ -682,23 +834,17 @@
 
                 targetSprite.mainText.setTint(0xF44336); // Rojo para fallo
 
-                // Efecto rebote rojo y caída
-                projectile.first.setStrokeStyle(8, 0xF44336);
-                scene.tweens.add({
-                    targets: projectile,
-                    y: 1200, // Cae fuera de pantalla
-                    x: selectedProv.x + (Math.random() > 0.5 ? 150 : -150), // Desvío
-                    duration: 600,
-                    ease: 'Power2',
-                    onComplete: () => {
-                        targetSprite.mainText.clearTint(); // reset color
-                        if (vidas <= 0) {
-                            gameOver();
-                        } else {
-                            nextRound();
-                        }
+                // Efecto rebote rojo y caída (Opcional: Si queremos que caiga, no podemos destruirlo antes)
+                // Como el usuario pidió que aparezca "impacto", ya lo hemos destruido arriba.
+                // Simplemente pasamos a la siguiente ronda tras el delay.
+                setTimeout(() => {
+                    targetSprite.mainText.clearTint();
+                    if (vidas <= 0) {
+                        gameOver();
+                    } else {
+                        nextRound();
                     }
-                });
+                }, 1000);
             }
         }
 
