@@ -5,8 +5,7 @@
         "food": "Pulpo a la Gallega",
         "x": 584,
         "y": 109,
-        "color": 11066076,
-        "image": "platos/caracoles-llauna.png"
+        "color": 11066076
     },
     {
         "id": 2,
@@ -14,8 +13,7 @@
         "food": "Queso Tetilla",
         "x": 688,
         "y": 152,
-        "color": 4553629,
-        "image": "platos/caracoles-llauna.png"
+        "color": 4553629
     },
     {
         "id": 3,
@@ -23,8 +21,7 @@
         "food": "Pan de Cea",
         "x": 677,
         "y": 243,
-        "color": 9485933,
-        "image": "platos/caracoles-llauna.png"
+        "color": 9485933
     },
     {
         "id": 4,
@@ -32,8 +29,7 @@
         "food": "Albariño",
         "x": 580,
         "y": 196,
-        "color": 4434571,
-        "image": "platos/caracoles-llauna.png"
+        "color": 4434571
     },
     {
         "id": 5,
@@ -41,8 +37,7 @@
         "food": "Fabada",
         "x": 819,
         "y": 107,
-        "color": 16369487,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16369487
     },
     {
         "id": 6,
@@ -50,8 +45,7 @@
         "food": "Sobao Pasiego",
         "x": 974,
         "y": 136,
-        "color": 16291358,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16291358
     },
     {
         "id": 7,
@@ -59,8 +53,7 @@
         "food": "Bacalao al Pil-Pil",
         "x": 1090,
         "y": 99,
-        "color": 15954476,
-        "image": "platos/caracoles-llauna.png"
+        "color": 15954476
     },
     {
         "id": 8,
@@ -68,8 +61,7 @@
         "food": "Pintxos",
         "x": 1170,
         "y": 128,
-        "color": 16335172,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16335172
     },
     {
         "id": 9,
@@ -77,8 +69,7 @@
         "food": "Perretxikos",
         "x": 1098,
         "y": 175,
-        "color": 5731728,
-        "image": "platos/caracoles-llauna.png"
+        "color": 5731728
     },
     {
         "id": 10,
@@ -86,8 +77,7 @@
         "food": "Pimientos del Piquillo",
         "x": 1207,
         "y": 191,
-        "color": 5083278,
-        "image": "platos/caracoles-llauna.png"
+        "color": 5083278
     },
     {
         "id": 11,
@@ -95,8 +85,7 @@
         "food": "Ternasco",
         "x": 1311,
         "y": 234,
-        "color": 2588065,
-        "image": "platos/caracoles-llauna.png"
+        "color": 2588065
     },
     {
         "id": 12,
@@ -104,8 +93,7 @@
         "food": "Pollo al Chilindrón",
         "x": 1229,
         "y": 319,
-        "color": 9485933,
-        "image": "platos/caracoles-llauna.png"
+        "color": 9485933
     },
     {
         "id": 13,
@@ -113,14 +101,12 @@
         "food": "Jamón de Teruel",
         "x": 1238,
         "y": 437,
-        "color": 16369487,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16369487
     },
     {
         "id": 14,
         "name": "Lleida",
         "food": "Caracoles a la Llauna",
-        "image": "platos/caracoles-llauna.png",
         "x": 1422,
         "y": 235,
         "color": 16291358
@@ -129,7 +115,6 @@
         "id": 15,
         "name": "Girona",
         "food": "Xuixo",
-        "image": "platos/caracoles-llauna.png",
         "x": 1564,
         "y": 232,
         "color": 16335172
@@ -138,7 +123,6 @@
         "id": 16,
         "name": "Barcelona",
         "food": "Crema Catalana",
-        "image": "platos/caracoles-llauna.png",
         "x": 1494,
         "y": 295,
         "color": 4434571
@@ -147,7 +131,6 @@
         "id": 17,
         "name": "Tarragona",
         "food": "Calçots",
-        "image": "platos/caracoles-llauna.png",
         "x": 1409,
         "y": 373,
         "color": 11066076
@@ -156,7 +139,6 @@
         "id": 18,
         "name": "Castellón",
         "food": "Langostinos de Vinaròs",
-        "image": "platos/caracoles-llauna.png",
         "x": 1335,
         "y": 480,
         "color": 4553629
@@ -165,7 +147,6 @@
         "id": 19,
         "name": "Valencia",
         "food": "Paella",
-        "image": "platos/caracoles-llauna.png",
         "x": 1264,
         "y": 567,
         "color": 15954476
@@ -174,7 +155,6 @@
         "id": 20,
         "name": "Alicante",
         "food": "Turrón",
-        "image": "platos/caracoles-llauna.png",
         "x": 1303,
         "y": 685,
         "color": 16369487
@@ -183,7 +163,6 @@
         "id": 21,
         "name": "Murcia",
         "food": "Zarangollo",
-        "image": "platos/caracoles-llauna.png",
         "x": 1205,
         "y": 729,
         "color": 5083278
@@ -194,8 +173,7 @@
         "food": "Migas",
         "x": 1147,
         "y": 840,
-        "color": 9485933,
-        "image": "platos/caracoles-llauna.png"
+        "color": 9485933
     },
     {
         "id": 23,
@@ -203,8 +181,7 @@
         "food": "Piononos",
         "x": 1022,
         "y": 824,
-        "color": 16335172,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16335172
     },
     {
         "id": 24,
@@ -212,8 +189,7 @@
         "food": "Espeto de Sardinas",
         "x": 922,
         "y": 884,
-        "color": 16291358,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16291358
     },
     {
         "id": 25,
@@ -221,8 +197,7 @@
         "food": "Tortillita de Camarones",
         "x": 803,
         "y": 922,
-        "color": 4434571,
-        "image": "platos/caracoles-llauna.png"
+        "color": 4434571
     },
     {
         "id": 26,
@@ -230,8 +205,7 @@
         "food": "Gamba Blanca",
         "x": 711,
         "y": 821,
-        "color": 11066076,
-        "image": "platos/caracoles-llauna.png"
+        "color": 11066076
     },
     {
         "id": 27,
@@ -239,8 +213,7 @@
         "food": "Gazpacho",
         "x": 812,
         "y": 813,
-        "color": 16369487,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16369487
     },
     {
         "id": 28,
@@ -248,8 +221,7 @@
         "food": "Salmorejo",
         "x": 898,
         "y": 750,
-        "color": 4553629,
-        "image": "platos/caracoles-llauna.png"
+        "color": 4553629
     },
     {
         "id": 29,
@@ -257,8 +229,7 @@
         "food": "Aceite de Oliva",
         "x": 1016,
         "y": 739,
-        "color": 9485933,
-        "image": "platos/caracoles-llauna.png"
+        "color": 9485933
     },
     {
         "id": 30,
@@ -266,8 +237,7 @@
         "food": "Jamón Ibérico",
         "x": 766,
         "y": 662,
-        "color": 15954476,
-        "image": "platos/caracoles-llauna.png"
+        "color": 15954476
     },
     {
         "id": 31,
@@ -275,8 +245,7 @@
         "food": "Torta del Casar",
         "x": 777,
         "y": 536,
-        "color": 16335172,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16335172
     },
     {
         "id": 32,
@@ -284,8 +253,7 @@
         "food": "Hornazo",
         "x": 786,
         "y": 395,
-        "color": 5083278,
-        "image": "platos/caracoles-llauna.png"
+        "color": 5083278
     },
     {
         "id": 33,
@@ -293,8 +261,7 @@
         "food": "Queso Zamorano",
         "x": 797,
         "y": 284,
-        "color": 2588065,
-        "image": "platos/caracoles-llauna.png"
+        "color": 2588065
     },
     {
         "id": 34,
@@ -302,8 +269,7 @@
         "food": "Cecina",
         "x": 808,
         "y": 205,
-        "color": 9485933,
-        "image": "platos/caracoles-llauna.png"
+        "color": 9485933
     },
     {
         "id": 35,
@@ -311,8 +277,7 @@
         "food": "Menestra",
         "x": 923,
         "y": 221,
-        "color": 16291358,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16291358
     },
     {
         "id": 36,
@@ -320,8 +285,7 @@
         "food": "Morcilla",
         "x": 1009,
         "y": 254,
-        "color": 16335172,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16335172
     },
     {
         "id": 37,
@@ -329,8 +293,7 @@
         "food": "Torreznos",
         "x": 1091,
         "y": 311,
-        "color": 4434571,
-        "image": "platos/caracoles-llauna.png"
+        "color": 4434571
     },
     {
         "id": 38,
@@ -338,8 +301,7 @@
         "food": "Cochinillo",
         "x": 978,
         "y": 356,
-        "color": 16369487,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16369487
     },
     {
         "id": 39,
@@ -347,8 +309,7 @@
         "food": "Chuletón",
         "x": 895,
         "y": 430,
-        "color": 11066076,
-        "image": "platos/caracoles-llauna.png"
+        "color": 11066076
     },
     {
         "id": 40,
@@ -356,8 +317,7 @@
         "food": "Lechazo",
         "x": 910,
         "y": 317,
-        "color": 4553629,
-        "image": "platos/caracoles-llauna.png"
+        "color": 4553629
     },
     {
         "id": 41,
@@ -365,8 +325,7 @@
         "food": "Cocido Madrileño",
         "x": 1002,
         "y": 444,
-        "color": 15954476,
-        "image": "platos/caracoles-llauna.png"
+        "color": 15954476
     },
     {
         "id": 42,
@@ -374,8 +333,7 @@
         "food": "Mazapán",
         "x": 948,
         "y": 522,
-        "color": 5083278,
-        "image": "platos/caracoles-llauna.png"
+        "color": 5083278
     },
     {
         "id": 43,
@@ -383,8 +341,7 @@
         "food": "Pisto Manchego",
         "x": 1001,
         "y": 629,
-        "color": 9485933,
-        "image": "platos/caracoles-llauna.png"
+        "color": 9485933
     },
     {
         "id": 44,
@@ -392,8 +349,7 @@
         "food": "Zarajos",
         "x": 1141,
         "y": 517,
-        "color": 16291358,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16291358
     },
     {
         "id": 45,
@@ -401,8 +357,7 @@
         "food": "Miel",
         "x": 1115,
         "y": 401,
-        "color": 2588065,
-        "image": "platos/caracoles-llauna.png"
+        "color": 2588065
     },
     {
         "id": 46,
@@ -410,8 +365,7 @@
         "food": "Miguelitos",
         "x": 1149,
         "y": 645,
-        "color": 16335172,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16335172
     },
     {
         "id": 47,
@@ -419,8 +373,7 @@
         "food": "Ensaimada",
         "x": 1601,
         "y": 536,
-        "color": 4434571,
-        "image": "platos/caracoles-llauna.png"
+        "color": 4434571
     },
     {
         "id": 48,
@@ -428,8 +381,7 @@
         "food": "Papas Arrugadas",
         "x": 431,
         "y": 999,
-        "color": 16369487,
-        "image": "platos/caracoles-llauna.png"
+        "color": 16369487
     },
     {
         "id": 49,
@@ -437,8 +389,7 @@
         "food": "Mojo Picón",
         "x": 173,
         "y": 992,
-        "color": 11066076,
-        "image": "platos/caracoles-llauna.png"
+        "color": 11066076
     },
     {
         "id": 50,
@@ -446,7 +397,22 @@
         "food": "Patatas a la Riojana",
         "x": 1103,
         "y": 234,
-        "color": 15954476,
-        "image": "platos/caracoles-llauna.png"
+        "color": 15954476
+    },
+    {
+        "id": 51,
+        "name": "Ceuta",
+        "food": "Pinchos Morunos",
+        "x": 790,
+        "y": 1033,
+        "color": 16369487
+    },
+    {
+        "id": 52,
+        "name": "Melilla",
+        "food": "Pastela",
+        "x": 1225,
+        "y": 1034,
+        "color": 4553629
     }
 ]
