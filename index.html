@@ -16,7 +16,7 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #2b2d42;
+            background-color: #F3F4F3;
             overflow: hidden;
             font-family: 'Nunito', sans-serif;
             display: flex;
@@ -30,7 +30,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #fcf9f2;
+            background-color: #F3F4F3;
             position: relative;
         }
 
@@ -434,10 +434,9 @@
         const game = new Phaser.Game(config);
 
         function preload() {
-            // Cargar imagen de mapa local
-            this.load.image('mapa_espana', 'Gemini_Generated_Image.png');
-
-            // Cargar archivo JSON local
+            // Mapa original con fondo corregido a #F3F4F3 para mantener alineación
+            this.load.image('mapa_espana', 'mapa_espana_fixed.png');
+            this.load.image('bull_launcher', 'assets/bull_launcher.png');
             this.load.json('proximosDatos', 'provincesData_actualizado.json');
 
             // Aquí se cargarían el resto de assets reales
@@ -541,35 +540,15 @@
                 provinceSprites.push(pGroup);
             });
 
-            // --- NUEVO LANZADOR CARTOON ---
-            launcher = this.add.container(960, 1080);
+            // --- NUEVO LANZADOR BULL-BOT ---
+            launcher = this.add.container(960, 1140); // Subido de 1186 a 1140
+            // Cuerpo del Robot-Toro
+            let bullBot = this.add.sprite(0, -60, 'bull_launcher');
+            // Escalado: 50% más grande que antes (185 * 1.5 = ~277)
+            bullBot.setDisplaySize(277, 277);
 
-            // Base del cañón (Soporte)
-            let cannonBase = this.add.graphics();
-            cannonBase.fillStyle(0x2b2d42, 1);
-            cannonBase.fillRoundedRect(-60, -40, 120, 60, 10);
-            cannonBase.lineStyle(4, 0x111111);
-            cannonBase.strokeRoundedRect(-60, -40, 120, 60, 10);
-
-            // El tubo del cañón
-            let cannonTube = this.add.graphics();
-            // Gradiente o colores cartoon
-            cannonTube.fillStyle(0xef233c, 1); // Rojo principal
-            cannonTube.fillRoundedRect(-40, -120, 80, 130, { tl: 20, tr: 20, bl: 0, br: 0 });
-            cannonTube.lineStyle(6, 0x2b2d42);
-            cannonTube.strokeRoundedRect(-40, -120, 80, 130, { tl: 20, tr: 20, bl: 0, br: 0 });
-
-            // Detalles del cañón (Anillos decorativos)
-            cannonTube.fillStyle(0xd90429, 1);
-            cannonTube.fillRect(-45, -110, 90, 15);
-            cannonTube.fillRect(-45, -60, 90, 10);
-
-            // La "boca" del cañón
-            cannonTube.fillStyle(0x2b2d42, 1);
-            cannonTube.fillEllipse(0, -120, 80, 25);
-
-            launcher.add([cannonBase, cannonTube]);
-            launcher.cannonTube = cannonTube; // Referencia para animación de retroceso
+            launcher.add(bullBot);
+            launcher.bullBot = bullBot; // Referencia para rotación y retroceso
 
             // Teclado
             this.input.keyboard.on('keydown-RIGHT', () => navigateKeyboard(1));
@@ -590,20 +569,33 @@
         }
 
         function update() {
-            // 1. Apuntar el cañón al ratón (Solo si no está disparando o modo edición)
-            if (launcher && launcher.cannonTube && !isShooting && !isEditMode) {
+            // 1. Apuntar el Robot-Toro al ratón
+            if (launcher && launcher.bullBot && !isEditMode) {
                 let pointer = this.input.activePointer;
-                // Calculamos el ángulo entre el centro del lanzador y el ratón
-                let angle = Phaser.Math.Angle.Between(launcher.x, launcher.y, pointer.worldX, pointer.worldY);
-                // Ajustamos +PI/2 porque el cañón está dibujado apuntando hacia arriba (0 rad en dibujo = UP)
-                launcher.cannonTube.rotation = angle + Math.PI / 2;
+                let angle = Phaser.Math.Angle.Between(launcher.x, launcher.y - 60, pointer.worldX, pointer.worldY);
 
-                // Limitar el ángulo para que no se de la vuelta completa (opcional but nice)
-                // Por ejemplo, que solo apunte entre -80 y 80 grados respecto a "arriba"
                 let targetRot = angle + Math.PI / 2;
-                if (targetRot > 1.4) targetRot = 1.4;
-                if (targetRot < -1.4) targetRot = -1.4;
-                launcher.cannonTube.rotation = targetRot;
+                // Límites de rotación
+                if (targetRot > 1.2) targetRot = 1.2;
+                if (targetRot < -1.2) targetRot = -1.2;
+
+                if (!isShooting) {
+                    launcher.bullBot.rotation = targetRot;
+
+                    // ELIMINAR PROYECTIL EN EL TORO (Ocultar mientras está en espera)
+                    if (projectile && projectile.active) {
+                        projectile.visible = false;
+                        // Mantenemos la lógica de posición por si acaso se activa de golpe
+                        let rot = launcher.bullBot.rotation;
+                        projectile.x = launcher.x + Math.sin(rot) * 110;
+                        projectile.y = (launcher.y - 60) - Math.cos(rot) * 110;
+                        projectile.rotation = rot;
+                        projectile.setScale(0.7);
+                    }
+                } else {
+                    // Asegurar que sea visible durante el disparo
+                    if (projectile) projectile.visible = true;
+                }
             }
 
             // 2. Actualizar la posición de la máscara para que siga al proyectil
@@ -703,10 +695,12 @@
             let scene = game.scene.scenes[0];
 
             // --- EFECTO DE DISPARO (Muzzle Flash) ---
-            // Calcular posición de la punta del cañón basada en su rotación
-            let rot = launcher.cannonTube.rotation;
-            let muzzleX = launcher.x + Math.sin(rot) * 120;
-            let muzzleY = launcher.y - Math.cos(rot) * 120;
+            let rot = launcher.bullBot.rotation;
+            // Lo hacemos visible al disparar
+            projectile.visible = true;
+            // Distancia sincronizada con update() (~110px)
+            let muzzleX = launcher.x + Math.sin(rot) * 110;
+            let muzzleY = (launcher.y - 60) - Math.cos(rot) * 110;
 
             // Flash de luz rápido
             let flash = scene.add.circle(muzzleX, muzzleY, 40, 0xffff00).setDepth(30);
@@ -730,14 +724,14 @@
             });
             setTimeout(() => particles.destroy(), 600);
 
-            // Ajustar posición inicial del proyectil para que salga de la boca
             projectile.x = muzzleX;
             projectile.y = muzzleY;
+            projectile.setScale(0.8); // Lo lanzamos un pelín más pequeño que antes para consistencia
 
-            // Animación de RETROCESO del cañón
+            // Animación de RETROCESO del Robot
             scene.tweens.add({
-                targets: launcher.cannonTube,
-                y: 30,
+                targets: launcher.bullBot,
+                y: -30, // Retrocede un poco (estaba en -60)
                 duration: 100,
                 yoyo: true,
                 ease: 'Quad.easeOut'
