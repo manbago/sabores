@@ -168,7 +168,8 @@
             margin-bottom: 5px;
         }
 
-        #game-over-screen {
+        #game-over-screen,
+        #confirm-restart-screen {
             display: none;
             position: absolute;
             top: 0;
@@ -183,7 +184,8 @@
             pointer-events: auto;
         }
 
-        #game-over-box {
+        #game-over-box,
+        #confirm-restart-box {
             background: #fff;
             border: 6px solid #43aa8b;
             border-radius: 30px;
@@ -197,6 +199,11 @@
             font-size: 64px;
             color: #f94144;
             margin: 0 0 20px 0;
+        }
+
+        #confirm-restart-box h1 {
+            font-size: 48px;
+            color: #073B4C;
         }
 
         p.final-score {
@@ -217,6 +224,18 @@
             cursor: pointer;
             box-shadow: 4px 4px 0px #333;
             transition: all 0.1s;
+        }
+
+        .btn-cancel {
+            background: #f94144;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .btn-confirm {
+            background: #43aa8b;
+            color: white;
+            margin-right: 10px;
         }
 
         button:active {
@@ -324,23 +343,7 @@
             z-index: 100;
         }
 
-        /* Tooltip de mapa */
-        #tooltip {
-            position: absolute;
-            background: #333;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-family: 'Fredoka One', cursive;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.1s;
-            transform: translate(-50%, -100%);
-            margin-top: -10px;
-            z-index: 50;
-        }
-
+        /* Tooltip de mapa REMOVIDO */
         /* Popup Sabías que... */
         #sabias-que-popup {
             display: none;
@@ -484,13 +487,32 @@
             color: #555;
             line-height: 1.2;
         }
+
+        /* Iconos de Vidas/Comodines */
+        .icon-active {
+            display: inline-block;
+        }
+
+        .icon-spent {
+            display: inline-block;
+            filter: grayscale(100%) opacity(50%);
+        }
+
+        #restart-btn {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            background: #f94144;
+            padding: 10px 20px;
+            font-size: 18px;
+            z-index: 100;
+        }
     </style>
 </head>
 
 <body>
 
     <div id="game-container"></div>
-    <div id="tooltip">Provincia</div>
 
     <!-- Popup de Notificación Toro -->
     <div id="notification-popup">
@@ -512,22 +534,33 @@
     <div id="game-stats">
         <div class="score-points">Reinos Conquistados: <span id="score-aciertos">0</span>/50</div>
         <div class="stat-box vidas-box" title="Vidas Restantes">
-            <span id="ui-vidas">🥘🥘🥘🥘🥘🥘🥘🥘</span><br>
+            <span id="ui-vidas">
+                <span class="icon-active">🥘</span><span class="icon-active">🥘</span><span
+                    class="icon-active">🥘</span><span class="icon-active">🥘</span><span
+                    class="icon-active">🥘</span><span class="icon-active">🥘</span><span
+                    class="icon-active">🥘</span><span class="icon-active">🥘</span>
+            </span><br>
             <span style="font-size:14px; color:#333;">Vidas</span>
         </div>
         <div class="stat-box comodines-box" title="Usar Comodín (Pista)"
             onclick="event.stopPropagation(); usarComodin();">
-            <span id="ui-comodines">🛸🛸🛸🛸🛸🛸🛸🛸</span><br>
-            <span style="font-size:14px; color:#333;">Comodín</span>
+            <span id="ui-comodines">
+                <span class="icon-active">🃏</span><span class="icon-active">🃏</span><span
+                    class="icon-active">🃏</span><span class="icon-active">🃏</span><span
+                    class="icon-active">🃏</span><span class="icon-active">🃏</span><span
+                    class="icon-active">🃏</span><span class="icon-active">🃏</span>
+            </span><br>
+            <span style="font-size:14px; color:#333;">Comodines</span>
         </div>
     </div>
 
+    <button id="restart-btn" onclick="confirmRestart()">Terminar Partida</button>
     <button id="edit-btn" onclick="toggleEditMode()">Activar Modo Edición</button>
 
     <div id="hud-container">
         <div id="dashboard">
             <div class="food-preview">
-                <div id="food-image">🍽️</div>
+                <div id="food-image"></div>
             </div>
             <div class="dashboard-info">
                 <div class="dash-title">Preparando Lanzamiento...</div>
@@ -543,6 +576,17 @@
             <h1>¡Juego Terminado!</h1>
             <p class="final-score">Aciertos: <span id="final-aciertos">0</span>/50</p>
             <button onclick="location.reload()">Jugar de Nuevo</button>
+        </div>
+    </div>
+
+    <div id="confirm-restart-screen">
+        <div id="confirm-restart-box">
+            <h1>¿Terminar Partida?</h1>
+            <p class="final-score" style="font-size: 24px;">Se perderá tu progreso actual.</p>
+            <div>
+                <button class="btn-confirm" onclick="location.reload()">Sí, reiniciar</button>
+                <button class="btn-cancel" onclick="cancelRestart()">Cancelar</button>
+            </div>
         </div>
     </div>
 
@@ -658,21 +702,18 @@
                 pGroup.on('pointerover', () => {
                     if (isShooting) return;
                     highlightProvince(pGroup, text, this);
-                    showTooltip(prov.name, pGroup.x, pGroup.y);
                     hoverIndex = i; // Sincroniza ratón con nav teclado
                 });
 
                 pGroup.on('pointerout', () => {
                     if (isShooting || isEditMode) return;
                     resetProvince(pGroup, text, this);
-                    hideTooltip();
                 });
 
                 // Disparo (Click)
                 pGroup.on('pointerdown', () => {
                     if (isEditMode) return;
                     if (!isShooting) shootAt(prov, pGroup);
-                    hideTooltip();
                 });
 
                 // --- Lógica Drag & Drop (Modo Edición) ---
@@ -688,7 +729,6 @@
                     if (!isEditMode) return;
                     this.x = dragX;
                     this.y = dragY;
-                    hideTooltip(); // Ocultar tooltip mientras arrastramos
                 });
 
                 pGroup.on('dragend', function (pointer, dragX, dragY, dropped) {
@@ -802,7 +842,7 @@
             domCurrentFood.innerText = currentTarget.food;
 
             // Asignar emoji animado según el plato (esto puede mejorarse con un mapa o emojis dedicados)
-            const emojisDisponibles = ['🥘', '🦐', '🥩', '🧀', '🐟', '🐙', '🍗', '🌶️', '🍮', '🥟'];
+            const emojisDisponibles = ['🥘', '🦐', '🥩', '🧀', '🐟', '🐙', '🍗', '🌶🥘', '🍮', '🥟'];
             let randomEmoji = emojisDisponibles[Math.floor(Math.random() * emojisDisponibles.length)];
 
             // Emoji personalizado según palabra clave en el nombre del plato
@@ -812,7 +852,7 @@
             else if (foodNameLow.includes('jamón') || foodNameLow.includes('ternasco') || foodNameLow.includes('chuletón') || foodNameLow.includes('lechazo')) randomEmoji = '🥩';
             else if (foodNameLow.includes('pollo')) randomEmoji = '🍗';
             else if (foodNameLow.includes('langostino') || foodNameLow.includes('gamba')) randomEmoji = '🦐';
-            else if (foodNameLow.includes('pimiento')) randomEmoji = '🌶️';
+            else if (foodNameLow.includes('pimiento')) randomEmoji = '🌶🥘';
             else if (foodNameLow.includes('bacalao') || foodNameLow.includes('sardina')) randomEmoji = '🐟';
             else if (foodNameLow.includes('paella')) randomEmoji = '🥘';
             else if (foodNameLow.includes('crema') || foodNameLow.includes('xuixo') || foodNameLow.includes('turrón') || foodNameLow.includes('mazapán') || foodNameLow.includes('miguelitos') || foodNameLow.includes('ensaimada') || foodNameLow.includes('sobao') || foodNameLow.includes('piononos')) randomEmoji = '🍮';
@@ -1052,6 +1092,7 @@
                 vidas--;
                 rachaAciertos = 0; // Romper racha
                 updateVidasUI();
+                triggerLossAnimation(domVidas.parentElement);
 
                 targetSprite.mainText.setTint(0xF44336); // Rojo para fallo
 
@@ -1127,26 +1168,6 @@
 
             let target = provinceSprites[hoverIndex];
             highlightProvince(target, target.mainText, game.scene.scenes[0]);
-            showTooltip(target.provinceData.name, target.x, target.y);
-        }
-
-        function showTooltip(text, x, y) {
-            // Convertir coordenadas del mundo Phaser al DOM (simplificado usando scale.displayScale)
-            let scaleX = game.scale.displayScale.x;
-            let scaleY = game.scale.displayScale.y;
-
-            let rect = game.canvas.getBoundingClientRect();
-            let domX = rect.left + (x * scaleX);
-            let domY = rect.top + (y * scaleY) - 50; // Offset arriba
-
-            domTooltip.innerText = text;
-            domTooltip.style.left = domX + 'px';
-            domTooltip.style.top = domY + 'px';
-            domTooltip.style.opacity = 1;
-        }
-
-        function hideTooltip() {
-            domTooltip.style.opacity = 0;
         }
 
         function gameOver() {
@@ -1164,13 +1185,21 @@
 
         // --- LÓGICA COMODINES Y VIDAS ---
         function updateVidasUI() {
-            // Vidas = Paella 🥘, Gastadas = Plato vacío 🍽️
-            domVidas.innerText = "🥘".repeat(vidas) + "🍽️".repeat(8 - vidas);
+            let html = "";
+            for (let i = 0; i < 8; i++) {
+                if (i < vidas) html += '<span class="icon-active">🥘</span>';
+                else html += '<span class="icon-spent">🥘</span>';
+            }
+            domVidas.innerHTML = html;
         }
 
         function updateComodinesUI() {
-            // Comodín = OVNI 🛸, Gastado = Prohibido 🚫
-            domComodines.innerText = "🛸".repeat(comodines) + "🚫".repeat(8 - comodines);
+            let html = "";
+            for (let i = 0; i < 8; i++) {
+                if (i < comodines) html += '<span class="icon-active">🃏</span>';
+                else html += '<span class="icon-spent">🃏</span>';
+            }
+            domComodines.innerHTML = html;
         }
 
         function usarComodin() {
@@ -1179,6 +1208,7 @@
 
             comodines--;
             updateComodinesUI();
+            triggerLossAnimation(domComodines.parentElement);
             checkAndShowNotification(); // Actualizar aviso si es necesario
 
             // Clonamos el objeto Data para no alterarlo
@@ -1216,7 +1246,39 @@
             document.getElementById('sabias-que-popup').style.display = 'none';
         }
 
+        function confirmRestart() {
+            document.getElementById('confirm-restart-screen').style.display = 'flex';
+        }
+
+        function cancelRestart() {
+            document.getElementById('confirm-restart-screen').style.display = 'none';
+        }
+
         // --- SISTEMA DE NOTIFICACIONES Y RECOMPENSAS ---
+        function triggerLossAnimation(el) {
+            // Efecto CSS Dom (rojo y vibración)
+            el.style.transition = "transform 0.1s, box-shadow 0.3s, background-color 0.3s";
+            el.style.backgroundColor = "#ffebee";
+            el.style.boxShadow = "0px 0px 25px 8px rgba(244, 67, 54, 0.6)";
+
+            // Animación de vibración rápida (shake)
+            let shakes = 0;
+            let interval = setInterval(() => {
+                shakes++;
+                el.style.transform = `translateX(${shakes % 2 === 0 ? 4 : -4}px)`;
+                if (shakes >= 6) {
+                    clearInterval(interval);
+                    el.style.transform = "scale(1)";
+                }
+            }, 50);
+
+            setTimeout(() => {
+                el.style.boxShadow = "4px 4px 0px rgba(0, 0, 0, 0.15)";
+                el.style.backgroundColor = "#ffffff";
+                setTimeout(() => { el.style.transition = ""; }, 300);
+            }, 500);
+        }
+
         function triggerRewardAnimation(el) {
             // Efecto CSS Dom
             el.style.transition = "transform 0.3s, box-shadow 0.3s, background-color 0.3s";
@@ -1227,13 +1289,9 @@
             // Partículas en Phaser
             if (game && game.scene && game.scene.scenes[0]) {
                 let scene = game.scene.scenes[0];
-                let rect = el.getBoundingClientRect();
-                let canvasRect = game.canvas.getBoundingClientRect();
-
-                let scaleX = game.scale.displayScale.x;
-                let scaleY = game.scale.displayScale.y;
-                let px = (rect.left + rect.width / 2 - canvasRect.left) / scaleX;
-                let py = (rect.top + rect.height / 2 - canvasRect.top) / scaleY;
+                // Posición estática aproximada del marcador superior derecho
+                let px = 1750;
+                let py = 100;
 
                 let particles = scene.add.particles(px, py, 'circle', {
                     color: [0x4CAF50, 0xffba08, 0xffffff],
@@ -1301,7 +1359,7 @@
                 // Solo vidas
                 else if (vidas <= 3) {
                     if (vidas === 3) msgObj = { title: "¡Friendly reminder!", text: "3 vidas restantes. Aún respiramos, pero ojo.", type: "warning" };
-                    else if (vidas === 2) msgObj = { title: "Jorl!", text: "2 vidas...", type: "danger" };
+                    else if (vidas === 2) msgObj = { title: "Auug!", text: "2 vidas...", type: "danger" };
                     else if (vidas === 1) msgObj = { title: "¡ÚLTIMO ALIENTO!", text: "¡1 sola vida! ", type: "danger" };
                 }
                 // Solo comodines
