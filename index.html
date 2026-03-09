@@ -1107,6 +1107,12 @@
 
                 targetSprite.mainText.setTint(0xF44336); // Rojo para fallo
 
+                // --- NUEVA LÓGICA ---
+                // Devolver la provincia fallada a un lugar aleatorio de la cola
+                // De esta manera el juego no termina hasta que se aciertan todas.
+                let insertIndex = Math.floor(Math.random() * (gameQueue.length + 1));
+                gameQueue.splice(insertIndex, 0, currentTarget);
+
                 // Efecto Miss
                 let missText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y - 50, '¡MISS!', {
                     fontFamily: 'Fredoka One', fontSize: '48px', color: '#F44336', stroke: '#fff', strokeThickness: 6
