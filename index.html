@@ -340,6 +340,150 @@
             margin-top: -10px;
             z-index: 50;
         }
+
+        /* Popup Sabías que... */
+        #sabias-que-popup {
+            display: none;
+            position: absolute;
+            left: 40px;
+            top: 25%;
+            transform: translateY(-50%);
+            width: 350px;
+            background: #FFD166;
+            border: 6px solid #EF476F;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            font-family: 'Nunito', sans-serif;
+            color: #073B4C;
+            animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop-in {
+            0% {
+                transform: translateY(-50%) scale(0);
+            }
+
+            100% {
+                transform: translateY(-50%) scale(1);
+            }
+        }
+
+        #sabias-que-title {
+            font-family: 'Fredoka One', cursive;
+            color: #EF476F;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #sabias-que-text {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        #sabias-que-close {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: #EF476F;
+            color: #fff;
+            border: 4px solid #073B4C;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-family: 'Fredoka One', cursive;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s;
+        }
+
+        #sabias-que-close:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Popup de Notificación (Estilo Móvil) */
+        #notification-popup {
+            display: none;
+            position: absolute;
+            left: 40px;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 12px 16px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            font-family: 'Nunito', sans-serif;
+            color: #333;
+            animation: slide-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            align-items: center;
+            gap: 12px;
+            width: 300px;
+            border-left: 6px solid #f94144;
+            /* Default Red */
+            transition: border-color 0.3s;
+        }
+
+        @keyframes slide-in {
+            0% {
+                transform: translateX(-120%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        #notification-avatar {
+            width: 45px;
+            height: 45px;
+            background: #fcf9f2;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 2px solid #ddd;
+        }
+
+        #notification-avatar img {
+            width: 120%;
+            margin-top: 10px;
+        }
+
+        .notification-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .notification-title {
+            font-weight: 800;
+            font-size: 14px;
+            color: #111;
+        }
+
+        .notification-msg {
+            font-weight: 600;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.2;
+        }
     </style>
 </head>
 
@@ -347,6 +491,23 @@
 
     <div id="game-container"></div>
     <div id="tooltip">Provincia</div>
+
+    <!-- Popup de Notificación Toro -->
+    <div id="notification-popup">
+        <div id="notification-avatar">
+            <img src="assets/bull_launcher.png" alt="Bull">
+        </div>
+        <div class="notification-content">
+            <div class="notification-title" id="notification-title">Aviso</div>
+            <div class="notification-msg" id="notification-msg">...</div>
+        </div>
+    </div>
+
+    <div id="sabias-que-popup">
+        <div id="sabias-que-close" onclick="closeSabiasQue()">X</div>
+        <h2 id="sabias-que-title">💡 ¡Sabías que...!</h2>
+        <div id="sabias-que-text">...</div>
+    </div>
 
     <div id="game-stats">
         <div class="score-points">Reinos Conquistados: <span id="score-aciertos">0</span>/50</div>
@@ -396,6 +557,7 @@
         let fallos = 0;
         let vidas = 8;
         let comodines = 8;
+        let rachaAciertos = 0; // Nueva variable para rachas
 
         let isShooting = false;
         let hoverIndex = 0; // Para teclado
@@ -665,6 +827,9 @@
             domComodinOptions.innerHTML = '';
             isShooting = false;
 
+            // Revisar y mostrar notificaciones (rachas o avisos de escasez)
+            checkAndShowNotification();
+
             // Recrear proyectil base
             createProjectile(game.scene.scenes[0]);
         }
@@ -715,6 +880,8 @@
 
         function shootAt(targetProv, targetSprite) {
             isShooting = true;
+            closeSabiasQue(); // Cerrar el popup si estaba abierto
+            hideNotification(); // Cerrar la notificación móvil
             let scene = game.scene.scenes[0];
 
             // --- EFECTO DE DISPARO (Muzzle Flash) ---
@@ -844,6 +1011,7 @@
             if (selectedProv.id === currentTarget.id) {
                 // ACIERTO
                 aciertos++;
+                rachaAciertos++; // Incrementar racha
                 domAciertos.innerText = aciertos;
 
                 // Efecto Swish
@@ -873,15 +1041,29 @@
                 domAciertos.parentElement.style.transform = 'scale(1.2)';
                 setTimeout(() => { domAciertos.parentElement.style.transform = 'scale(1)'; }, 200);
 
-                setTimeout(nextRound, 1000);
+                setTimeout(() => {
+                    showSabiasQue(selectedProv.info);
+                    nextRound(); // Pasar de ronda inmediatamente sin esperar al popup
+                }, 1000);
 
             } else {
                 // FALLO
                 fallos++;
                 vidas--;
+                rachaAciertos = 0; // Romper racha
                 updateVidasUI();
 
                 targetSprite.mainText.setTint(0xF44336); // Rojo para fallo
+
+                // Efecto Miss
+                let missText = scene.add.text(selectedProv.x, selectedProv.y - 50, '¡MISS!', {
+                    fontFamily: 'Fredoka One', fontSize: '48px', color: '#F44336', stroke: '#fff', strokeThickness: 6
+                }).setOrigin(0.5).setDepth(30);
+
+                scene.tweens.add({
+                    targets: missText, y: '-=100', alpha: 0, scale: 1.5, duration: 1000,
+                    onComplete: () => missText.destroy()
+                });
 
                 // Efecto rebote rojo y caída (Opcional: Si queremos que caiga, no podemos destruirlo antes)
                 // Como el usuario pidió que aparezca "impacto", ya lo hemos destruido arriba.
@@ -997,6 +1179,7 @@
 
             comodines--;
             updateComodinesUI();
+            checkAndShowNotification(); // Actualizar aviso si es necesario
 
             // Clonamos el objeto Data para no alterarlo
             let misProvincias = JSON.parse(JSON.stringify(provincesData));
@@ -1023,6 +1206,149 @@
             if (game && game.canvas) game.canvas.focus();
         }
 
+        // --- SABÍAS QUE POPUP ---
+        function showSabiasQue(infoText) {
+            document.getElementById('sabias-que-text').innerText = infoText || "¿Sabías que la gastronomía española es famosa mundialmente?";
+            document.getElementById('sabias-que-popup').style.display = 'block';
+        }
+
+        function closeSabiasQue() {
+            document.getElementById('sabias-que-popup').style.display = 'none';
+        }
+
+        // --- SISTEMA DE NOTIFICACIONES Y RECOMPENSAS ---
+        function triggerRewardAnimation(el) {
+            // Efecto CSS Dom
+            el.style.transition = "transform 0.3s, box-shadow 0.3s, background-color 0.3s";
+            el.style.transform = "scale(1.3)";
+            el.style.boxShadow = "0px 0px 25px 8px rgba(76, 175, 80, 0.6)";
+            el.style.backgroundColor = "#e8f5e9";
+
+            // Partículas en Phaser
+            if (game && game.scene && game.scene.scenes[0]) {
+                let scene = game.scene.scenes[0];
+                let rect = el.getBoundingClientRect();
+                let canvasRect = game.canvas.getBoundingClientRect();
+
+                let scaleX = game.scale.displayScale.x;
+                let scaleY = game.scale.displayScale.y;
+                let px = (rect.left + rect.width / 2 - canvasRect.left) / scaleX;
+                let py = (rect.top + rect.height / 2 - canvasRect.top) / scaleY;
+
+                let particles = scene.add.particles(px, py, 'circle', {
+                    color: [0x4CAF50, 0xffba08, 0xffffff],
+                    speed: { min: 100, max: 400 },
+                    scale: { start: 0.6, end: 0 },
+                    lifespan: 800,
+                    blendMode: 'ADD',
+                    quantity: 40
+                });
+                particles.setDepth(100);
+                setTimeout(() => particles.destroy(), 1000);
+            }
+
+            setTimeout(() => {
+                el.style.transform = "scale(1)";
+                el.style.boxShadow = "4px 4px 0px rgba(0, 0, 0, 0.15)";
+                el.style.backgroundColor = "#ffffff";
+                setTimeout(() => { el.style.transition = ""; }, 300);
+            }, 600);
+        }
+
+        function checkAndShowNotification() {
+            let msgObj = null;
+
+            // 1. Evaluar Recompensas Positivas (Rachas)
+            if (rachaAciertos === 3) {
+                msgObj = { title: "¡En racha!", text: "Llevas 3 seguidas. ¡A los 5 ganas un comodín!", type: "info" };
+            } else if (rachaAciertos === 4) {
+                msgObj = { title: "¡Buena racha!", text: "Llevas 4 seguidas. ¡A los 5 ganas un comodín!", type: "info" };
+            } else if (rachaAciertos === 5) {
+                if (comodines < 8) {
+                    comodines++;
+                    updateComodinesUI();
+                    triggerRewardAnimation(domComodines.parentElement);
+                    msgObj = { title: "¡COMBO x5!", text: "¡Has ganado 1 COMODIN extra!", type: "success" };
+                } else {
+                    msgObj = { title: "¡COMBO x5!", text: "Comodines al máximo, ¡pero menuda racha llevas!", type: "info" };
+                }
+            } else if (rachaAciertos === 6) {
+                msgObj = { title: "¡Imparable!", text: "¡Estás a un acierto de conseguir una VIDA extra!", type: "info" };
+            } else if (rachaAciertos === 7) {
+                if (vidas < 8) {
+                    vidas++;
+                    updateVidasUI();
+                    triggerRewardAnimation(domVidas.parentElement);
+                    msgObj = { title: "¡COMBO x7!", text: "¡Has ganado 1 VIDA extra!", type: "success" };
+                } else {
+                    msgObj = { title: "¡COMBO x7!", text: "Vidas al máximo. ¡Eres una leyenda!", type: "info" };
+                }
+                rachaAciertos = 0; // Reiniciar racha tras máxima recompensa (8)
+            }
+
+            // 2. Si no hay recompensa, evaluar Escasez/Peligros (Negativos)
+            if (!msgObj) {
+                // Combinados primero (los más extremos)
+                if (vidas <= 3 && comodines <= 3) {
+                    if (vidas === 1 || comodines === 1) {
+                        msgObj = { title: "¡ALERTA MÁXIMA!", text: `¡${vidas} vida(s) y ${comodines} comodín(es)! ¡Suerte y la toro!`, type: "danger" };
+                    } else if (vidas === 2 || comodines === 2) {
+                        msgObj = { title: "¡Sudores fríos!", text: `¡Quedan ${vidas} vidas y ${comodines} comodines! ¡Concéntrate!`, type: "danger" };
+                    } else { // 3 y 3
+                        msgObj = { title: "¡Uy, uy, uy!", text: `Avisando... 3 vidas y 3 comodines. La cosa se tensa.`, type: "warning" };
+                    }
+                }
+                // Solo vidas
+                else if (vidas <= 3) {
+                    if (vidas === 3) msgObj = { title: "¡Friendly reminder!", text: "3 vidas restantes. Aún respiramos, pero ojo.", type: "warning" };
+                    else if (vidas === 2) msgObj = { title: "Jorl!", text: "2 vidas...", type: "danger" };
+                    else if (vidas === 1) msgObj = { title: "¡ÚLTIMO ALIENTO!", text: "¡1 sola vida! ", type: "danger" };
+                }
+                // Solo comodines
+                else if (comodines <= 3) {
+                    if (comodines === 3) msgObj = { title: "¡Alerta!", text: "Te quedan 3 comodines. ", type: "warning" };
+                    else if (comodines === 2) msgObj = { title: "¡Secano total!", text: "Solo 2 comodines... No los gastes a lo loco.", type: "warning" };
+                    else if (comodines === 1) msgObj = { title: "¡Última llamada!", text: "¡1 comodín! ¡Resérvalo para una que no sepas!", type: "danger" };
+                }
+            }
+
+            // 3. Mostrar la notificación si hay mensaje
+            if (msgObj) {
+                showNotification(msgObj.title, msgObj.text, msgObj.type);
+            } else {
+                hideNotification();
+            }
+        }
+
+        function showNotification(title, text, type) {
+            let pop = document.getElementById('notification-popup');
+            let tEl = document.getElementById('notification-title');
+            let mEl = document.getElementById('notification-msg');
+
+            tEl.innerText = title;
+            mEl.innerText = text;
+
+            // Asignar color de borde según el tipo
+            if (type === "success" || type === "info") {
+                pop.style.borderLeftColor = "#4CAF50"; // Verde
+                tEl.style.color = "#4CAF50";
+            } else if (type === "warning") {
+                pop.style.borderLeftColor = "#FFD166"; // Amarillo/naranja
+                tEl.style.color = "#E59819";
+            } else {
+                pop.style.borderLeftColor = "#f94144"; // Rojo (danger)
+                tEl.style.color = "#f94144";
+            }
+
+            // Breve animación reinicio
+            pop.style.display = 'none';
+            setTimeout(() => { pop.style.display = 'flex'; }, 50);
+        }
+
+        function hideNotification() {
+            document.getElementById('notification-popup').style.display = 'none';
+        }
+
         // --- MODO EDICIÓN ---
         function toggleEditMode() {
             isEditMode = !isEditMode;
@@ -1044,7 +1370,7 @@
         }
 
         function exportJSONData() {
-            // Actualizamos solo los IDs, nombres, coords y color.
+            // Actualizamos IDs, nombres, coords, color e info.
             const updatedData = provincesData.map(p => {
                 return {
                     id: p.id,
@@ -1052,7 +1378,8 @@
                     food: p.food,
                     x: p.x,
                     y: p.y,
-                    color: p.color
+                    color: p.color,
+                    info: p.info
                 };
             });
 
