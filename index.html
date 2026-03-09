@@ -585,7 +585,7 @@
             <p class="final-score" style="font-size: 24px;">Se perderá tu progreso actual.</p>
             <div>
                 <button class="btn-confirm" onclick="location.reload()">Sí, reiniciar</button>
-                <button class="btn-cancel" onclick="cancelRestart()">Cancelar</button>
+                <button class="btn-cancel" onclick="cancelRestart(event)">Cancelar</button>
             </div>
         </div>
     </div>
@@ -1042,12 +1042,12 @@
 
             // Partículas de "estallido" (Shatter effect)
             let shatter = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y, 'circle', {
-                color: [0xffffff, 0xffba08, 0xf94144, 0x2b2d42],
+                color: [0x000000, 0x333333],
                 speed: { min: 50, max: 150 },
                 scale: { start: 0.3, end: 0 },
                 lifespan: 600,
                 quantity: 15,
-                blendMode: 'ADD'
+                blendMode: 'NORMAL'
             });
             setTimeout(() => shatter.destroy(), 700);
 
@@ -1069,13 +1069,14 @@
 
                 // Efecto confeti de partículas (con primitives)
                 let particles = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y, 'circle', {
-                    color: [0xf94144, 0xf9c74f, 0x43aa8b, 0xffffff],
-                    colorRandom: true,
+                    color: [0x000000],
+                    colorRandom: false,
                     speed: { min: -200, max: 200 },
                     angle: { min: 0, max: 360 },
                     scale: { start: 0.3, end: 0 },
                     lifespan: 1000,
-                    quantity: 20
+                    quantity: 20,
+                    blendMode: 'NORMAL'
                 });
 
                 targetSprite.mainText.setTint(0x4CAF50); // Verde para acierto
@@ -1253,7 +1254,8 @@
             document.getElementById('confirm-restart-screen').style.display = 'flex';
         }
 
-        function cancelRestart() {
+        function cancelRestart(event) {
+            if (event) event.stopPropagation();
             document.getElementById('confirm-restart-screen').style.display = 'none';
         }
 
