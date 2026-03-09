@@ -1004,7 +1004,7 @@
             // 1. Animación Horizontal, Escala y Rotación
             scene.tweens.add({
                 targets: projectile,
-                x: targetProv.x,
+                x: targetProv.x + MAP_OFFSET_X,
                 scaleX: 0.2, // Simula profundidad
                 scaleY: 0.2,
                 angle: 720,  // Da dos vueltas completas
@@ -1041,7 +1041,7 @@
             if (projectileMaskGraphics) projectileMaskGraphics.destroy();
 
             // Partículas de "estallido" (Shatter effect)
-            let shatter = scene.add.particles(selectedProv.x, selectedProv.y, 'circle', {
+            let shatter = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y, 'circle', {
                 color: [0xffffff, 0xffba08, 0xf94144, 0x2b2d42],
                 speed: { min: 50, max: 150 },
                 scale: { start: 0.3, end: 0 },
@@ -1058,7 +1058,7 @@
                 domAciertos.innerText = aciertos;
 
                 // Efecto Swish
-                let swishText = scene.add.text(selectedProv.x, selectedProv.y - 50, '¡SWISH!', {
+                let swishText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y - 50, '¡SWISH!', {
                     fontFamily: 'Fredoka One', fontSize: '48px', color: '#4CAF50', stroke: '#fff', strokeThickness: 6
                 }).setOrigin(0.5).setDepth(30);
 
@@ -1068,7 +1068,7 @@
                 });
 
                 // Efecto confeti de partículas (con primitives)
-                let particles = scene.add.particles(selectedProv.x, selectedProv.y, 'circle', {
+                let particles = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y, 'circle', {
                     color: [0xf94144, 0xf9c74f, 0x43aa8b, 0xffffff],
                     colorRandom: true,
                     speed: { min: -200, max: 200 },
@@ -1100,7 +1100,7 @@
                 targetSprite.mainText.setTint(0xF44336); // Rojo para fallo
 
                 // Efecto Miss
-                let missText = scene.add.text(selectedProv.x, selectedProv.y - 50, '¡MISS!', {
+                let missText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y - 50, '¡MISS!', {
                     fontFamily: 'Fredoka One', fontSize: '48px', color: '#F44336', stroke: '#fff', strokeThickness: 6
                 }).setOrigin(0.5).setDepth(30);
 
