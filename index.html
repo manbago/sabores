@@ -608,6 +608,9 @@
         let isEditMode = false; // Modo edición
         let projectileMaskGraphics; // Gráfico para la máscara del proyectil
 
+        const MAP_OFFSET_X = -120; // Ajuste para compensar el hueco del Atlántico en el mapa y centrar a España
+
+
         const domAciertos = document.getElementById('score-aciertos');
         const domFallos = document.getElementById('score-fallos');
         const domVidas = document.getElementById('ui-vidas');
@@ -667,7 +670,7 @@
             gameQueue = Phaser.Utils.Array.Shuffle([...provincesData]);
 
             // Fondo / Mapa decorativo
-            let mapBg = this.add.image(960, 540, 'mapa_espana');
+            let mapBg = this.add.image(960 + MAP_OFFSET_X, 540, 'mapa_espana');
             // Forzamos a que cubra el tamaño de diseño 1920x1080
             mapBg.setDisplaySize(1920, 1080);
             // Coloco la profundidad al fondo
@@ -675,7 +678,7 @@
 
             // Dibujar provincias como textos interactivos
             provincesData.forEach((prov, i) => {
-                let pGroup = this.add.container(prov.x, prov.y);
+                let pGroup = this.add.container(prov.x + MAP_OFFSET_X, prov.y);
 
                 // Texto completo de la provincia
                 let text = this.add.text(0, 0, prov.name, {
@@ -735,8 +738,8 @@
                     if (!isEditMode) return;
                     this.setDepth(0);
                     text.clearTint();
-                    // Actualizar el objeto original con las nuevas coordenadas
-                    this.provinceData.x = Math.round(this.x);
+                    // Actualizar el objeto original con las nuevas coordenadas, deshaciendo el offset visual
+                    this.provinceData.x = Math.round(this.x - MAP_OFFSET_X);
                     this.provinceData.y = Math.round(this.y);
                 });
 
@@ -747,7 +750,7 @@
             });
 
             // --- NUEVO LANZADOR BULL-BOT ---
-            launcher = this.add.container(960, 1140); // Subido de 1186 a 1140
+            launcher = this.add.container(960 + MAP_OFFSET_X, 1140); // Subido de 1186 a 1140
             // Cuerpo del Robot-Toro
             let bullBot = this.add.sprite(0, -60, 'bull_launcher');
             // Escalado: 50% más grande que antes (185 * 1.5 = ~277)
