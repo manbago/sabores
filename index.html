@@ -716,6 +716,7 @@
                 // Disparo (Click)
                 pGroup.on('pointerdown', () => {
                     if (isEditMode) return;
+                    if (isModalOpen()) return;
                     if (!isShooting) shootAt(prov, pGroup);
                 });
 
@@ -777,6 +778,7 @@
             this.input.keyboard.on('keydown-UP', () => navigateKeyboard(-5));
             this.input.keyboard.on('keydown-DOWN', () => navigateKeyboard(5));
             this.input.keyboard.on('keydown-ENTER', () => {
+                if (isModalOpen()) return;
                 if (!isShooting && provinceSprites[hoverIndex]) {
                     shootAt(provinceSprites[hoverIndex].provinceData, provinceSprites[hoverIndex]);
                 }
@@ -835,6 +837,11 @@
         }
 
         // --- FUNCIONES LOGICAS ---
+
+        function isModalOpen() {
+            return document.getElementById('confirm-restart-screen').style.display === 'flex' ||
+                document.getElementById('game-over-screen').style.display === 'flex';
+        }
 
         function nextRound() {
             if (gameQueue.length === 0) {
