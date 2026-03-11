@@ -6,8 +6,8 @@
         let currentTarget = null;
         let aciertos = 0;
         let fallos = 0;
-        let vidas = 8;
-        let comodines = 8;
+        let vidas = 7;
+        let comodines = 5;
         let rachaAciertos = 0; // Nueva variable para rachas
 
         let isShooting = false;
@@ -37,7 +37,7 @@
             parent: 'game-container',
             scale: {
                 mode: Phaser.Scale.FIT,
-                autoCenter: Phaser.Scale.NONE
+                autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
             },
             scene: {
                 preload: preload,
@@ -194,6 +194,10 @@
             // Resaltar el primer elemento inicialmente
             if (provinceSprites.length > 0) highlightProvince(provinceSprites[0], provinceSprites[0].mainText, this);
 
+            // Inicializar UI de Vidas y Comodines
+            updateVidasUI();
+            updateComodinesUI();
+            
             // Iniciar juego
             nextRound();
 
@@ -285,7 +289,7 @@
             isShooting = false;
 
             // Revisar y mostrar notificaciones (rachas o avisos de escasez)
-            checkAndShowNotification();
+            checkAndShowNotification(true);
 
             // Recrear proyectil base
             createProjectile(game.scene.scenes[0]);
@@ -600,18 +604,16 @@
         // --- LÓGICA COMODINES Y VIDAS ---
         function updateVidasUI() {
             let html = "";
-            for (let i = 0; i < 8; i++) {
-                if (i < vidas) html += '<span class="icon-active">🍽️</span>';
-                else html += '<span class="icon-spent">🍽️</span>';
+            for (let i = 0; i < vidas; i++) {
+                html += '<span class="icon-active">🍽️</span>';
             }
             domVidas.innerHTML = html;
         }
 
         function updateComodinesUI() {
             let html = "";
-            for (let i = 0; i < 8; i++) {
-                if (i < comodines) html += '<span class="icon-active">🃏</span>';
-                else html += '<span class="icon-spent">🃏</span>';
+            for (let i = 0; i < comodines; i++) {
+                html += '<span class="icon-active">🃏</span>';
             }
             domComodines.innerHTML = html;
         }
@@ -623,7 +625,7 @@
             comodines--;
             updateComodinesUI();
             triggerUseAnimation(domComodines.parentElement);
-            checkAndShowNotification(); // Actualizar aviso si es necesario
+            checkAndShowNotification(false); // Actualizar aviso si es necesario, sin chequear rachas
 
             // Clonamos el objeto Data para no alterarlo
             let misProvincias = JSON.parse(JSON.stringify(provincesData));
@@ -745,35 +747,37 @@
             }, 600);
         }
 
-        function checkAndShowNotification() {
+        function checkAndShowNotification(checkStreaks = true) {
             let msgObj = null;
 
             // 1. Evaluar Recompensas Positivas (Rachas)
-            if (rachaAciertos === 3) {
-                msgObj = { title: "¡En racha!", text: "Llevas 3 seguidas. ¡A los 5 ganas un comodín!", type: "info" };
-            } else if (rachaAciertos === 4) {
-                msgObj = { title: "¡Buena racha!", text: "Llevas 4 seguidas. ¡A los 5 ganas un comodín!", type: "info" };
-            } else if (rachaAciertos === 5) {
-                if (comodines < 8) {
-                    comodines++;
-                    updateComodinesUI();
-                    triggerRewardAnimation(domComodines.parentElement);
-                    msgObj = { title: "¡COMBO x5!", text: "¡Has ganado 1 COMODIN extra!", type: "success" };
-                } else {
-                    msgObj = { title: "¡COMBO x5!", text: "Comodines al máximo, ¡pero menuda racha llevas!", type: "info" };
+            if (checkStreaks) {
+                if (rachaAciertos === 3) {
+                    msgObj = { title: "¡En racha!", text: "Llevas 3 seguidas. ¡A los 5 ganas un comodín!", type: "info" };
+                } else if (rachaAciertos === 4) {
+                    msgObj = { title: "¡Buena racha!", text: "Llevas 4 seguidas. ¡A los 5 ganas un comodín!", type: "info" };
+                } else if (rachaAciertos === 5) {
+                    if (comodines < 7) {
+                        comodines++;
+                        updateComodinesUI();
+                        triggerRewardAnimation(domComodines.parentElement);
+                        msgObj = { title: "¡COMBO x5!", text: "¡Has ganado 1 COMODIN extra!", type: "success" };
+                    } else {
+                        msgObj = { title: "¡COMBO x5!", text: "Comodines al máximo, ¡pero menuda racha llevas!", type: "info" };
+                    }
+                } else if (rachaAciertos === 6) {
+                    msgObj = { title: "¡Imparable!", text: "¡Estás a un acierto de conseguir una VIDA extra!", type: "info" };
+                } else if (rachaAciertos === 7) {
+                    if (vidas < 7) {
+                        vidas++;
+                        updateVidasUI();
+                        triggerRewardAnimation(domVidas.parentElement);
+                        msgObj = { title: "¡COMBO x7!", text: "¡Has ganado 1 VIDA extra!", type: "success" };
+                    } else {
+                        msgObj = { title: "¡COMBO x7!", text: "Vidas al máximo. ¡Eres una leyenda!", type: "info" };
+                    }
+                    rachaAciertos = 0; // Reiniciar racha tras máxima recompensa (8)
                 }
-            } else if (rachaAciertos === 6) {
-                msgObj = { title: "¡Imparable!", text: "¡Estás a un acierto de conseguir una VIDA extra!", type: "info" };
-            } else if (rachaAciertos === 7) {
-                if (vidas < 8) {
-                    vidas++;
-                    updateVidasUI();
-                    triggerRewardAnimation(domVidas.parentElement);
-                    msgObj = { title: "¡COMBO x7!", text: "¡Has ganado 1 VIDA extra!", type: "success" };
-                } else {
-                    msgObj = { title: "¡COMBO x7!", text: "Vidas al máximo. ¡Eres una leyenda!", type: "info" };
-                }
-                rachaAciertos = 0; // Reiniciar racha tras máxima recompensa (8)
             }
 
             // 2. Si no hay recompensa, evaluar Escasez/Peligros (Negativos)

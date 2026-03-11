@@ -252,8 +252,9 @@
             box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
             font-family: 'Fredoka One', cursive;
             font-size: 26px;
-            text-align: right;
+            text-align: center;
             user-select: none;
+            min-width: 250px;
         }
 
         .vidas-box {

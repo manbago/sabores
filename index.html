@@ -18,7 +18,7 @@
     <!-- Popup de Notificación Toro -->
     <div id="notification-popup">
         <div id="notification-avatar">
-            <img src="assets/bull_launcher.png" alt="Bull">
+            <img src="assets/images/bull_launcher.png" alt="Bull">
         </div>
         <div class="notification-content">
             <div class="notification-title" id="notification-title">Aviso</div>
@@ -33,24 +33,14 @@
     </div>
 
     <div id="game-stats">
-        <div class="score-points">Reinos Conquistados: <span id="score-aciertos">0</span>/52</div>
+        <div class="stat-box score-points">Provincias: <span id="score-aciertos">0</span>/52</div>
         <div class="stat-box vidas-box" title="Vidas Restantes">
-            <span id="ui-vidas">
-                <span class="icon-active">🍽️</span><span class="icon-active">🍽️</span><span
-                    class="icon-active">🍽️</span><span class="icon-active">🍽️</span><span
-                    class="icon-active">🍽️</span><span class="icon-active">🍽️</span><span
-                    class="icon-active">🍽️</span><span class="icon-active">🍽️</span>
-            </span><br>
+            <span id="ui-vidas"></span><br>
             <span style="font-size:14px; color:#333;">Vidas</span>
         </div>
         <div class="stat-box comodines-box" title="Usar Comodín (Pista)"
             onclick="event.stopPropagation(); usarComodin();">
-            <span id="ui-comodines">
-                <span class="icon-active">🃏</span><span class="icon-active">🃏</span><span
-                    class="icon-active">🃏</span><span class="icon-active">🃏</span><span
-                    class="icon-active">🃏</span><span class="icon-active">🃏</span><span
-                    class="icon-active">🃏</span><span class="icon-active">🃏</span>
-            </span><br>
+            <span id="ui-comodines"></span><br>
             <span style="font-size:14px; color:#333;">Comodines</span>
         </div>
     </div>
