@@ -11,6 +11,9 @@
         let rachaAciertos = 0; // Nueva variable para rachas
 
         let isShooting = false;
+        let musicEnabled = true;
+        let sfxEnabled = true;
+        let bgMusic = null;
         let hoverIndex = 0; // Para teclado
         let isEditMode = false; // Modo edición
         let projectileMaskGraphics; // Gráfico para la máscara del proyectil
@@ -57,6 +60,9 @@
 
             // Efectos de sonido (Local asset)
             this.load.audio('bull_sound', 'assets/audio/shot.mp3');
+            this.load.audio('success_sound', 'assets/audio/success.wav');
+            this.load.audio('fail_sound', 'assets/audio/fail.wav');
+            this.load.audio('flamenco_bg', 'assets/audio/flamenco.mp3');
         }
 
         let provinceSprites = [];
@@ -180,10 +186,10 @@
             });
 
             // Teclado
-            this.input.keyboard.on('keydown-RIGHT', () => navigateKeyboard(1));
-            this.input.keyboard.on('keydown-LEFT', () => navigateKeyboard(-1));
-            this.input.keyboard.on('keydown-UP', () => navigateKeyboard(-5));
-            this.input.keyboard.on('keydown-DOWN', () => navigateKeyboard(5));
+            this.input.keyboard.on('keydown-RIGHT', () => navigateKeyboard('RIGHT'));
+            this.input.keyboard.on('keydown-LEFT', () => navigateKeyboard('LEFT'));
+            this.input.keyboard.on('keydown-UP', () => navigateKeyboard('UP'));
+            this.input.keyboard.on('keydown-DOWN', () => navigateKeyboard('DOWN'));
             this.input.keyboard.on('keydown-ENTER', () => {
                 if (isModalOpen()) return;
                 if (!isShooting && provinceSprites[hoverIndex]) {
@@ -205,6 +211,13 @@
             this.input.on('pointerdown', () => {
                 if (this.sound.context.state === 'suspended') {
                     this.sound.context.resume();
+                }
+                // Iniciar música si no está sonando y está habilitada
+                if (musicEnabled && (!bgMusic || !bgMusic.isPlaying)) {
+                    if (!bgMusic) {
+                        bgMusic = this.sound.add('flamenco_bg', { loop: true, volume: 0.3 });
+                    }
+                    bgMusic.play();
                 }
             });
         }
@@ -356,7 +369,7 @@
             // --- NUEVO EFECTO "PLASMA BURST" ---
 
             // 1. Sonido del Toro
-            if (scene.cache.audio.exists('bull_sound')) {
+            if (sfxEnabled && scene.cache.audio.exists('bull_sound')) {
                 scene.sound.play('bull_sound', { volume: 0.8 });
             }
 
@@ -461,6 +474,8 @@
 
             if (selectedProv.id === currentTarget.id) {
                 // ACIERTO
+                if (sfxEnabled && scene.cache.audio.exists('success_sound')) scene.sound.play('success_sound', { volume: 0.7 });
+                
                 aciertos++;
                 rachaAciertos++; // Incrementar racha
                 domAciertos.innerText = aciertos;
@@ -500,6 +515,8 @@
 
             } else {
                 // FALLO
+                if (sfxEnabled && scene.cache.audio.exists('fail_sound')) scene.sound.play('fail_sound', { volume: 0.4 });
+                
                 fallos++;
                 vidas--;
                 rachaAciertos = 0; // Romper racha
@@ -578,14 +595,43 @@
             }
         }
 
-        function navigateKeyboard(offset) {
+        function navigateKeyboard(direction) {
             if (isShooting) return;
 
-            hoverIndex = (hoverIndex + offset) % provinceSprites.length;
-            if (hoverIndex < 0) hoverIndex = provinceSprites.length - 1;
+            let current = provinceSprites[hoverIndex];
+            if (!current) return;
 
-            let target = provinceSprites[hoverIndex];
-            highlightProvince(target, target.mainText, game.scene.scenes[0]);
+            let bestMatch = null;
+            let bestDist = Infinity;
+
+            for (let i = 0; i < provinceSprites.length; i++) {
+                let candidate = provinceSprites[i];
+                if (i === hoverIndex) continue; // Skip self
+                
+                // Allow navigating over hit provinces to reach others? Yes.
+                let dx = candidate.x - current.x;
+                let dy = candidate.y - current.y;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+
+                let isValiddirection = false;
+                
+                // We use a cone of vision to determine if it's "in that direction"
+                if (direction === 'RIGHT' && dx > Math.abs(dy) * 0.5) isValiddirection = true;
+                if (direction === 'LEFT' && -dx > Math.abs(dy) * 0.5) isValiddirection = true;
+                if (direction === 'DOWN' && dy > Math.abs(dx) * 0.5) isValiddirection = true;
+                if (direction === 'UP' && -dy > Math.abs(dx) * 0.5) isValiddirection = true;
+
+                if (isValiddirection && dist < bestDist) {
+                    bestDist = dist;
+                    bestMatch = i;
+                }
+            }
+
+            if (bestMatch !== null) {
+                hoverIndex = bestMatch;
+                let target = provinceSprites[hoverIndex];
+                highlightProvince(target, target.mainText, game.scene.scenes[0]);
+            }
         }
 
         function gameOver() {
@@ -673,27 +719,18 @@
 
         // --- SISTEMA DE NOTIFICACIONES Y RECOMPENSAS ---
         function triggerLossAnimation(el) {
-            // Efecto CSS Dom (rojo y vibración)
-            el.style.transition = "transform 0.1s, box-shadow 0.3s, background-color 0.3s";
+            // Efecto CSS Dom (rojo suave)
+            el.style.transition = "transform 0.2s, box-shadow 0.3s, background-color 0.3s";
             el.style.backgroundColor = "#ffebee";
-            el.style.boxShadow = "0px 0px 25px 8px rgba(244, 67, 54, 0.6)";
-
-            // Animación de vibración rápida (shake)
-            let shakes = 0;
-            let interval = setInterval(() => {
-                shakes++;
-                el.style.transform = `translateX(${shakes % 2 === 0 ? 4 : -4}px)`;
-                if (shakes >= 6) {
-                    clearInterval(interval);
-                    el.style.transform = "scale(1)";
-                }
-            }, 50);
+            el.style.boxShadow = "0px 0px 15px 4px rgba(244, 67, 54, 0.4)";
+            el.style.transform = "scale(0.95)";
 
             setTimeout(() => {
                 el.style.boxShadow = "4px 4px 0px rgba(0, 0, 0, 0.15)";
                 el.style.backgroundColor = "#ffffff";
+                el.style.transform = "scale(1)";
                 setTimeout(() => { el.style.transition = ""; }, 300);
-            }, 500);
+            }, 400);
         }
 
         function triggerUseAnimation(el) {
@@ -811,6 +848,38 @@
                 showNotification(msgObj.title, msgObj.text, msgObj.type);
             } else {
                 hideNotification();
+            }
+        }
+
+        // --- FUNCIONES DE CONTROL DE AUDIO ---
+        function toggleMusic(event) {
+            if (event) event.stopPropagation();
+            musicEnabled = !musicEnabled;
+            const btn = document.getElementById('music-toggle');
+            
+            if (musicEnabled) {
+                btn.classList.remove('off');
+                if (bgMusic) bgMusic.resume();
+                else if (game.scene.scenes[0]) {
+                    const scene = game.scene.scenes[0];
+                    bgMusic = scene.sound.add('flamenco_bg', { loop: true, volume: 0.3 });
+                    bgMusic.play();
+                }
+            } else {
+                btn.classList.add('off');
+                if (bgMusic) bgMusic.pause();
+            }
+        }
+
+        function toggleSFX(event) {
+            if (event) event.stopPropagation();
+            sfxEnabled = !sfxEnabled;
+            const btn = document.getElementById('sfx-toggle');
+            
+            if (sfxEnabled) {
+                btn.classList.remove('off');
+            } else {
+                btn.classList.add('off');
             }
         }
 

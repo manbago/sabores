@@ -257,6 +257,43 @@
             min-width: 250px;
         }
 
+        /* Controles de Audio */
+        #audio-settings {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .audio-btn {
+            width: 50px;
+            height: 50px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            border: 4px solid #333;
+            border-radius: 15px;
+            font-size: 24px;
+            box-shadow: 4px 4px 0px #333;
+            transition: all 0.1s;
+        }
+
+        .audio-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #333;
+        }
+
+        .audio-btn.off {
+            filter: grayscale(100%);
+            background: #eee;
+            opacity: 0.7;
+        }
+
         .vidas-box {
             color: #f94144;
         }
