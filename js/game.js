@@ -19,7 +19,7 @@ let hoverIndex = 0; // Para teclado
 let isEditMode = false; // Modo edición
 let projectileMaskGraphics; // Gráfico para la máscara del proyectil
 
-const MAP_OFFSET_X = -120; // Ajuste para compensar el hueco del Atlántico en el mapa y centrar a España
+const MAP_OFFSET_X = 0; // El mapa recortado ya viene centrado, no requiere offset adicional
 
 
 const domAciertos = document.getElementById('score-aciertos');
@@ -56,7 +56,7 @@ const game = new Phaser.Game(config);
 
 function preload() {
     // Assets finales
-    this.load.image('mapa_espana', 'assets/images/mapa-blanco.png');
+    this.load.image('mapa_espana', 'assets/images/mapa-blanco_cut.png');
     this.load.image('bull_launcher', 'assets/images/bull_launcher.png');
     this.load.json('proximosDatos', 'data/provincesData.json');
 
@@ -123,8 +123,9 @@ function create() {
 
     // Fondo / Mapa decorativo
     let mapBg = this.add.image(960 + MAP_OFFSET_X, 540, 'mapa_espana');
-    // Forzamos a que cubra el tamaño de diseño 1920x1080
-    mapBg.setDisplaySize(1920, 1080);
+    // Ajustamos la escala basándonos en la altura (1080) para mantener la proporción
+    let scale = 1080 / mapBg.height;
+    mapBg.setScale(scale);
     // Coloco la profundidad al fondo
     mapBg.setDepth(-10);
 
