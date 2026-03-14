@@ -9,10 +9,68 @@
     <script src="lib/phaser.min.js"></script>
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/style.css">
+    <script>
+        // ======= JUICE SOUND ENGINE (Web Audio API) =======
+        // Genera sonidos de UI programáticamente sin necesitar archivos.
+        const _ac = new (window.AudioContext || window.webkitAudioContext)();
+
+        function _playTone(freq, type, duration, vol, attack, decay) {
+            try {
+                const o = _ac.createOscillator();
+                const g = _ac.createGain();
+                o.connect(g); g.connect(_ac.destination);
+                o.type = type || 'sine';
+                o.frequency.setValueAtTime(freq, _ac.currentTime);
+                g.gain.setValueAtTime(0, _ac.currentTime);
+                g.gain.linearRampToValueAtTime(vol || 0.15, _ac.currentTime + (attack || 0.01));
+                g.gain.exponentialRampToValueAtTime(0.001, _ac.currentTime + duration);
+                o.start(_ac.currentTime);
+                o.stop(_ac.currentTime + duration + 0.05);
+            } catch(e) {}
+        }
+
+        function playClickSound()  { _playTone(520, 'square', 0.08, 0.12, 0.005, 0.08); }
+        function playHoverSound()  { _playTone(880, 'sine',   0.06, 0.06, 0.005, 0.06); }
+        function playSuccessJingle() {
+            _playTone(523, 'sine', 0.1, 0.12);
+            setTimeout(() => _playTone(659, 'sine', 0.1, 0.12), 100);
+            setTimeout(() => _playTone(784, 'sine', 0.2, 0.18), 200);
+        }
+        function playErrorTone() { _playTone(180, 'sawtooth', 0.12, 0.1); }
+
+        // Auto-attach to all buttons on DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', () => {
+            function attachSounds(root) {
+                root.querySelectorAll('button').forEach(btn => {
+                    if (!btn.dataset.juiceAttached) {
+                        btn.addEventListener('mouseenter', playHoverSound);
+                        btn.addEventListener('click', playClickSound);
+                        btn.dataset.juiceAttached = '1';
+                    }
+                });
+            }
+            attachSounds(document);
+            // Observe new buttons added dynamically
+            new MutationObserver(() => attachSounds(document)).observe(document.body, { childList: true, subtree: true });
+        });
+    </script>
+
 </head>
 
 <body>
 
+    <!-- ======= MENÚ PRINCIPAL ======= -->
+    <div id="main-menu-screen">
+        <div class="menu-logo-wrap">
+            <span class="menu-logo-title">🍽️ SABOR DE ESPAÑA</span>
+            <span class="menu-logo-sub">The Hoops Challenge</span>
+        </div>
+        <button class="menu-btn btn-play" id="menu-play-btn">▶ JUGAR</button>
+        <button class="menu-btn" id="menu-audio-toggle">🎷 Música: ON &nbsp; 🔊 Efectos: ON</button>
+        <div class="menu-version">v1.0 · 52 Provincias</div>
+    </div>
+
+    <!-- ======= JUEGO ======= -->
     <div id="game-container"></div>
 
     <!-- Popup de Notificación Toro -->
@@ -32,6 +90,7 @@
         <div id="sabias-que-text">...</div>
     </div>
 
+    <!-- Controles de Audio (In-Game) -->
     <div id="audio-settings">
         <button id="music-toggle" class="audio-btn" onclick="toggleMusic(event)" title="Música Si/No">
             <span class="icon">🎷</span>
@@ -41,21 +100,24 @@
         </button>
     </div>
 
+    <!-- Botón Pantalla Completa -->
+    <button id="fullscreen-btn" onclick="toggleFullscreen(event)" title="Pantalla Completa (F11)">⛶</button>
+
     <div id="game-stats">
-        <div class="stat-box score-points">Provincias: <span id="score-aciertos">0</span>/52</div>
-        <div class="stat-box vidas-box" title="Vidas Restantes">
-            <span id="ui-vidas"></span><br>
-            <span style="font-size:14px; color:#333;">Vidas</span>
+        <div class="stat-box score-points">🍽️ <span id="score-aciertos">0</span> <span style="opacity:0.6;font-size:16px;">/ 52</span></div>
+        <div class="stat-box vidas-box" id="vidas-stat-box" title="Vidas Restantes">
+            <span id="ui-vidas">❤️❤️❤️❤️❤️❤️❤️</span>
+            <br><span style="font-size:11px;color:#a07550;font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:2px;">VIDAS</span>
         </div>
-        <div class="stat-box comodines-box" title="Usar Comodín (Pista)"
+        <div class="stat-box comodines-box" title="Clic para usar Comodín (Pista)"
             onclick="event.stopPropagation(); usarComodin();">
-            <span id="ui-comodines"></span><br>
-            <span style="font-size:14px; color:#333;">Comodines</span>
+            <span id="ui-comodines">⭐⭐⭐⭐⭐</span>
+            <br><span style="font-size:11px;color:#a07550;font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:2px;">COMODINES</span>
         </div>
     </div>
 
-    <button id="restart-btn" onclick="confirmRestart()">Terminar Partida</button>
-    <button id="edit-btn" onclick="toggleEditMode()" style="display: none;">Activar Modo Edición</button>
+    <button id="restart-btn" onclick="confirmRestart()">✕ Terminar</button>
+    <button id="edit-btn" onclick="toggleEditMode()" style="display: none;">✎ Modo Edición</button>
 
     <div id="hud-container">
         <div id="dashboard">
@@ -63,8 +125,8 @@
                 <div id="food-image"></div>
             </div>
             <div class="dashboard-info">
-                <div class="dash-title">Preparando Lanzamiento...</div>
-                <div class="dash-subtitle">¿DÓNDE ENCESTAMOS ESTE PLATO?</div>
+                <div class="dash-title">🎯 Siguiente Lanzamiento</div>
+                <div class="dash-subtitle">¿A qué provincia pertenece este plato?</div>
                 <div class="highlight-food" id="current-food">Cargando...</div>
                 <div id="comodin-container" class="comodin-options" style="display:none;"></div>
             </div>
@@ -74,20 +136,240 @@
     <div id="game-over-screen">
         <div id="game-over-box">
             <h1>¡Juego Terminado!</h1>
-            <p class="final-score">Aciertos: <span id="final-aciertos">0</span>/52</p>
-            <button onclick="location.reload()">Jugar de Nuevo</button>
+            <p class="final-score">Provincias: <span id="final-aciertos">0</span>/52</p>
+            <button onclick="location.reload()">🔄 Jugar de Nuevo</button>
         </div>
     </div>
 
     <div id="confirm-restart-screen">
         <div id="confirm-restart-box">
             <h1>¿Terminar Partida?</h1>
-            <p class="final-score" style="font-size: 24px;">Se perderá tu progreso actual.</p>
+            <p class="final-score" style="font-size: 22px;">Se perderá tu progreso actual.</p>
             <div>
-                <button class="btn-confirm" onclick="location.reload()">Sí, reiniciar</button>
-                <button class="btn-cancel" onclick="cancelRestart(event)">Cancelar</button>
+                <button class="btn-confirm" onclick="location.reload()">✓ Sí, reiniciar</button>
+                <button class="btn-cancel" onclick="cancelRestart(event)">✕ Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <!-- ======= PAUSA ======= -->
+    <div id="pause-screen">
+        <div id="pause-box">
+            <h2 id="pause-title">⏸ PAUSA</h2>
+
+            <!-- Vista: Menú pausa -->
+            <div id="pause-menu-view">
+                <button class="pause-btn" id="resume-btn">▶ Reanudar</button>
+                <button class="pause-btn" id="settings-btn">⚙ Ajustes</button>
+                <button class="pause-btn btn-danger" id="goto-menu-btn">🏠 Menú Principal</button>
+            </div>
+
+            <!-- Vista: Ajustes -->
+            <div id="pause-settings-view" style="display:none;">
+                <div class="slider-row">
+                    <label>🔊 Volumen General</label>
+                    <input type="range" id="slider-master" min="0" max="100" value="80" class="vol-slider">
+                    <span class="vol-val" id="val-master">80%</span>
+                </div>
+                <div class="slider-row">
+                    <label>🎷 Música</label>
+                    <input type="range" id="slider-music" min="0" max="100" value="30" class="vol-slider">
+                    <span class="vol-val" id="val-music">30%</span>
+                </div>
+                <div class="slider-row">
+                    <label>💥 Efectos</label>
+                    <input type="range" id="slider-sfx" min="0" max="100" value="70" class="vol-slider">
+                    <span class="vol-val" id="val-sfx">70%</span>
+                </div>
+                <button class="pause-btn" id="settings-back-btn">← Volver</button>
             </div>
         </div>
     </div>
 
     <script src="js/game.js"></script>
+
+    <script>
+        // ======= MENÚ PRINCIPAL =======
+        const menuScreen = document.getElementById('main-menu-screen');
+        const menuPlayBtn = document.getElementById('menu-play-btn');
+        const menuAudioToggle = document.getElementById('menu-audio-toggle');
+
+        // Estado inicial: ocultar el HUD in-game hasta que se juegue
+        document.getElementById('game-stats').style.display = 'none';
+        document.getElementById('hud-container').style.display = 'none';
+        document.getElementById('restart-btn').style.display = 'none';
+        document.getElementById('audio-settings').style.display = 'none';
+        document.getElementById('fullscreen-btn').style.display = 'none';
+
+        let menuMusicOn = true;
+        let menuSfxOn = true;
+
+        menuAudioToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Toggle ambos de una para simplificar desde el menú
+            menuMusicOn = !menuMusicOn;
+            menuSfxOn = menuMusicOn;
+            menuAudioToggle.textContent = menuMusicOn
+                ? '🎷 Música: ON   🔊 Efectos: ON'
+                : '🔇 Música: OFF  🔇 Efectos: OFF';
+            // Sincronizar con toggles in-game si el juego ya arrancó
+            if (typeof musicEnabled !== 'undefined') {
+                if (musicEnabled !== menuMusicOn) toggleMusic(null);
+                if (sfxEnabled !== menuSfxOn) toggleSFX(null);
+            }
+        });
+
+        menuPlayBtn.addEventListener('click', () => {
+            menuScreen.classList.add('hidden');
+
+            // Mostrar el HUD inmediatamente — sin esperar la transición del menú
+            document.getElementById('game-stats').style.display = 'flex';
+            document.getElementById('hud-container').style.display = 'flex';
+            document.getElementById('restart-btn').style.display = 'block';
+            document.getElementById('audio-settings').style.display = 'flex';
+            document.getElementById('fullscreen-btn').style.display = 'flex';
+
+            // Aplicar ajustes de audio del menú
+            if (!menuMusicOn && typeof musicEnabled !== 'undefined') {
+                musicEnabled = true;
+                toggleMusic(null);
+            }
+            if (!menuSfxOn && typeof sfxEnabled !== 'undefined') {
+                sfxEnabled = true;
+                toggleSFX(null);
+            }
+
+            // Habilitar disparos tras la transición de salida del menú (evita clicks accidentales)
+            setTimeout(() => {
+                menuScreen.style.display = 'none';
+                if (typeof gameStarted !== 'undefined') gameStarted = true;
+            }, 650);
+        });
+
+        // ======= PANTALLA COMPLETA =======
+        function toggleFullscreen(e) {
+            if (e) e.stopPropagation();
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+                document.getElementById('fullscreen-btn').textContent = '✕⛶';
+            } else {
+                document.exitFullscreen();
+                document.getElementById('fullscreen-btn').textContent = '⛶';
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F11') {
+                e.preventDefault();
+                toggleFullscreen(null);
+            }
+            // ESCAPE: abrir/cerrar pausa sólo si el juego ha empezado
+            if (e.key === 'Escape' && typeof gameStarted !== 'undefined' && gameStarted) {
+                togglePause();
+            }
+        });
+
+        // ======= MENÚ DE PAUSA =======
+        const pauseScreen    = document.getElementById('pause-screen');
+        const pauseMenuView  = document.getElementById('pause-menu-view');
+        const pauseSettingsView = document.getElementById('pause-settings-view');
+        window.isPaused = false;
+
+        function togglePause() {
+            window.isPaused = !window.isPaused;
+            if (window.isPaused) {
+                pauseScreen.classList.add('paused');
+                pauseMenuView.style.display    = 'flex';
+                pauseSettingsView.style.display = 'none';
+                // Pausar la música de fondo si existe
+                if (typeof bgMusic !== 'undefined' && bgMusic && bgMusic.isPlaying) {
+                    bgMusic.pause();
+                }
+            } else {
+                pauseScreen.classList.remove('paused');
+                // Reanudar música si está habilitada
+                if (typeof musicEnabled !== 'undefined' && musicEnabled
+                    && typeof bgMusic !== 'undefined' && bgMusic) {
+                    bgMusic.resume();
+                }
+            }
+        }
+
+        // Botón Reanudar
+        document.getElementById('resume-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePause();
+        });
+
+        // Botón Ajustes
+        document.getElementById('settings-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            pauseMenuView.style.display    = 'none';
+            pauseSettingsView.style.display = 'flex';
+        });
+
+        // Volver desde Ajustes
+        document.getElementById('settings-back-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            pauseSettingsView.style.display = 'none';
+            pauseMenuView.style.display    = 'flex';
+        });
+
+        // Botón Menú Principal
+        document.getElementById('goto-menu-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.isPaused = false;
+            pauseScreen.classList.remove('paused');
+            // Detener música
+            if (typeof bgMusic !== 'undefined' && bgMusic) bgMusic.stop();
+            // Mostrar menú principal y ocultar HUD
+            menuScreen.style.display = 'flex';
+            menuScreen.style.opacity = '1';
+            menuScreen.classList.remove('hidden');
+            document.getElementById('game-stats').style.display  = 'none';
+            document.getElementById('hud-container').style.display = 'none';
+            document.getElementById('restart-btn').style.display  = 'none';
+            document.getElementById('audio-settings').style.display = 'none';
+            document.getElementById('fullscreen-btn').style.display = 'none';
+            if (typeof gameStarted !== 'undefined') gameStarted = false;
+            // Reiniciar la escena de Phaser
+            setTimeout(() => location.reload(), 100);
+        });
+
+        // ======= SLIDERS DE VOLUMEN =======
+        function setupSlider(sliderId, valId, onInput) {
+            const slider = document.getElementById(sliderId);
+            const valEl  = document.getElementById(valId);
+            slider.addEventListener('input', () => {
+                valEl.textContent = slider.value + '%';
+                onInput(slider.value / 100);
+            });
+        }
+
+        // Volumen General — afecta a todo
+        setupSlider('slider-master', 'val-master', (v) => {
+            if (typeof bgMusic !== 'undefined' && bgMusic) {
+                const musicVol = (document.getElementById('slider-music').value / 100) * v;
+                bgMusic.setVolume(musicVol);
+            }
+            // Ajustar sfxVolumeFactor global para cuando se disparen sonidos
+            window.sfxVolumeFactor = (document.getElementById('slider-sfx').value / 100) * v;
+        });
+
+        // Volumen Música
+        setupSlider('slider-music', 'val-music', (v) => {
+            const master = document.getElementById('slider-master').value / 100;
+            if (typeof bgMusic !== 'undefined' && bgMusic) {
+                bgMusic.setVolume(v * master);
+            }
+        });
+
+        // Volumen SFX
+        setupSlider('slider-sfx', 'val-sfx', (v) => {
+            const master = document.getElementById('slider-master').value / 100;
+            window.sfxVolumeFactor = v * master;
+        });
+
+    </script>
+
+</body>
+</html>

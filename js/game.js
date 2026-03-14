@@ -11,6 +11,7 @@
         let rachaAciertos = 0; // Nueva variable para rachas
 
         let isShooting = false;
+        let gameStarted = false; // Bloquea disparos hasta que se pulse JUGAR
         let musicEnabled = true;
         let sfxEnabled = true;
         let bgMusic = null;
@@ -47,14 +48,15 @@
                 create: create,
                 update: update
             },
-            transparent: true // Para que se vea el background del body
+            backgroundColor: '#ffffff',
+            transparent: false
         };
 
         const game = new Phaser.Game(config);
 
         function preload() {
             // Assets finales
-            this.load.image('mapa_espana', 'assets/images/mapa_espana_fixed.png');
+            this.load.image('mapa_espana', 'assets/images/mapa-blanco.png');
             this.load.image('bull_launcher', 'assets/images/bull_launcher.png');
             this.load.json('proximosDatos', 'data/provincesData.json');
 
@@ -81,6 +83,43 @@
 
             // Preparamos la cola de juego inicial
             gameQueue = Phaser.Utils.Array.Shuffle([...provincesData]);
+
+            // Pre-cargar todas las imágenes de platos en batch para que estén disponibles desde la primera ronda
+            const dishImagesToLoad = provincesData.filter(p => p.image);
+            let dishLoadPending = dishImagesToLoad.length;
+
+            if (dishLoadPending > 0) {
+                // Mostrar "Cargando..." en el HUD mientras se cargan las imágenes
+                const domCurrentFood = document.getElementById('current-food');
+                const domFoodImage = document.getElementById('food-image');
+                if (domCurrentFood) domCurrentFood.innerText = 'Cargando...';
+                if (domFoodImage) domFoodImage.innerHTML = '<span style="font-size:2em;animation:spin 1s linear infinite;display:inline-block">⏳</span>';
+
+                let pendingLoad = 0;
+                dishImagesToLoad.forEach(p => {
+                    const key = `dish_${p.id}`;
+                    if (!this.textures.exists(key)) {
+                        this.load.image(key, p.image);
+                        pendingLoad++;
+                    }
+                });
+
+                if (pendingLoad > 0) {
+                    this.load.once('complete', () => {
+                        // Simular carga para que el usuario vea el estado "Cargando..."
+                        setTimeout(() => {
+                            window._dishImagesReady = true;
+                            nextRound();
+                        }, 1500);
+                    });
+                    this.load.start();
+                } else {
+                    // Todas las texturas ya estaban en caché
+                    window._dishImagesReady = true;
+                }
+            } else {
+                window._dishImagesReady = true;
+            }
 
             // Fondo / Mapa decorativo
             let mapBg = this.add.image(960 + MAP_OFFSET_X, 540, 'mapa_espana');
@@ -128,6 +167,8 @@
 
                 // Disparo (Click)
                 pGroup.on('pointerdown', () => {
+                    if (!gameStarted) return;
+                    if (window.isPaused) return; // Ignorar si el juego está en pausa
                     if (isEditMode) return;
                     if (isModalOpen()) return;
                     if (!isShooting) shootAt(prov, pGroup);
@@ -204,8 +245,9 @@
             updateVidasUI();
             updateComodinesUI();
             
-            // Iniciar juego
-            nextRound();
+            // Iniciar juego — nextRound se llama tras cargar imágenes si las hay, o directamente si no
+            if (window._dishImagesReady) nextRound();
+            // (Si no está listo, se llama desde el callback 'complete' de arriba)
 
             // Asegurar que el AudioContext se reanuda al interactuar
             this.input.on('pointerdown', () => {
@@ -296,6 +338,12 @@
             } else {
                 domFoodImage.innerText = randomEmoji;
             }
+
+            // Re-trigger food-pop animation on the food name
+            const hf = domCurrentFood;
+            hf.style.animation = 'none';
+            void hf.offsetWidth; // reflow
+            hf.style.animation = '';
 
             domComodinOptions.style.display = 'none'; // Ocultar pistas
             domComodinOptions.innerHTML = '';
@@ -480,33 +528,41 @@
                 rachaAciertos++; // Incrementar racha
                 domAciertos.innerText = aciertos;
 
-                // Efecto Swish
-                let swishText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y - 50, '¡SWISH!', {
-                    fontFamily: 'Fredoka One', fontSize: '48px', color: '#4CAF50', stroke: '#fff', strokeThickness: 6
+                // Popup SWISH!
+                const swishMessages = ['\u00A1SWISH! \uD83C\uDF89', '\uD83D\uDC4F \u00A1Ole!', '\uD83E\uDD73 \u00A1Bien!', '\uD83C\uDF55 \u00A1Correcto!'];
+                const swishMsg = swishMessages[aciertos % swishMessages.length];
+                let swishText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y - 50, swishMsg, {
+                    fontFamily: 'Fredoka One', fontSize: '52px', color: '#06d6a0',
+                    stroke: '#073b4c', strokeThickness: 8
                 }).setOrigin(0.5).setDepth(30);
 
                 scene.tweens.add({
-                    targets: swishText, y: '-=100', alpha: 0, scale: 1.5, duration: 1000,
+                    targets: swishText, y: '-=150', alpha: 0, scale: 1.4, duration: 1800,
+                    ease: 'Cubic.easeOut',
                     onComplete: () => swishText.destroy()
                 });
 
-                // Efecto confeti de partículas (con primitives)
+                // Confeti de colores en partículas — permanece en el mapa como celebración
                 let particles = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y, 'circle', {
-                    color: [0x000000],
-                    colorRandom: false,
-                    speed: { min: -100, max: 100 },
+                    color: [0x000000, 0xffd166, 0xef476f, 0x118ab2],
+                    colorRandom: true,
+                    speed: { min: 20, max: 60 },
                     angle: { min: 0, max: 360 },
-                    scale: { start: 0.3, end: 0 },
-                    lifespan: 1000,
-                    quantity: 10,
+                    scale: { start: 0.4, end: 0 },
+                    lifespan: 1400,
+                    quantity: 14,
                     blendMode: 'NORMAL'
                 });
 
                 targetSprite.mainText.setTint(0x4CAF50); // Verde para acierto
 
-                // Animación de UI
-                domAciertos.parentElement.style.transform = 'scale(1.2)';
+                // UI score pulse
+                domAciertos.parentElement.style.transform = 'scale(1.25)';
                 setTimeout(() => { domAciertos.parentElement.style.transform = 'scale(1)'; }, 200);
+
+                // Ring de éxito
+                let ring2 = scene.add.circle(selectedProv.x + MAP_OFFSET_X, selectedProv.y, 10, 0x06d6a0, 0.7).setDepth(28);
+                scene.tweens.add({ targets: ring2, radius: 90, alpha: 0, duration: 500, ease: 'Cubic.easeOut', onComplete: () => ring2.destroy() });
 
                 setTimeout(() => {
                     showSabiasQue(selectedProv.info);
@@ -635,31 +691,64 @@
         }
 
         function gameOver() {
-            domFinalAciertos.innerText = aciertos;
-
             if (vidas <= 0) {
-                document.querySelector('#game-over-box h1').innerText = "¡Te quedaste sin Vidas!";
-                document.querySelector('#game-over-box p.final-score').innerHTML = `Lograste <span id="final-aciertos">${aciertos}</span> platos.`;
+                document.querySelector('#game-over-box h1').innerText = "\uD83D\uDC94 Sin Vidas";
+                document.querySelector('#game-over-box p.final-score').innerHTML =
+                    `Encestaste <span id="final-aciertos">0</span> platos de 52.`;
             } else {
-                document.querySelector('#game-over-box h1').innerText = "¡Ganaste!";
+                document.querySelector('#game-over-box h1').innerText = "\uD83C\uDF89 \u00A1Ganaste!";
+                document.querySelector('#game-over-box p.final-score').innerHTML =
+                    `\u00A1<span id="final-aciertos">0</span> de 52 provincias!`;
             }
-
             domGameOver.style.display = 'flex';
+            // Dar un tick para que el CSS compile y luego añadir .active
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                domGameOver.classList.add('active');
+                // Animar el contador de puntuación
+                const finalEl = document.getElementById('final-aciertos');
+                if (finalEl) {
+                    let count = 0;
+                    const target = aciertos;
+                    const dur = Math.min(1500, target * 60);
+                    const step = dur / Math.max(target, 1);
+                    const iv = setInterval(() => {
+                        count++;
+                        finalEl.innerText = count;
+                        if (count >= target) clearInterval(iv);
+                    }, step);
+                }
+            }));
         }
 
         // --- LÓGICA COMODINES Y VIDAS ---
         function updateVidasUI() {
-            let html = "";
-            for (let i = 0; i < vidas; i++) {
-                html += '<span class="icon-active">🍽️</span>';
+            const maxVidas = 8; // Total original de vidas
+            let html = '';
+            for (let i = 0; i < maxVidas; i++) {
+                if (i < vidas) {
+                    html += '<span class="icon-active">\u2764\uFE0F</span>';
+                } else {
+                    html += '<span class="icon-spent">\uD83E\uDD0D</span>'; // corazón roto
+                }
             }
             domVidas.innerHTML = html;
+            // Pulsar corazón si quedan <= 2 vidas
+            const vidasBox = document.getElementById('vidas-stat-box');
+            if (vidasBox) {
+                if (vidas <= 2) vidasBox.classList.add('danger');
+                else vidasBox.classList.remove('danger');
+            }
         }
 
         function updateComodinesUI() {
-            let html = "";
-            for (let i = 0; i < comodines; i++) {
-                html += '<span class="icon-active">🃏</span>';
+            const maxComodines = 8;
+            let html = '';
+            for (let i = 0; i < maxComodines; i++) {
+                if (i < comodines) {
+                    html += '<span class="icon-active" style="font-size:20px">\u2B50</span>'; // estrella dorada
+                } else {
+                    html += '<span class="icon-spent" style="font-size:20px">\u2606</span>'; // estrella vacía
+                }
             }
             domComodines.innerHTML = html;
         }
