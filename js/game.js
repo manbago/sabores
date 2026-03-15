@@ -237,8 +237,8 @@ function create() {
         bullOffsetY = -60 - 61.5; 
     }
 
-    // Lo situamos al final del canvas + 60px de base de diseño
-    launcher = this.add.container(960 + MAP_OFFSET_X, canvasHeight + 60); 
+    // Lo situamos al final del canvas + 110px de base de diseño para asegurar que toque el HUD
+    launcher = this.add.container(960 + MAP_OFFSET_X, canvasHeight + 110); 
     let bullBot = this.add.sprite(0, bullOffsetY, 'bull_launcher');
     this.bull = bullBot; // Referencia para debug
     bullBot.setDisplaySize(bullSize, bullSize);
@@ -564,7 +564,7 @@ function checkResult(selectedProv, targetSprite, scene) {
         // Popup SWISH!
         const swishMessages = ['\u00A1SWISH! \uD83C\uDF89', '\uD83D\uDC4F \u00A1Ole!', '\uD83E\uDD73 \u00A1Bien!', '\uD83C\uDF55 \u00A1Correcto!'];
         const swishMsg = swishMessages[aciertos % swishMessages.length];
-        let swishText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y - 50, swishMsg, {
+        let swishText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y + (scene.currentVerticalOffset || 0) - 50, swishMsg, {
             fontFamily: 'Fredoka One', fontSize: '52px', color: '#06d6a0',
             stroke: '#073b4c', strokeThickness: 8
         }).setOrigin(0.5).setDepth(30);
@@ -576,7 +576,7 @@ function checkResult(selectedProv, targetSprite, scene) {
         });
 
         // Confeti de colores en partículas — permanece en el mapa como celebración
-        let particles = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y, 'circle', {
+        let particles = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y + (scene.currentVerticalOffset || 0), 'circle', {
             color: [0x000000, 0xffd166, 0xef476f, 0x118ab2],
             colorRandom: true,
             speed: { min: 20, max: 60 },
@@ -594,7 +594,7 @@ function checkResult(selectedProv, targetSprite, scene) {
         setTimeout(() => { domAciertos.parentElement.style.transform = 'scale(1)'; }, 200);
 
         // Ring de éxito
-        let ring2 = scene.add.circle(selectedProv.x + MAP_OFFSET_X, selectedProv.y, 10, 0x06d6a0, 0.7).setDepth(28);
+        let ring2 = scene.add.circle(selectedProv.x + MAP_OFFSET_X, selectedProv.y + (scene.currentVerticalOffset || 0), 10, 0x06d6a0, 0.7).setDepth(28);
         scene.tweens.add({ targets: ring2, radius: 90, alpha: 0, duration: 500, ease: 'Cubic.easeOut', onComplete: () => ring2.destroy() });
 
         setTimeout(() => {
@@ -621,7 +621,7 @@ function checkResult(selectedProv, targetSprite, scene) {
         gameQueue.splice(insertIndex, 0, currentTarget);
 
         // Efecto Miss
-        let missText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y - 50, '¡MISS!', {
+        let missText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y + (scene.currentVerticalOffset || 0) - 50, '¡MISS!', {
             fontFamily: 'Fredoka One', fontSize: '48px', color: '#F44336', stroke: '#fff', strokeThickness: 6
         }).setOrigin(0.5).setDepth(30);
 
