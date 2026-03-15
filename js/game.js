@@ -33,14 +33,24 @@ const domTooltip = document.getElementById('tooltip');
 const domGameOver = document.getElementById('game-over-screen');
 const domFinalAciertos = document.getElementById('final-aciertos');
 
-// Configuración de Phaser
+// --- CÁLCULO DE RESOLUCIÓN INICIAL (Prevención de Estiramiento) ---
+let initialWidth = 1920;
+let initialHeight = 1080;
+// Si cargamos directamente en móvil/tablet (vertical), ajustamos la altura interna
+if (window.innerWidth < window.innerHeight || window.innerWidth <= 1024) {
+    // Tomamos como referencia el alto real del contenedor (aprox 75vh) vs ancho
+    const aspect = window.innerHeight * 0.75 / window.innerWidth;
+    initialHeight = initialWidth * aspect;
+    if (initialHeight < 1080) initialHeight = 1080;
+}
+
 const config = {
     type: Phaser.AUTO,
-    width: 1920,
-    height: 1080,
+    width: initialWidth,
+    height: initialHeight,
     parent: 'game-container',
     scale: {
-        mode: Phaser.Scale.FIT, // Volvemos a FIT para estabilidad
+        mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
     scene: {
@@ -122,23 +132,8 @@ function create() {
     }
 
     // --- CENTRADO DINÁMICO DEL MAPA (Responsive Pro) ---
-    // Calculamos la altura necesaria para que el canvas de 1920px de ancho 
-    // cubra exactamente el área del contenedor sin dejar bandas negras y permitiendo centrar el mapa.
-    let canvasWidth = 1920;
-    let canvasHeight = 1080;
-    let parentWidth = this.scale.parent.clientWidth;
-    let parentHeight = this.scale.parent.clientHeight;
-    
-    if (parentWidth > 0 && parentHeight > 0) {
-        // Ajustamos la altura interna manteniendo el ancho de 1920
-        canvasHeight = canvasWidth * (parentHeight / parentWidth);
-        if (canvasHeight < 1080) canvasHeight = 1080;
-    }
-    
-    // Redimensionar el juego para que ocupe todo el espacio vertical disponible
-    this.scale.resize(canvasWidth, canvasHeight);
-
-    // Calculamos el offset para centrar el mapa (de 1080px) en la nueva altura
+    // Usamos el alto ya calculado en el arranque para centrar el mapa de 1080px
+    let canvasHeight = this.scale.height;
     let verticalOffset = (canvasHeight - 1080) / 2;
     this.currentVerticalOffset = verticalOffset;
     
@@ -147,8 +142,9 @@ function create() {
 
     // Fondo / Mapa decorativo
     let mapBg = this.add.image(960 + MAP_OFFSET_X, 540, 'mapa_espana');
-    // Ajustamos la escala basándonos en la altura (1080)
-    let scale = 1080 / mapBg.height;
+    this.map = mapBg; // Referencia para debug
+    // Altura base del mapa recortado es 1536px. Usamos el valor fijo para evitar errores de medición inicial.
+    let scale = 1080 / 1536;
     mapBg.setScale(scale);
     mapBg.setDepth(-10);
     mapContainer.add(mapBg);
@@ -231,9 +227,10 @@ function create() {
     });
 
     // --- LANZADOR BULL-BOT ---
-    // Lo situamos al final exacto de la nueva altura del canvas + offset para compensar el sprite
+    // Lo situamos al final exacto de la nueva altura del canvas + offset
     launcher = this.add.container(960 + MAP_OFFSET_X, canvasHeight + 60); 
     let bullBot = this.add.sprite(0, -60, 'bull_launcher');
+    this.bull = bullBot; // Referencia para debug
     bullBot.setDisplaySize(277, 277);
     launcher.add(bullBot);
     launcher.bullBot = bullBot;
