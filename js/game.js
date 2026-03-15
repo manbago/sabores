@@ -40,7 +40,7 @@ const config = {
     height: 1080,
     parent: 'game-container',
     scale: {
-        mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.FIT, // Volvemos a FIT para estabilidad
         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
     scene: {
@@ -121,13 +121,37 @@ function create() {
         window._dishImagesReady = true;
     }
 
+    // --- CENTRADO DINÁMICO DEL MAPA (Responsive Pro) ---
+    // Calculamos la altura necesaria para que el canvas de 1920px de ancho 
+    // cubra exactamente el área del contenedor sin dejar bandas negras y permitiendo centrar el mapa.
+    let canvasWidth = 1920;
+    let canvasHeight = 1080;
+    let parentWidth = this.scale.parent.clientWidth;
+    let parentHeight = this.scale.parent.clientHeight;
+    
+    if (parentWidth > 0 && parentHeight > 0) {
+        // Ajustamos la altura interna manteniendo el ancho de 1920
+        canvasHeight = canvasWidth * (parentHeight / parentWidth);
+        if (canvasHeight < 1080) canvasHeight = 1080;
+    }
+    
+    // Redimensionar el juego para que ocupe todo el espacio vertical disponible
+    this.scale.resize(canvasWidth, canvasHeight);
+
+    // Calculamos el offset para centrar el mapa (de 1080px) en la nueva altura
+    let verticalOffset = (canvasHeight - 1080) / 2;
+    this.currentVerticalOffset = verticalOffset;
+    
+    const mapContainer = this.add.container(0, verticalOffset);
+    this.mapContainer = mapContainer;
+
     // Fondo / Mapa decorativo
     let mapBg = this.add.image(960 + MAP_OFFSET_X, 540, 'mapa_espana');
-    // Ajustamos la escala basándonos en la altura (1080) para mantener la proporción
+    // Ajustamos la escala basándonos en la altura (1080)
     let scale = 1080 / mapBg.height;
     mapBg.setScale(scale);
-    // Coloco la profundidad al fondo
     mapBg.setDepth(-10);
+    mapContainer.add(mapBg);
 
     // Dibujar provincias como textos interactivos
     provincesData.forEach((prov, i) => {
@@ -143,6 +167,7 @@ function create() {
         }).setOrigin(0.5);
 
         pGroup.add(text);
+        mapContainer.add(pGroup);
 
         // Área interactiva reducida para mayor precisión y menor solapamiento
         let w = text.width + 20; // Hitbox ajustado (10px padding por lado)
@@ -205,13 +230,11 @@ function create() {
         provinceSprites.push(pGroup);
     });
 
-    // --- NUEVO LANZADOR BULL-BOT ---
-    launcher = this.add.container(960 + MAP_OFFSET_X, 1140); // Subido de 1186 a 1140
-    // Cuerpo del Robot-Toro
+    // --- LANZADOR BULL-BOT ---
+    // Lo situamos al final exacto de la nueva altura del canvas + offset para compensar el sprite
+    launcher = this.add.container(960 + MAP_OFFSET_X, canvasHeight + 60); 
     let bullBot = this.add.sprite(0, -60, 'bull_launcher');
-    // Escalado: 50% más grande que antes (185 * 1.5 = ~277)
     bullBot.setDisplaySize(277, 277);
-
     launcher.add(bullBot);
     launcher.bullBot = bullBot;
 
@@ -471,34 +494,36 @@ function shootAt(targetProv, targetSprite) {
         ease: 'Quad.easeOut'
     });
 
-    // 1. Animación Horizontal, Escala y Rotación
+    // Animación unificada del proyectil (Horizontal, Escala y Rotación)
     scene.tweens.add({
         targets: projectile,
         x: targetProv.x + MAP_OFFSET_X,
-        scaleX: 0.2, // Simula profundidad
+        scaleX: 0.2, 
         scaleY: 0.2,
-        angle: 720,  // Da dos vueltas completas
-        duration: 1500, // 1.5s (lento)
-        ease: 'Linear'
+        angle: 720,
+        duration: 1500,
+        ease: 'Linear',
+        onComplete: () => {
+            checkResult(targetProv, targetSprite, scene);
+        }
     });
 
-    // 2. Animación Vertical coordinada (Parábola)
+    // Parábola (Vertical): Sube a un punto pico y luego baja al objetivo real con offset
+    let peakY = (targetProv.y + scene.currentVerticalOffset) - 300;
+    let finalY = targetProv.y + scene.currentVerticalOffset;
+
     scene.tweens.add({
         targets: projectile,
-        y: targetProv.y - 250, // Punto más alto del arco
-        duration: 750, // Mitad del tiempo
-        ease: 'Sine.easeOut',
+        y: peakY,
+        duration: 750,
+        ease: 'Cubic.easeOut',
         onComplete: () => {
-            // Fase de CAÍDA: El proyectil baja hacia el objetivo
+            if (!projectile || !projectile.active) return;
             scene.tweens.add({
                 targets: projectile,
-                y: targetProv.y, // Altura exacta del impacto
-                duration: 750, // Segunda mitad del tiempo
-                ease: 'Sine.easeIn',
-                onComplete: () => {
-                    // Al terminar la caída, ejecutamos el impacto
-                    checkResult(targetProv, targetSprite, scene);
-                }
+                y: finalY,
+                duration: 750,
+                ease: 'Cubic.easeIn'
             });
         }
     });
@@ -510,8 +535,8 @@ function checkResult(selectedProv, targetSprite, scene) {
     if (projectile) projectile.destroy();
     if (projectileMaskGraphics) projectileMaskGraphics.destroy();
 
-    // Partículas de "estallido" (Shatter effect)
-    let shatter = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y, 'circle', {
+    // Partículas de "estallido" (Shatter effect) en la posición real del mapa
+    let shatter = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y + scene.currentVerticalOffset, 'circle', {
         color: [0x000000, 0x333333],
         speed: { min: 50, max: 150 },
         scale: { start: 0.3, end: 0 },
@@ -796,6 +821,11 @@ function showSabiasQue(infoText) {
 
 function closeSabiasQue() {
     document.getElementById('sabias-que-popup').style.display = 'none';
+    // Reajustar posición de notificación si existe en móvil
+    const pop = document.getElementById('notification-popup');
+    if (window.innerWidth <= 768) {
+        pop.style.top = ''; // Volver al CSS (85px)
+    }
 }
 
 function confirmRestart() {
@@ -991,6 +1021,17 @@ function showNotification(title, text, type) {
     } else {
         pop.style.borderLeftColor = "#f94144"; // Rojo (danger)
         tEl.style.color = "#f94144";
+    }
+
+    // Reposicionamiento dinámico en móvil si el "Sabías que" está abierto
+    const sabiasPop = document.getElementById('sabias-que-popup');
+    if (window.innerWidth <= 768 && sabiasPop && sabiasPop.style.display === 'block') {
+        const rect = sabiasPop.getBoundingClientRect();
+        // Ponemos el top de la notificación después del final del popup de sabias que
+        // (En móvil ambos suelen estar a left: 10px, right: 10px)
+        pop.style.top = (sabiasPop.offsetTop + sabiasPop.offsetHeight + 10) + 'px';
+    } else {
+        pop.style.top = ''; // Usar el valor base de CSS (85px)
     }
 
     // Breve animación reinicio
