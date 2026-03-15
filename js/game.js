@@ -1007,15 +1007,38 @@ function toggleEditMode() {
     isEditMode = !isEditMode;
     const btn = document.getElementById('edit-btn');
 
+    // Crear o remover el overlay de edición
+    let overlay = document.getElementById('edit-overlay');
+
     if (isEditMode) {
-        btn.innerText = "Guardar y Exportar JSON";
-        btn.style.background = "#f94144";
+        btn.innerText = "💾 Guardar y Exportar";
+        btn.style.background = "#073b4c";
+        btn.style.boxShadow = "0 5px 0 #000";
         document.getElementById('hud-container').style.display = "none";
-        alert("MODO EDICIÓN ACTIVADO:\nArrastra los nombres de las provincias a su posición correcta en el mapa. Cuando termines, pulsa 'Guardar y Exportar JSON'.");
+        
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'edit-overlay';
+            overlay.innerHTML = `
+                <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
+                            background: rgba(7, 59, 76, 0.9); color: white; padding: 15px 30px; 
+                            border-radius: 50px; border: 4px solid #ffd166; z-index: 1000;
+                            font-family: 'Fredoka One', cursive; pointer-events: none; text-align: center;
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                    🏗️ MODO EDICIÓN ACTIVADO<br>
+                    <span style="font-size: 14px; font-family: 'Nunito', sans-serif; opacity: 0.9;">
+                        Arrastra los nombres a su sitio. Pulsa GUARDAR al terminar.
+                    </span>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
     } else {
-        btn.innerText = "Activar Modo Edición";
-        btn.style.background = "#43aa8b";
+        btn.innerText = "✎ Modo Edición";
+        btn.style.background = "#06d6a0";
+        btn.style.boxShadow = "0 5px 0 #049070";
         document.getElementById('hud-container').style.display = "flex";
+        if (overlay) overlay.remove();
 
         // Exportar Data
         exportJSONData();
@@ -1032,14 +1055,17 @@ function exportJSONData() {
             x: p.x,
             y: p.y,
             color: p.color,
-            info: p.info
+            info: p.info,
+            image: p.image // Asegurar que no perdemos la imagen
         };
     });
 
     const jsonString = JSON.stringify(updatedData, null, 4);
 
-    // 1. Mostrar por consola por si acaso
-    console.log("NUEVAS COORDENADAS JSON:", jsonString);
+    // 1. Mostrar por consola con un marcador claro para el asistente
+    console.log("=== BEGIN UPDATE DATA ===");
+    console.log(jsonString);
+    console.log("=== END UPDATE DATA ===");
 
     // 2. Descargar archivo automáticamente
     const blob = new Blob([jsonString], { type: "application/json" });
@@ -1047,11 +1073,11 @@ function exportJSONData() {
 
     const a = document.createElement('a');
     a.href = url;
-    a.download = "provincesData_actualizado.json";
+    a.download = "provincesData.json";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    alert("El archivo JSON con las nuevas posiciones se ha descargado.\nAbre tu archivo index.html original y reemplaza todo el bloque 'const provincesData = [...]' con el contenido de este archivo descargado.");
+    alert("¡Posiciones guardadas!\n\nSe ha descargado el archivo 'provincesData.json'. Pásame el contenido si quieres que actualice el proyecto por ti.");
 }
