@@ -237,8 +237,9 @@ function create() {
         bullOffsetY = -60 - 61.5; 
     }
 
-    // Lo situamos al final del canvas + 110px de base de diseño para asegurar que toque el HUD
-    launcher = this.add.container(960 + MAP_OFFSET_X, canvasHeight + 110); 
+    // Lo situamos al final del canvas + un offset dinámico para PC vs Mobile
+    let bottomOffset = (window.innerWidth <= 1024) ? 110 : 60;
+    launcher = this.add.container(960 + MAP_OFFSET_X, canvasHeight + bottomOffset); 
     let bullBot = this.add.sprite(0, bullOffsetY, 'bull_launcher');
     this.bull = bullBot; // Referencia para debug
     bullBot.setDisplaySize(bullSize, bullSize);
