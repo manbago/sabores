@@ -227,11 +227,21 @@ function create() {
     });
 
     // --- LANZADOR BULL-BOT ---
-    // Lo situamos al final exacto de la nueva altura del canvas + offset
+    // En móvil/tablet lo hacemos más grande (400px) para que se vea mejor, 
+    // pero ajustamos la posición para que su base siga en la misma línea "dorada" del HUD.
+    let bullSize = 277;
+    let bullOffsetY = -60;
+    if (window.innerWidth <= 1024) {
+        bullSize = 400;
+        // Compensamos el crecimiento (400-277)/2 = 61.5px para mantener la base quieta
+        bullOffsetY = -60 - 61.5; 
+    }
+
+    // Lo situamos al final del canvas + 60px de base de diseño
     launcher = this.add.container(960 + MAP_OFFSET_X, canvasHeight + 60); 
-    let bullBot = this.add.sprite(0, -60, 'bull_launcher');
+    let bullBot = this.add.sprite(0, bullOffsetY, 'bull_launcher');
     this.bull = bullBot; // Referencia para debug
-    bullBot.setDisplaySize(277, 277);
+    bullBot.setDisplaySize(bullSize, bullSize);
     launcher.add(bullBot);
     launcher.bullBot = bullBot;
 
