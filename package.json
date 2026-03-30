@@ -1,0 +1,48 @@
+{
+  "name": "sabor-de-espana",
+  "version": "1.0.0",
+  "description": "Sabor de España: The Hoops Challenge",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "electron-packager . SaborDeEspana --platform=win32 --arch=x64 --out=dist --icon=assets/images/icon.ico --overwrite"
+  },
+  "build": {
+    "appId": "com.manbago.sabordeespana",
+    "productName": "Sabor de España: The Hoops Challenge",
+    "win": {
+      "target": "nsis",
+      "icon": "assets/images/bull_launcher.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "**/*",
+      "!node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!node_modules/*.d.ts",
+      "!README.md"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manbago/sabores.git"
+  },
+  "keywords": [],
+  "author": "Manuel Bago Cobo",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/manbago/sabores/issues"
+  },
+  "homepage": "https://github.com/manbago/sabores#readme",
+  "devDependencies": {
+    "electron": "^41.1.0",
+    "electron-builder": "^26.8.1",
+    "electron-is-dev": "^3.0.1",
+    "electron-packager": "^17.1.2",
+    "png-to-ico": "^3.0.1"
+  }
+}

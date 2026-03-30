@@ -1,3 +1,7 @@
+/** 
+ * Sabor de España: The Hoops Challenge 
+ * Creado por Manuel Bago Cobo
+ */
 // DATOS (Cargados desde JSON externo)
 let provincesData = [];
 
@@ -289,7 +293,8 @@ function create() {
         // Iniciar música si no está sonando y está habilitada
         if (musicEnabled && (!bgMusic || !bgMusic.isPlaying)) {
             if (!bgMusic) {
-                bgMusic = this.sound.add('flamenco_bg', { loop: true, volume: 0.3 });
+                let initialMusicVol = typeof window.musicVolumeFactor !== 'undefined' ? window.musicVolumeFactor : 0.24;
+                bgMusic = this.sound.add('flamenco_bg', { loop: true, volume: initialMusicVol });
             }
             bgMusic.play();
         }
@@ -450,7 +455,8 @@ function shootAt(targetProv, targetSprite) {
 
     // 1. Sonido del Toro
     if (sfxEnabled && scene.cache.audio.exists('bull_sound')) {
-        scene.sound.play('bull_sound', { volume: 0.8 });
+        let vol = 0.8 * (typeof window.sfxVolumeFactor !== 'undefined' ? window.sfxVolumeFactor : 0.56);
+        scene.sound.play('bull_sound', { volume: vol });
     }
 
     // 2. Anillo de Choque (Shockwave)
@@ -556,7 +562,10 @@ function checkResult(selectedProv, targetSprite, scene) {
 
     if (selectedProv.id === currentTarget.id) {
         // ACIERTO
-        if (sfxEnabled && scene.cache.audio.exists('success_sound')) scene.sound.play('success_sound', { volume: 0.7 });
+        if (sfxEnabled && scene.cache.audio.exists('success_sound')) {
+            let vol = 0.7 * (typeof window.sfxVolumeFactor !== 'undefined' ? window.sfxVolumeFactor : 0.56);
+            scene.sound.play('success_sound', { volume: vol });
+        }
 
         aciertos++;
         rachaAciertos++; // Incrementar racha
@@ -605,7 +614,10 @@ function checkResult(selectedProv, targetSprite, scene) {
 
     } else {
         // FALLO
-        if (sfxEnabled && scene.cache.audio.exists('fail_sound')) scene.sound.play('fail_sound', { volume: 0.4 });
+        if (sfxEnabled && scene.cache.audio.exists('fail_sound')) {
+            let vol = 0.4 * (typeof window.sfxVolumeFactor !== 'undefined' ? window.sfxVolumeFactor : 0.56);
+            scene.sound.play('fail_sound', { volume: vol });
+        }
 
         fallos++;
         vidas--;
@@ -756,7 +768,7 @@ function gameOver() {
 
 // --- LÓGICA COMODINES Y VIDAS ---
 function updateVidasUI() {
-    const maxVidas = 8; // Total original de vidas
+    const maxVidas = 7; // Total de vidas
     let html = '';
     for (let i = 0; i < maxVidas; i++) {
         if (i < vidas) {
@@ -775,7 +787,7 @@ function updateVidasUI() {
 }
 
 function updateComodinesUI() {
-    const maxComodines = 8;
+    const maxComodines = 5;
     let html = '';
     for (let i = 0; i < maxComodines; i++) {
         if (i < comodines) {

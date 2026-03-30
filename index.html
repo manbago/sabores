@@ -8,7 +8,7 @@
     <!-- Phaser 3 Local -->
     <script src="lib/phaser.min.js"></script>
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=2">
     <script>
         // ======= JUICE SOUND ENGINE (Web Audio API) =======
         // Genera sonidos de UI programáticamente sin necesitar archivos.
@@ -61,12 +61,66 @@
 
     <!-- ======= MENÚ PRINCIPAL ======= -->
     <div id="main-menu-screen">
-        <div class="menu-logo-wrap">
+        <div class="menu-logo-wrap" id="menu-logo-container">
             <span class="menu-logo-title">🍽️ SABOR DE ESPAÑA</span>
             <span class="menu-logo-sub">The Hoops Challenge</span>
         </div>
-        <button class="menu-btn btn-play" id="menu-play-btn">▶ JUGAR</button>
-        <button class="menu-btn" id="menu-audio-toggle">🎷 Música: ON &nbsp; 🔊 Efectos: ON</button>
+        
+        <!-- VISTA CONTENEDOR GRID -->
+        <div class="menu-views-container">
+            <!-- VISTA: Botones Principales -->
+            <div id="menu-main-view" class="menu-view active">
+                <button class="menu-btn btn-play" id="menu-btn-newgame">▶ NUEVA PARTIDA</button>
+                <button class="menu-btn" id="menu-btn-options">⚙️ OPCIONES</button>
+                <button class="menu-btn" id="menu-btn-about">ℹ️ ACERCA DE</button>
+                <button class="menu-btn btn-danger" id="menu-btn-exit" style="margin-top: 30px; font-size: 16px; padding: 10px 40px; min-width: 180px;">🚪 SALIR AL ESCRITORIO</button>
+            </div>
+
+            <!-- VISTA: Opciones -->
+            <div id="menu-options-view" class="menu-view hidden">
+                <h2 class="menu-section-title">Ajustes</h2>
+                
+                <div class="menu-settings-box">
+                    <div class="slider-row">
+                        <label>💻 Gráficos (Pantalla)</label>
+                        <button class="menu-small-btn" id="menu-btn-fullscreen" style="width:100%; margin-top:5px; font-size:16px; padding:10px;">⛶ Alternar Pantalla Completa</button>
+                    </div>
+                    <hr style="border: 1px dashed rgba(255,255,255,0.2); margin: 15px 0;">
+                    <div class="slider-row">
+                        <label>🔊 Volumen General</label>
+                        <input type="range" id="menu-slider-master" min="0" max="100" value="80" class="vol-slider">
+                        <span class="vol-val" id="menu-val-master">80%</span>
+                    </div>
+                    <div class="slider-row">
+                        <label>🎷 Música</label>
+                        <input type="range" id="menu-slider-music" min="0" max="100" value="30" class="vol-slider">
+                        <span class="vol-val" id="menu-val-music">30%</span>
+                    </div>
+                    <div class="slider-row">
+                        <label>💥 Efectos</label>
+                        <input type="range" id="menu-slider-sfx" min="0" max="100" value="70" class="vol-slider">
+                        <span class="vol-val" id="menu-val-sfx">70%</span>
+                    </div>
+                </div>
+                
+                <button class="menu-btn" id="menu-btn-back-options">← VOLVER</button>
+            </div>
+
+            <!-- VISTA: Acerca De -->
+            <div id="menu-about-view" class="menu-view hidden">
+                <h2 class="menu-section-title">Créditos</h2>
+                <div class="menu-about-box">
+                    <p style="font-size:24px; color:#ffd166; font-family:'Fredoka One', cursive; margin-bottom:10px;">Sabor de España: The Hoops Challenge</p>
+                    <p style="font-size:18px; color:#06d6a0; margin-bottom:10px;">Creado por <strong>Manuel Bago Cobo</strong></p>
+                    <p>Desarrollado como una experiencia interactiva para aprender sobre la gastronomía española mientras te diviertes.</p>
+                    <br>
+                    <p><small style="color:#06d6a0;">Motor Gráfico: Phaser 3</small></p>
+                    <p><small>Versión 1.0 · 52 Provincias</small></p>
+                </div>
+                <button class="menu-btn" id="menu-btn-back-about">← VOLVER</button>
+            </div>
+        </div>
+
         <div class="menu-version">v1.0 · 52 Provincias</div>
     </div>
 
@@ -116,8 +170,8 @@
         </div>
     </div>
 
-    <button id="restart-btn" onclick="confirmRestart()">✕ Terminar</button>
-    <button id="edit-btn" onclick="toggleEditMode()">✎ Modo Edición</button>
+    <button id="restart-btn" onclick="confirmRestart()">Salir</button>
+    <button id="edit-btn" onclick="toggleEditMode()" style="display: none;">✎ Modo Edición</button>
 
     <div id="hud-container">
         <div id="dashboard">
@@ -143,7 +197,7 @@
 
     <div id="confirm-restart-screen">
         <div id="confirm-restart-box">
-            <h1>¿Terminar Partida?</h1>
+            <h1>¿Salir de la Partida?</h1>
             <p class="final-score" style="font-size: 22px;">Se perderá tu progreso actual.</p>
             <div>
                 <button class="btn-confirm" onclick="location.reload()">✓ Sí, reiniciar</button>
@@ -190,8 +244,85 @@
     <script>
         // ======= MENÚ PRINCIPAL =======
         const menuScreen = document.getElementById('main-menu-screen');
-        const menuPlayBtn = document.getElementById('menu-play-btn');
-        const menuAudioToggle = document.getElementById('menu-audio-toggle');
+        
+        // Vistas
+        const viewMain    = document.getElementById('menu-main-view');
+        const viewOptions = document.getElementById('menu-options-view');
+        const viewAbout   = document.getElementById('menu-about-view');
+
+        function switchMenuView(activeView) {
+            viewMain.classList.add('hidden');
+            viewMain.classList.remove('active');
+            viewOptions.classList.add('hidden');
+            viewOptions.classList.remove('active');
+            viewAbout.classList.add('hidden');
+            viewAbout.classList.remove('active');
+
+            setTimeout(() => {
+                activeView.classList.remove('hidden');
+                activeView.classList.add('active');
+            }, 300); // Wait for transition
+        }
+
+        // Navegación
+        document.getElementById('menu-btn-options').addEventListener('click', () => switchMenuView(viewOptions));
+        document.getElementById('menu-btn-about').addEventListener('click', () => switchMenuView(viewAbout));
+        document.getElementById('menu-btn-back-options').addEventListener('click', () => switchMenuView(viewMain));
+        document.getElementById('menu-btn-back-about').addEventListener('click', () => switchMenuView(viewMain));
+
+        // Botón Salir
+        document.getElementById('menu-btn-exit').addEventListener('click', () => {
+            if (confirm("¿Estás seguro de que quieres salir al escritorio?")) {
+                if (typeof require !== 'undefined') {
+                    // Entorno nativo Electron
+                    const { ipcRenderer } = require('electron');
+                    ipcRenderer.send('quit-app');
+                } else {
+                    // Entorno Web puro (navegador)
+                    window.close();
+                }
+            }
+        });
+
+        // Alternar Pantalla Completa desde Opciones
+        document.getElementById('menu-btn-fullscreen').addEventListener('click', (e) => {
+            toggleFullscreen(e);
+        });
+
+        // Sliders de Audio en Menú (Sincronizan con globales)
+        function setupMenuSlider(sliderId, valId, globalUpdateFunc) {
+            const slider = document.getElementById(sliderId);
+            const valEl = document.getElementById(valId);
+            slider.addEventListener('input', () => {
+                valEl.textContent = slider.value + '%';
+                globalUpdateFunc(slider.value / 100);
+            });
+            // Init
+            valEl.textContent = slider.value + '%';
+        }
+
+        let menuMasterVol = 0.8;
+        let menuMusicVol  = 0.3;
+        let menuSfxVol    = 0.7;
+
+        setupMenuSlider('menu-slider-master', 'menu-val-master', (v) => {
+            menuMasterVol = v;
+            document.getElementById('slider-master').value = v * 100; // sync in-game pause menu
+            document.getElementById('val-master').textContent = (v * 100).toFixed(0) + '%';
+            if (typeof updateVolumes === 'function') updateVolumes();
+        });
+        setupMenuSlider('menu-slider-music', 'menu-val-music', (v) => {
+            menuMusicVol = v;
+            document.getElementById('slider-music').value = v * 100;
+            document.getElementById('val-music').textContent = (v * 100).toFixed(0) + '%';
+            if (typeof updateVolumes === 'function') updateVolumes();
+        });
+        setupMenuSlider('menu-slider-sfx', 'menu-val-sfx', (v) => {
+            menuSfxVol = v;
+            document.getElementById('slider-sfx').value = v * 100;
+            document.getElementById('val-sfx').textContent = (v * 100).toFixed(0) + '%';
+            if (typeof updateVolumes === 'function') updateVolumes();
+        });
 
         // Estado inicial: ocultar el HUD in-game hasta que se juegue
         document.getElementById('game-stats').style.display = 'none';
@@ -200,25 +331,7 @@
         document.getElementById('audio-settings').style.display = 'none';
         document.getElementById('fullscreen-btn').style.display = 'none';
 
-        let menuMusicOn = true;
-        let menuSfxOn = true;
-
-        menuAudioToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            // Toggle ambos de una para simplificar desde el menú
-            menuMusicOn = !menuMusicOn;
-            menuSfxOn = menuMusicOn;
-            menuAudioToggle.textContent = menuMusicOn
-                ? '🎷 Música: ON   🔊 Efectos: ON'
-                : '🔇 Música: OFF  🔇 Efectos: OFF';
-            // Sincronizar con toggles in-game si el juego ya arrancó
-            if (typeof musicEnabled !== 'undefined') {
-                if (musicEnabled !== menuMusicOn) toggleMusic(null);
-                if (sfxEnabled !== menuSfxOn) toggleSFX(null);
-            }
-        });
-
-        menuPlayBtn.addEventListener('click', () => {
+        document.getElementById('menu-btn-newgame').addEventListener('click', () => {
             menuScreen.classList.add('hidden');
 
             // Mostrar el HUD inmediatamente — sin esperar la transición del menú
@@ -228,17 +341,7 @@
             document.getElementById('audio-settings').style.display = 'flex';
             document.getElementById('fullscreen-btn').style.display = 'flex';
 
-            // Aplicar ajustes de audio del menú
-            if (!menuMusicOn && typeof musicEnabled !== 'undefined') {
-                musicEnabled = true;
-                toggleMusic(null);
-            }
-            if (!menuSfxOn && typeof sfxEnabled !== 'undefined') {
-                sfxEnabled = true;
-                toggleSFX(null);
-            }
-
-            // Habilitar disparos tras la transición de salida del menú (evita clicks accidentales)
+            // Habilitar disparos tras la transición de salida del menú
             setTimeout(() => {
                 menuScreen.style.display = 'none';
                 if (typeof gameStarted !== 'undefined') gameStarted = true;
@@ -335,36 +438,48 @@
             setTimeout(() => location.reload(), 100);
         });
 
-        // ======= SLIDERS DE VOLUMEN =======
-        function setupSlider(sliderId, valId, onInput) {
-            const slider = document.getElementById(sliderId);
-            const valEl  = document.getElementById(valId);
-            slider.addEventListener('input', () => {
-                valEl.textContent = slider.value + '%';
-                onInput(slider.value / 100);
-            });
+        // ======= SLIDERS DE VOLUMEN (Global y Sincronizado) =======
+        function linkSliders(sliderId1, valId1, sliderId2, valId2, onInput) {
+            const s1 = document.getElementById(sliderId1);
+            const v1 = document.getElementById(valId1);
+            const s2 = document.getElementById(sliderId2);
+            const v2 = document.getElementById(valId2);
+
+            function update(val, fromSync) {
+                if (!fromSync) {
+                    s1.value = val;
+                    s2.value = val;
+                }
+                v1.textContent = val + '%';
+                v2.textContent = val + '%';
+                onInput(val / 100);
+            }
+
+            s1.addEventListener('input', () => update(s1.value, false));
+            s2.addEventListener('input', () => update(s2.value, false));
         }
 
-        // Volumen General — afecta a todo
-        setupSlider('slider-master', 'val-master', (v) => {
+        // Volumen General
+        linkSliders('menu-slider-master', 'menu-val-master', 'slider-master', 'val-master', (v) => {
+            const musicVol = (document.getElementById('slider-music').value / 100) * v;
+            window.musicVolumeFactor = musicVol;
             if (typeof bgMusic !== 'undefined' && bgMusic) {
-                const musicVol = (document.getElementById('slider-music').value / 100) * v;
                 bgMusic.setVolume(musicVol);
             }
-            // Ajustar sfxVolumeFactor global para cuando se disparen sonidos
             window.sfxVolumeFactor = (document.getElementById('slider-sfx').value / 100) * v;
         });
 
         // Volumen Música
-        setupSlider('slider-music', 'val-music', (v) => {
+        linkSliders('menu-slider-music', 'menu-val-music', 'slider-music', 'val-music', (v) => {
             const master = document.getElementById('slider-master').value / 100;
+            window.musicVolumeFactor = v * master;
             if (typeof bgMusic !== 'undefined' && bgMusic) {
-                bgMusic.setVolume(v * master);
+                bgMusic.setVolume(window.musicVolumeFactor);
             }
         });
 
         // Volumen SFX
-        setupSlider('slider-sfx', 'val-sfx', (v) => {
+        linkSliders('menu-slider-sfx', 'menu-val-sfx', 'slider-sfx', 'val-sfx', (v) => {
             const master = document.getElementById('slider-master').value / 100;
             window.sfxVolumeFactor = v * master;
         });

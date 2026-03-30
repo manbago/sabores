@@ -99,7 +99,7 @@ body, html {
 /* Menu Buttons */
 .menu-btn {
     font-family: 'Fredoka One', cursive;
-    font-size: clamp(20px, 2.5vw, 32px);
+    font-size: clamp(24px, 3vw, 40px);
     color: #073b4c;
     background: #ffd166;
     border: none;
@@ -109,7 +109,7 @@ body, html {
     cursor: pointer;
     box-shadow: 0 8px 0 #e8a020, 0 10px 20px rgba(0,0,0,0.3);
     transition: transform 0.1s, box-shadow 0.1s;
-    min-width: 260px;
+    min-width: 360px;
     text-align: center;
 }
 
@@ -126,7 +126,6 @@ body, html {
     background: #06d6a0;
     box-shadow: 0 8px 0 #04a07a, 0 10px 20px rgba(0,0,0,0.3);
     color: #fff;
-    font-size: clamp(24px, 3vw, 40px);
 }
 
 .menu-btn.btn-play:hover {
@@ -145,6 +144,104 @@ body, html {
     font-size: 13px;
     color: rgba(255,255,255,0.4);
 }
+
+/* Menu Views Container */
+.menu-views-container {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+/* Menu Views (Main, Options, About) */
+.menu-view {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    width: 100%;
+}
+
+.menu-view.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.95);
+}
+
+.menu-view.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+@keyframes fade-in-scale {
+    0%   { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.menu-section-title {
+    font-family: 'Fredoka One', cursive;
+    color: #ffd166;
+    font-size: 32px;
+    margin: 0 0 10px 0;
+    text-shadow: 2px 2px 0 #ef476f;
+}
+
+.menu-settings-box, .menu-about-box {
+    background: rgba(10, 10, 30, 0.7);
+    border: 4px solid #06d6a0;
+    border-radius: 20px;
+    padding: 20px 30px;
+    width: 100%;
+    color: #fff;
+    margin-bottom: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.menu-about-box {
+    text-align: center;
+    line-height: 1.5;
+    border-color: #ef476f;
+}
+
+.menu-small-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 16px;
+    color: #073b4c;
+    background: #06d6a0;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #04a07a;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.menu-small-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #04a07a;
+}
+.menu-small-btn:hover {
+    background: #07e6ac;
+}
+
+.btn-danger {
+    background: #ef476f !important;
+    box-shadow: 0 8px 0 #a02040 !important;
+    color: #fff !important;
+}
+.btn-danger:hover {
+    background: #ff5c85 !important;
+}
+.btn-danger:active {
+    box-shadow: 0 3px 0 #a02040 !important;
+}
+
 /* ========================
    HUD INFERIOR — CARTOON JUICE
    ======================== */
