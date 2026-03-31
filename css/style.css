@@ -640,6 +640,7 @@ button:active {
     position: absolute;
     bottom: 70px;
     right: 14px;
+    width: 120px;
     background: #ef476f;
     color: #fff;
     font-size: 16px;
@@ -650,6 +651,23 @@ button:active {
 }
 
 #restart-btn:active { box-shadow: 0 2px 0 #a02040; }
+
+/* Botón Pausa */
+#pause-btn {
+    position: absolute;
+    bottom: 120px;
+    right: 14px;
+    width: 120px;
+    background: #118ab2;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px 18px;
+    box-shadow: 0 5px 0 #0a5f7a;
+    margin: 0;
+    z-index: 100;
+}
+
+#pause-btn:active { box-shadow: 0 2px 0 #0a5f7a; }
 
 /* Botón Edición */
 #edit-btn {

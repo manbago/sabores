@@ -97,8 +97,8 @@
                     </div>
                     <div class="slider-row">
                         <label>🎷 Música</label>
-                        <input type="range" id="menu-slider-music" min="0" max="100" value="30" class="vol-slider">
-                        <span class="vol-val" id="menu-val-music">30%</span>
+                        <input type="range" id="menu-slider-music" min="0" max="100" value="10" class="vol-slider">
+                        <span class="vol-val" id="menu-val-music">10%</span>
                     </div>
                     <div class="slider-row">
                         <label>💥 Efectos</label>
@@ -115,10 +115,10 @@
                 <h2 class="menu-section-title">Créditos</h2>
                 <div class="menu-about-box">
                     <p style="font-size:24px; color:#ffd166; font-family:'Fredoka One', cursive; margin-bottom:10px;">Sabor de España: The Hoops Challenge</p>
-                    <p style="font-size:18px; color:#06d6a0; margin-bottom:10px;">Creado por <strong>Manuel Bago Cobo</strong></p>
                     <p>Desarrollado como una experiencia interactiva para aprender sobre la gastronomía española mientras te diviertes.</p>
                     <br>
                     <p><small style="color:#06d6a0;">Motor Gráfico: Phaser 3</small></p>
+                    <p><small style="color:#06d6a0;">Creado por <strong>Manuel Bago Cobo</strong></small></p>
                     <p><small id="about-ver">Cargando versión...</small></p>
                 </div>
                 <button class="menu-btn" id="menu-btn-back-about">← VOLVER</button>
@@ -175,6 +175,7 @@
     </div>
 
     <button id="restart-btn" onclick="confirmRestart()">Salir</button>
+    <button id="pause-btn" onclick="togglePause()">⏸ Pausa</button>
     <button id="edit-btn" onclick="toggleEditMode()" style="display: none;">✎ Modo Edición</button>
 
     <div id="hud-container">
@@ -233,8 +234,8 @@
                 </div>
                 <div class="slider-row">
                     <label>🎷 Música</label>
-                    <input type="range" id="slider-music" min="0" max="100" value="30" class="vol-slider">
-                    <span class="vol-val" id="val-music">30%</span>
+                    <input type="range" id="slider-music" min="0" max="100" value="10" class="vol-slider">
+                    <span class="vol-val" id="val-music">10%</span>
                 </div>
                 <div class="slider-row">
                     <label>💥 Efectos</label>
@@ -251,7 +252,7 @@
     <script>
         // ======= VERSIÓN DINÁMICA (Electron Only) =======
         function syncVersion() {
-            let pureVer = "1.0.1"; // Fallback para Web
+            let pureVer = "1.0.2"; // Fallback para Web
             try {
                 if (typeof require !== 'undefined') {
                     const pkg = require('./package.json');
@@ -406,16 +407,19 @@
 
         function togglePause() {
             window.isPaused = !window.isPaused;
+            const pauseBtn = document.getElementById('pause-btn');
             if (window.isPaused) {
                 pauseScreen.classList.add('paused');
                 pauseMenuView.style.display    = 'flex';
                 pauseSettingsView.style.display = 'none';
+                if (pauseBtn) pauseBtn.innerHTML = '▶ Reanudar';
                 // Pausar la música de fondo si existe
                 if (typeof bgMusic !== 'undefined' && bgMusic && bgMusic.isPlaying) {
                     bgMusic.pause();
                 }
             } else {
                 pauseScreen.classList.remove('paused');
+                if (pauseBtn) pauseBtn.innerHTML = '⏸ Pausa';
                 // Reanudar música si está habilitada
                 if (typeof musicEnabled !== 'undefined' && musicEnabled
                     && typeof bgMusic !== 'undefined' && bgMusic) {
