@@ -6,21 +6,30 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:desktop": "electron-packager . SaborDeEspana --platform=win32 --arch=x64 --out=dist --icon=assets/images/icon.ico --app-version=1.0.1 --app-copyright=\"Manuel Bago Cobo\" --win32metadata.ProductName=\"Sabor de España\" --win32metadata.CompanyName=\"Manuel Bago Cobo\" --win32metadata.FileDescription=\"The Hoops Challenge\" --overwrite"
+    "build:desktop": "electron-packager . SaborDeEspana --platform=win32 --arch=x64 --out=dist --icon=assets/images/icon.ico --app-version=1.0.1 --app-copyright=\"Manuel Bago Cobo\" --win32metadata.ProductName=\"Sabor de España\" --win32metadata.CompanyName=\"Manuel Bago Cobo\" --win32metadata.FileDescription=\"The Hoops Challenge\" --overwrite",
+    "dist": "electron-builder --win"
   },
   "build": {
     "appId": "com.manbago.sabordeespana",
-    "productName": "Sabor de España: The Hoops Challenge",
+    "productName": "Sabor de España",
+    "directories": {
+      "output": "dist/installer"
+    },
     "win": {
       "target": "nsis",
-      "icon": "assets/images/bull_launcher.png"
+      "icon": "assets/images/icon.ico"
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "artifactName": "SaborDeEspana_Setup.exe"
     },
     "files": [
       "**/*",
+      "!dist",
+      "!.git",
       "!node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
       "!node_modules/*.d.ts",
       "!README.md"
