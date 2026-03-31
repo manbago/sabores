@@ -11,6 +11,8 @@
     <script src="lib/phaser.min.js"></script>
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/style.css?v=2">
+    <!-- Confetti Library para que se vea sobre el HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script>
         // ======= JUICE SOUND ENGINE (Web Audio API) =======
         // Genera sonidos de UI programáticamente sin necesitar archivos.
@@ -195,7 +197,7 @@
             <p class="final-score">Provincias: <span id="final-aciertos">0</span>/52</p>
             <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
                 <button id="btn-game-over-main" onclick="location.reload()">🔄 Jugar de Nuevo</button>
-                <button id="btn-game-over-about" style="display: none; background: transparent; border: 2px solid #555; color: #fff; padding: 10px; font-size: 16px; border-radius: 10px;" onclick="showAboutFromWin()">ℹ️ Acerca de</button>
+                <button id="btn-game-over-about" style="display: none; background: #fff; border: 2px solid #333; color: #333; font-weight: 800; padding: 10px; font-size: 16px; border-radius: 10px; cursor:pointer; box-shadow: 0 4px 0 #999;" onclick="showAboutFromWin()">ℹ️ Acerca de</button>
             </div>
         </div>
     </div>
@@ -244,7 +246,7 @@
         </div>
     </div>
 
-    <script src="js/game.js"></script>
+    <script src="js/game.js?v=test2"></script>
 
     <script>
         // ======= MENÚ PRINCIPAL =======

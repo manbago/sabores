@@ -747,6 +747,7 @@ function gameOver() {
         if(mainBtn) mainBtn.innerText = "🔄 Jugar de Nuevo";
         if(aboutBtn) aboutBtn.style.display = "none";
         document.getElementById('game-over-box').style.boxShadow = "0 20px 50px rgba(0,0,0,0.5)";
+        document.getElementById('game-over-screen').style.backgroundColor = ''; // Restaurar sombra negra normal
     } else {
         document.querySelector('#game-over-box h1').innerText = "\uD83C\uDF89 \u00A1Ganaste!";
         document.querySelector('#game-over-box p.final-score').innerHTML =
@@ -755,8 +756,6 @@ function gameOver() {
         if(aboutBtn) aboutBtn.style.display = "block";
         document.getElementById('game-over-box').style.boxShadow = "0 0 80px rgba(255, 209, 102, 0.8)";
         
-        let scene = game.scene.scenes[0];
-        
         // Efecto Sonoro Triunfal
         if (sfxEnabled && typeof _playTone !== 'undefined') {
             _playTone(400, 'square', 0.2, 0.1, 0.05, 0.1);
@@ -764,20 +763,26 @@ function gameOver() {
             setTimeout(() => _playTone(600, 'square', 0.6, 0.2, 0.05, 0.4), 300);
             setTimeout(() => _playTone(800, 'square', 1.0, 0.3, 0.1, 0.8), 500);
         }
-        
-        // Cañones de confeti masivos estilo fuegos artificiales
-        scene.add.particles(canvasWidth / 2, canvasHeight - 50, 'circle', {
-            color: [ 0xffffff, 0xffd166, 0x06d6a0, 0xef476f, 0x118ab2 ],
-            colorRandom: true,
-            lifespan: 4000,
-            angle: { min: -130, max: -50 },
-            speed: { min: 400, max: 1000 },
-            gravityY: 600,
-            scale: { start: 1.2, end: 0 },
-            blendMode: 'SCREEN',
-            quantity: 3,
-            emitZone: { type: 'random', source: new Phaser.Geom.Rectangle(-400, 0, 800, 50) }
-        }).setDepth(45);
+
+        // LANZAR CONFETI DOM (Librería Canvas-Confetti)
+        if (typeof confetti === 'function') {
+            const count = 200;
+            const defaults = { origin: { y: 0.7 }, zIndex: 1000 };
+
+            function fire(particleRatio, opts) {
+                confetti({
+                    ...defaults,
+                    ...opts,
+                    particleCount: Math.floor(count * particleRatio)
+                });
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+        }
     }
     domGameOver.style.display = 'flex';
     // Dar un tick para que el CSS compile y luego añadir .active
