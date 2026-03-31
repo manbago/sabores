@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "electron-packager . SaborDeEspana --platform=win32 --arch=x64 --out=dist --icon=assets/images/icon.ico --overwrite"
+    "build:desktop": "electron-packager . SaborDeEspana --platform=win32 --arch=x64 --out=dist --icon=assets/images/icon.ico --overwrite"
   },
   "build": {
     "appId": "com.manbago.sabordeespana",
