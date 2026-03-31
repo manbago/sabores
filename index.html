@@ -119,13 +119,13 @@
                     <p>Desarrollado como una experiencia interactiva para aprender sobre la gastronomía española mientras te diviertes.</p>
                     <br>
                     <p><small style="color:#06d6a0;">Motor Gráfico: Phaser 3</small></p>
-                    <p><small>Versión 1.0 · 52 Provincias</small></p>
+                    <p><small id="about-ver">Cargando versión...</small></p>
                 </div>
                 <button class="menu-btn" id="menu-btn-back-about">← VOLVER</button>
             </div>
         </div>
 
-        <div class="menu-version">v1.0 · 52 Provincias</div>
+        <div class="menu-version" id="footer-ver">Cargando...</div>
     </div>
 
     <!-- ======= JUEGO ======= -->
@@ -247,6 +247,26 @@
     </div>
 
     <script src="js/game.js?v=test2"></script>
+
+    <script>
+        // ======= VERSIÓN DINÁMICA (Electron Only) =======
+        function syncVersion() {
+            let pureVer = "1.0.1"; // Fallback para Web
+            try {
+                if (typeof require !== 'undefined') {
+                    const pkg = require('./package.json');
+                    pureVer = pkg.version;
+                }
+            } catch(e) { console.log("Web mode: using fallback version"); }
+            
+            const verText = `v${pureVer} · 52 Provincias`;
+            const footer = document.getElementById('footer-ver');
+            const about = document.getElementById('about-ver');
+            if(footer) footer.innerText = verText;
+            if(about) about.innerText = "Versión " + pureVer + " · 52 Provincias";
+        }
+        syncVersion();
+    </script>
 
     <script>
         // ======= MENÚ PRINCIPAL =======

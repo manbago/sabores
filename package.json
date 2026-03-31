@@ -1,12 +1,12 @@
 {
   "name": "sabor-de-espana",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sabor de España: The Hoops Challenge",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:desktop": "electron-packager . SaborDeEspana --platform=win32 --arch=x64 --out=dist --icon=assets/images/icon.ico --overwrite"
+    "build:desktop": "electron-packager . SaborDeEspana --platform=win32 --arch=x64 --out=dist --icon=assets/images/icon.ico --app-version=1.0.1 --app-copyright=\"Manuel Bago Cobo\" --win32metadata.ProductName=\"Sabor de España\" --win32metadata.CompanyName=\"Manuel Bago Cobo\" --win32metadata.FileDescription=\"The Hoops Challenge\" --overwrite"
   },
   "build": {
     "appId": "com.manbago.sabordeespana",
