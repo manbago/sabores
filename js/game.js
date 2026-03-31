@@ -737,14 +737,47 @@ function navigateKeyboard(direction) {
 }
 
 function gameOver() {
+    let mainBtn = document.getElementById('btn-game-over-main');
+    let aboutBtn = document.getElementById('btn-game-over-about');
+
     if (vidas <= 0) {
         document.querySelector('#game-over-box h1').innerText = "\uD83D\uDC94 Sin Vidas";
         document.querySelector('#game-over-box p.final-score').innerHTML =
             `Encestaste <span id="final-aciertos">0</span> platos de 52.`;
+        if(mainBtn) mainBtn.innerText = "🔄 Jugar de Nuevo";
+        if(aboutBtn) aboutBtn.style.display = "none";
+        document.getElementById('game-over-box').style.boxShadow = "0 20px 50px rgba(0,0,0,0.5)";
     } else {
         document.querySelector('#game-over-box h1').innerText = "\uD83C\uDF89 \u00A1Ganaste!";
         document.querySelector('#game-over-box p.final-score').innerHTML =
             `\u00A1<span id="final-aciertos">0</span> de 52 provincias!`;
+        if(mainBtn) mainBtn.innerText = "🏠 Volver al Menú";
+        if(aboutBtn) aboutBtn.style.display = "block";
+        document.getElementById('game-over-box').style.boxShadow = "0 0 80px rgba(255, 209, 102, 0.8)";
+        
+        let scene = game.scene.scenes[0];
+        
+        // Efecto Sonoro Triunfal
+        if (sfxEnabled && typeof _playTone !== 'undefined') {
+            _playTone(400, 'square', 0.2, 0.1, 0.05, 0.1);
+            setTimeout(() => _playTone(500, 'square', 0.2, 0.1, 0.05, 0.1), 150);
+            setTimeout(() => _playTone(600, 'square', 0.6, 0.2, 0.05, 0.4), 300);
+            setTimeout(() => _playTone(800, 'square', 1.0, 0.3, 0.1, 0.8), 500);
+        }
+        
+        // Cañones de confeti masivos estilo fuegos artificiales
+        scene.add.particles(canvasWidth / 2, canvasHeight - 50, 'circle', {
+            color: [ 0xffffff, 0xffd166, 0x06d6a0, 0xef476f, 0x118ab2 ],
+            colorRandom: true,
+            lifespan: 4000,
+            angle: { min: -130, max: -50 },
+            speed: { min: 400, max: 1000 },
+            gravityY: 600,
+            scale: { start: 1.2, end: 0 },
+            blendMode: 'SCREEN',
+            quantity: 3,
+            emitZone: { type: 'random', source: new Phaser.Geom.Rectangle(-400, 0, 800, 50) }
+        }).setDepth(45);
     }
     domGameOver.style.display = 'flex';
     // Dar un tick para que el CSS compile y luego añadir .active
