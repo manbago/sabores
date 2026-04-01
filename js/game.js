@@ -106,8 +106,8 @@ function create() {
         // Mostrar "Cargando..." en el HUD mientras se cargan las imágenes
         const domCurrentFood = document.getElementById('current-food');
         const domFoodImage = document.getElementById('food-image');
-        if (domCurrentFood) domCurrentFood.innerText = 'Cargando...';
-        if (domFoodImage) domFoodImage.innerHTML = '<span style="font-size:2em;animation:spin 1s linear infinite;display:inline-block">⏳</span>';
+        if (domCurrentFood) domCurrentFood.innerHTML = '<span class="loading-text">CARGANDO PLATOS...</span>';
+        if (domFoodImage) domFoodImage.innerHTML = '<div class="neon-loader"></div>';
 
         let pendingLoad = 0;
         dishImagesToLoad.forEach(p => {
@@ -810,9 +810,9 @@ function updateVidasUI() {
     let html = '';
     for (let i = 0; i < maxVidas; i++) {
         if (i < vidas) {
-            html += '<span class="icon-active">\u2764\uFE0F</span>';
+            html += '<span class="icon-active" style="font-size:18px;filter:drop-shadow(0 0 3px #a855f7)">🧠</span>';
         } else {
-            html += '<span class="icon-spent">\uD83E\uDD0D</span>'; // corazón roto
+            html += '<span class="icon-spent" style="font-size:18px;opacity:0.65">🧠</span>';
         }
     }
     domVidas.innerHTML = html;
@@ -829,9 +829,9 @@ function updateComodinesUI() {
     let html = '';
     for (let i = 0; i < maxComodines; i++) {
         if (i < comodines) {
-            html += '<span class="icon-active" style="font-size:20px">\u2B50</span>'; // estrella dorada
+            html += '<span class="icon-active" style="font-size:22px;filter:drop-shadow(0 0 4px #a855f7)">🃏</span>';
         } else {
-            html += '<span class="icon-spent" style="font-size:20px">\u2606</span>'; // estrella vacía
+            html += '<span class="icon-spent" style="font-size:22px;opacity:0.65">🃏</span>';
         }
     }
     domComodines.innerHTML = html;

@@ -1160,3 +1160,58 @@ p.final-score {
         min-width: auto;
     }
 }
+
+/* ========================
+   NEON LOADER (Cargando Platos)
+   ======================== */
+.neon-loader {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 6px solid transparent;
+    border-top-color: #ffd166;
+    border-right-color: #06d6a0;
+    border-bottom-color: #ef476f;
+    border-left-color: #118ab2;
+    animation: neon-spin 0.9s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite,
+               neon-glow 1.8s ease-in-out infinite alternate;
+    box-shadow:
+        0 0 12px #ffd16688,
+        0 0 28px #06d6a044,
+        inset 0 0 12px rgba(255, 255, 255, 0.05);
+}
+
+.loading-text {
+    display: inline-block;
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    letter-spacing: 4px;
+    color: #2b2d42;
+    text-shadow:
+        0 0 8px rgba(168, 85, 247, 0.6),
+        0 0 20px rgba(6, 214, 160, 0.3);
+    animation: loading-flicker 1.4s ease-in-out infinite;
+}
+
+@keyframes loading-flicker {
+    0%, 100% { opacity: 1;    text-shadow: 0 0 8px rgba(168,85,247,0.7), 0 0 20px rgba(6,214,160,0.4); }
+    25%       { opacity: 0.6; text-shadow: 0 0 4px rgba(239,71,111,0.5), 0 0 12px rgba(17,138,178,0.3); }
+    50%       { opacity: 0.9; text-shadow: 0 0 14px rgba(168,85,247,0.9), 0 0 30px rgba(6,214,160,0.5); }
+    75%       { opacity: 0.5; text-shadow: 0 0 6px rgba(17,138,178,0.6), 0 0 16px rgba(239,71,111,0.3); }
+}
+
+@keyframes neon-spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes neon-glow {
+    0%   { box-shadow: 0 0 8px #ffd16699,  0 0 20px #06d6a033; }
+    50%  { box-shadow: 0 0 20px #ef476f99, 0 0 40px #118ab255; }
+    100% { box-shadow: 0 0 8px #06d6a099,  0 0 20px #ffd16633; }
+}
+
+@keyframes neon-text-slide {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+}
