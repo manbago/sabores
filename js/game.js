@@ -23,6 +23,20 @@ let hoverIndex = 0; // Para teclado
 let isEditMode = false; // Modo edición
 let projectileMaskGraphics; // Gráfico para la máscara del proyectil
 
+// --- STEAM ACHIEVEMENTS WRAPPER ---
+function unlockAchievement(achId) {
+    if (typeof gameSwAPI !== 'undefined' && gameSwAPI && gameSwAPI.achievement) {
+        try {
+            if (!gameSwAPI.achievement.isActivated(achId)) {
+                gameSwAPI.achievement.activate(achId);
+                console.log("Steam Achievement Unlocked:", achId);
+            }
+        } catch(e) {
+            console.warn("Failed to unlock achievement:", e);
+        }
+    }
+}
+
 const MAP_OFFSET_X = 0; // El mapa recortado ya viene centrado, no requiere offset adicional
 
 
@@ -475,6 +489,9 @@ function isModalOpen() {
 }
 
 function nextRound() {
+    // Logro Primera Partida
+    if (aciertos === 0 && fallos === 0) unlockAchievement('ACH_FIRST_PLAY');
+
     if (gameQueue.length === 0) {
         gameOver();
         return;
@@ -697,6 +714,11 @@ function checkResult(selectedProv, targetSprite, scene) {
 
         aciertos++;
         rachaAciertos++; // Incrementar racha
+        
+        // Logros de Racha
+        if (rachaAciertos === 5) unlockAchievement('ACH_COMBO_5');
+        if (rachaAciertos === 10) unlockAchievement('ACH_COMBO_10');
+
         domAciertos.innerText = aciertos;
 
         // Popup SWISH!
@@ -881,6 +903,8 @@ function gameOver() {
         if(mainBtn) mainBtn.innerText = t('btn_main_menu');
         if(aboutBtn) aboutBtn.style.display = "block";
         document.getElementById('game-over-box').style.boxShadow = "0 0 80px rgba(255, 209, 102, 0.8)";
+        
+        unlockAchievement('ACH_GAME_CLEAR');
         
         // Efecto Sonoro Triunfal
         if (sfxEnabled && typeof _playTone !== 'undefined') {
