@@ -357,14 +357,65 @@ function create() {
     });
 }
 
+let gameSwAPI = null;
+try { if (typeof require !== 'undefined') gameSwAPI = require('electron').remote ? require('electron').remote.getGlobal('steamworks') : require('steamworks.js'); } catch(e){}
+let swInGameSet = null;
+let swInGameUp = null, swInGameDown = null, swInGameLeft = null, swInGameRight = null, swInGameShoot = null, swInGamePause = null;
+
 function update() {
-    // 0. Gamepad Analog Stick Polling
-    if (this.input.gamepad.total > 0) {
+    // 0. Gamepad Analog Stick Polling & Steamworks Input
+    let usedSteamInput = false;
+    let now = this.time.now;
+    
+    if (gameSwAPI && gameSwAPI.input) {
+        try {
+            const controllers = gameSwAPI.input.getControllers();
+            if (controllers && controllers.length > 0) {
+                usedSteamInput = true;
+                const pad = controllers[0];
+                if (!swInGameSet) swInGameSet = gameSwAPI.input.getActionSet("InGame");
+                if (!swInGameUp) swInGameUp = gameSwAPI.input.getDigitalAction("action_up");
+                if (!swInGameDown) swInGameDown = gameSwAPI.input.getDigitalAction("action_down");
+                if (!swInGameLeft) swInGameLeft = gameSwAPI.input.getDigitalAction("action_left");
+                if (!swInGameRight) swInGameRight = gameSwAPI.input.getDigitalAction("action_right");
+                if (!swInGameShoot) swInGameShoot = gameSwAPI.input.getDigitalAction("action_shoot");
+                if (!swInGamePause) swInGamePause = gameSwAPI.input.getDigitalAction("action_pause");
+
+                pad.activateActionSet(swInGameSet);
+
+                if (!this.lastGamepadNav || now > this.lastGamepadNav + 250) {
+                    if (pad.isDigitalActionPressed(swInGameRight)) { navigateKeyboard('RIGHT'); this.lastGamepadNav = now; }
+                    else if (pad.isDigitalActionPressed(swInGameLeft)) { navigateKeyboard('LEFT'); this.lastGamepadNav = now; }
+                    else if (pad.isDigitalActionPressed(swInGameDown)) { navigateKeyboard('DOWN'); this.lastGamepadNav = now; }
+                    else if (pad.isDigitalActionPressed(swInGameUp)) { navigateKeyboard('UP'); this.lastGamepadNav = now; }
+                }
+
+                // Shoot
+                if (pad.isDigitalActionPressed(swInGameShoot)) {
+                    if (!this.lastGamepadShoot || now > this.lastGamepadShoot + 300) {
+                        doAction();
+                        this.lastGamepadShoot = now;
+                    }
+                }
+                
+                // Pause
+                if (pad.isDigitalActionPressed(swInGamePause)) {
+                    if (!this.lastGamepadPause || now > this.lastGamepadPause + 500) {
+                        if (typeof gameStarted !== 'undefined' && gameStarted && document.getElementById('main-menu-screen').classList.contains('hidden')) {
+                            if (typeof window.togglePause === 'function') window.togglePause();
+                        }
+                        this.lastGamepadPause = now;
+                    }
+                }
+            }
+        } catch(e) {}
+    }
+
+    if (!usedSteamInput && this.input.gamepad.total > 0) {
         let pad = this.input.gamepad.pads[0];
         if (pad && pad.axes.length > 1) {
             let x = pad.axes[0].getValue();
             let y = pad.axes[1].getValue();
-            let now = this.time.now;
             if (!this.lastGamepadNav || now > this.lastGamepadNav + 250) {
                 if (x > 0.6) { navigateKeyboard('RIGHT'); this.lastGamepadNav = now; }
                 else if (x < -0.6) { navigateKeyboard('LEFT'); this.lastGamepadNav = now; }

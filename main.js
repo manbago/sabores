@@ -12,6 +12,18 @@ try {
     isDev = false;
 }
 
+let steamClient = null;
+try {
+    const steamworks = require('steamworks.js');
+    steamClient = steamworks.init(4596230);
+    // Make steamworks available globally so we can check it in renderer
+    global.steamworks = steamworks;
+    global.steamClient = steamClient;
+    console.log("Steamworks API initialized successfully.");
+} catch (e) {
+    console.warn("Steamworks API could not be initialized:", e);
+}
+
 function createWindow() {
     // Definimos las características de la ventana del juego
     const win = new BrowserWindow({
