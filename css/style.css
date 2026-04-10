@@ -651,6 +651,13 @@ button:active {
 
 .btn-confirm:active { box-shadow: 0 2px 0 #049070; }
 
+.gamepad-focus {
+    transform: scale(1.05) !important;
+    border-color: #ef476f !important;
+    box-shadow: 0 0 15px rgba(239, 71, 111, 0.8), 0 5px 0 #ef476f !important;
+    background: #ffe491 !important;
+}
+
 /* Botón Terminar Partida */
 #restart-btn {
     position: absolute;

@@ -98,6 +98,14 @@
                         </select>
                     </div>
                     <hr style="border: 1px dashed rgba(255,255,255,0.2); margin: 15px 0;">
+                    <div class="slider-row" style="margin-bottom: 10px;">
+                        <label data-i18n="lbl_control_profile">🎮 Perfil de Control</label>
+                        <select id="control-profile-selector" style="width:100%; padding: 5px; font-family:'Nunito',sans-serif; border-radius:8px; border:2px solid #ccc; font-weight:800; cursor:pointer; background:#fff; color:#333;">
+                            <option value="arrows" data-i18n="opt_profile_arrows">Flechas + Enter</option>
+                            <option value="wasd" data-i18n="opt_profile_wasd">WASD + Espacio</option>
+                        </select>
+                    </div>
+                    <hr style="border: 1px dashed rgba(255,255,255,0.2); margin: 15px 0;">
                     <div class="slider-row">
                         <label data-i18n="lbl_graphics">💻 Gráficos (Pantalla)</label>
                         <button class="menu-small-btn" id="menu-btn-fullscreen" style="width:100%; margin-top:5px; font-size:16px; padding:10px;" data-i18n="btn_fullscreen">⛶ Alternar Pantalla Completa</button>
@@ -139,6 +147,11 @@
         </div>
 
         <div class="menu-version" id="footer-ver">Cargando...</div>
+        
+        <!-- Gamepad Indicator -->
+        <div id="gamepad-indicator" style="display: none; position: absolute; bottom: 10px; left: 15px; background: rgba(10, 10, 30, 0.8); color: #06d6a0; padding: 8px 16px; border: 2px solid #06d6a0; border-radius: 20px; font-family: 'Fredoka One', cursive; align-items: center; gap: 8px;">
+            🎮 <span data-i18n="gamepad_detected">Mando Detectado</span>
+        </div>
     </div>
 
     <!-- ======= JUEGO ======= -->
@@ -354,6 +367,16 @@
             });
             // Init
             valEl.textContent = slider.value + '%';
+        }
+
+        let currentControlProfile = localStorage.getItem('control_profile') || 'arrows';
+        const controlSelector = document.getElementById('control-profile-selector');
+        if (controlSelector) {
+            controlSelector.value = currentControlProfile;
+            controlSelector.addEventListener('change', (e) => {
+                currentControlProfile = e.target.value;
+                localStorage.setItem('control_profile', currentControlProfile);
+            });
         }
 
         let menuMasterVol = 0.8;
@@ -573,9 +596,67 @@
                 document.getElementById('restart-btn').style.display  = 'none';
             }, 300);
         }
+        // ======= NAVEGACIÓN UI GLOBAL POR MANDO =======
+        let lastUIGamepadTime = 0;
+        let focusedButtonIndex = -1;
+        
+        function getFocusableButtons() {
+            const buttons = Array.from(document.querySelectorAll('button:not([style*="display: none"])'));
+            return buttons.filter(b => {
+                const rect = b.getBoundingClientRect();
+                return rect.width > 0 && rect.height > 0 && window.getComputedStyle(b).visibility !== 'hidden' && b.style.display !== 'none';
+            });
+        }
 
+        function updateGamepadUI() {
+            const pads = navigator.getGamepads ? navigator.getGamepads() : null;
+            if (!pads) return requestAnimationFrame(updateGamepadUI);
+            
+            const pad = pads[0];
+            if (pad) {
+                const now = performance.now();
+                if (now > lastUIGamepadTime + 200) {
+                    const buttons = getFocusableButtons();
+                    if (buttons.length === 0) return requestAnimationFrame(updateGamepadUI);
+                    
+                    let axisY = pad.axes.length > 1 ? pad.axes[1] : 0;
+                    let moved = false;
+                    
+                    if (focusedButtonIndex < 0 || focusedButtonIndex >= buttons.length) {
+                        focusedButtonIndex = 0;
+                    }
+                    
+                    // Abajo
+                    if (pad.buttons[13]?.pressed || axisY > 0.6) {
+                        focusedButtonIndex = (focusedButtonIndex + 1) % buttons.length;
+                        moved = true;
+                    }
+                    // Arriba
+                    else if (pad.buttons[12]?.pressed || axisY < -0.6) {
+                        focusedButtonIndex = (focusedButtonIndex - 1 + buttons.length) % buttons.length;
+                        moved = true;
+                    }
+                    
+                    if (moved) {
+                        lastUIGamepadTime = now;
+                        buttons.forEach(b => b.classList.remove('gamepad-focus'));
+                        buttons[focusedButtonIndex].classList.add('gamepad-focus');
+                    }
+                    
+                    // Aceptar (A / Cruz)
+                    if (pad.buttons[0]?.pressed) {
+                        if (now > lastUIGamepadTime + 300) {
+                            lastUIGamepadTime = now;
+                            buttons[focusedButtonIndex].classList.remove('gamepad-focus');
+                            buttons[focusedButtonIndex].click();
+                        }
+                    }
+                }
+            }
+            requestAnimationFrame(updateGamepadUI);
+        }
+        requestAnimationFrame(updateGamepadUI);
 
     </script>
-
 </body>
 </html>

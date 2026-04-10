@@ -62,6 +62,9 @@ const config = {
         create: create,
         update: update
     },
+    input: {
+        gamepad: true
+    },
     backgroundColor: '#ffffff',
     transparent: false
 };
@@ -268,15 +271,62 @@ function create() {
         repeat: -1
     });
 
-    // Teclado
-    this.input.keyboard.on('keydown-RIGHT', () => navigateKeyboard('RIGHT'));
-    this.input.keyboard.on('keydown-LEFT', () => navigateKeyboard('LEFT'));
-    this.input.keyboard.on('keydown-UP', () => navigateKeyboard('UP'));
-    this.input.keyboard.on('keydown-DOWN', () => navigateKeyboard('DOWN'));
-    this.input.keyboard.on('keydown-ENTER', () => {
-        if (isModalOpen()) return;
+    // --- CONTROLES Y SOPORTE DE MANDO ---
+    function getCurrentProfile() {
+        return localStorage.getItem('control_profile') || 'arrows';
+    }
+
+    const doAction = () => {
+        if (isModalOpen() || window.isPaused) return;
+        if (document.getElementById('main-menu-screen').style.display !== 'none' && !document.getElementById('main-menu-screen').classList.contains('hidden')) return;
         if (!isShooting && provinceSprites[hoverIndex]) {
             shootAt(provinceSprites[hoverIndex].provinceData, provinceSprites[hoverIndex]);
+        }
+    };
+
+    // Teclado
+    this.input.keyboard.on('keydown-RIGHT', () => { if (getCurrentProfile() === 'arrows') navigateKeyboard('RIGHT'); });
+    this.input.keyboard.on('keydown-LEFT', () => { if (getCurrentProfile() === 'arrows') navigateKeyboard('LEFT'); });
+    this.input.keyboard.on('keydown-UP', () => { if (getCurrentProfile() === 'arrows') navigateKeyboard('UP'); });
+    this.input.keyboard.on('keydown-DOWN', () => { if (getCurrentProfile() === 'arrows') navigateKeyboard('DOWN'); });
+    this.input.keyboard.on('keydown-ENTER', () => { if (getCurrentProfile() === 'arrows') doAction(); });
+
+    this.input.keyboard.on('keydown-D', () => { if (getCurrentProfile() === 'wasd') navigateKeyboard('RIGHT'); });
+    this.input.keyboard.on('keydown-A', () => { if (getCurrentProfile() === 'wasd') navigateKeyboard('LEFT'); });
+    this.input.keyboard.on('keydown-W', () => { if (getCurrentProfile() === 'wasd') navigateKeyboard('UP'); });
+    this.input.keyboard.on('keydown-S', () => { if (getCurrentProfile() === 'wasd') navigateKeyboard('DOWN'); });
+    this.input.keyboard.on('keydown-SPACE', () => { if (getCurrentProfile() === 'wasd') doAction(); });
+
+    // Gamepad (Phaser native wrapper)
+    this.input.gamepad.on('connected', (pad) => {
+        const ind = document.getElementById('gamepad-indicator');
+        if (ind) ind.style.display = 'flex';
+        
+        pad.on('down', (index, value, button) => {
+            // Aceptar/Disparar: Botón A (Steam/Xbox index 0)
+            if (index === 0) {
+                // If we are playing
+                doAction();
+            }
+            // D-PAD
+            if (index === 12) navigateKeyboard('UP');
+            if (index === 13) navigateKeyboard('DOWN');
+            if (index === 14) navigateKeyboard('LEFT');
+            if (index === 15) navigateKeyboard('RIGHT');
+            
+            // Pausa / Atrás: Botón B (index 1) o Menú (index 9)
+            if (index === 1 || index === 9) {
+                if (typeof gameStarted !== 'undefined' && gameStarted && document.getElementById('main-menu-screen').classList.contains('hidden')) {
+                    if (typeof window.togglePause === 'function') window.togglePause();
+                }
+            }
+        });
+    });
+
+    this.input.gamepad.on('disconnected', (pad) => {
+        if (this.input.gamepad.total === 0) {
+            const ind = document.getElementById('gamepad-indicator');
+            if (ind) ind.style.display = 'none';
         }
     });
 
@@ -308,6 +358,22 @@ function create() {
 }
 
 function update() {
+    // 0. Gamepad Analog Stick Polling
+    if (this.input.gamepad.total > 0) {
+        let pad = this.input.gamepad.pads[0];
+        if (pad && pad.axes.length > 1) {
+            let x = pad.axes[0].getValue();
+            let y = pad.axes[1].getValue();
+            let now = this.time.now;
+            if (!this.lastGamepadNav || now > this.lastGamepadNav + 250) {
+                if (x > 0.6) { navigateKeyboard('RIGHT'); this.lastGamepadNav = now; }
+                else if (x < -0.6) { navigateKeyboard('LEFT'); this.lastGamepadNav = now; }
+                else if (y > 0.6) { navigateKeyboard('DOWN'); this.lastGamepadNav = now; }
+                else if (y < -0.6) { navigateKeyboard('UP'); this.lastGamepadNav = now; }
+            }
+        }
+    }
+
     // 1. Apuntar el Robot-Toro al ratón
     if (launcher && launcher.bullBot && !isEditMode) {
         let pointer = this.input.activePointer;
@@ -619,7 +685,7 @@ function checkResult(selectedProv, targetSprite, scene) {
         scene.tweens.add({ targets: ring2, radius: 90, alpha: 0, duration: 500, ease: 'Cubic.easeOut', onComplete: () => ring2.destroy() });
 
         setTimeout(() => {
-            showSabiasQue(selectedProv.info);
+            showSabiasQue(t('info_' + selectedProv.id));
             nextRound(); // Pasar de ronda inmediatamente sin esperar al popup
         }, 1000);
 
