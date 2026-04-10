@@ -138,6 +138,18 @@ body, html {
     box-shadow: 0 3px 0 #04a07a, 0 4px 8px rgba(0,0,0,0.2);
 }
 
+.menu-btn-secondary {
+    font-size: clamp(18px, 2.2vw, 24px) !important;
+    padding: 12px 40px !important;
+    min-width: 280px !important;
+    box-shadow: 0 6px 0 #e8a020, 0 8px 15px rgba(0,0,0,0.2) !important;
+}
+
+.menu-btn-secondary:active {
+    transform: translateY(4px) !important;
+    box-shadow: 0 2px 0 #e8a020, 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
 .menu-version {
     position: fixed;
     bottom: 10px;
