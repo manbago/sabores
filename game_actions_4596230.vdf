@@ -1,0 +1,59 @@
+"In Game Actions"
+{
+	"actions"
+	{
+		"InGame"
+		{
+			"title"					"#Set_InGame"
+			"Button"
+			{
+				"action_up"		{ "title"		"#Action_Up" }
+				"action_down"	{ "title"		"#Action_Down" }
+				"action_left"	{ "title"		"#Action_Left" }
+				"action_right"	{ "title"		"#Action_Right" }
+				"action_shoot"	{ "title"		"#Action_Shoot" }
+				"action_pause"	{ "title"		"#Action_Pause" }
+			}
+		}
+		"Menu"
+		{
+			"title"					"#Set_Menu"
+			"Button"
+			{
+				"action_up"		{ "title"		"#Action_Up" }
+				"action_down"	{ "title"		"#Action_Down" }
+				"action_left"	{ "title"		"#Action_Left" }
+				"action_right"	{ "title"		"#Action_Right" }
+				"action_shoot"	{ "title"		"#Action_Accept" }
+				"action_pause"	{ "title"		"#Action_Pause" }
+			}
+		}
+	}
+	"localization"
+	{
+		"english"
+		{
+			"Set_InGame"	"In-Game"
+			"Set_Menu"		"Menu Navigation"
+			"Action_Up"		"Up"
+			"Action_Down"	"Down"
+			"Action_Left"	"Left"
+			"Action_Right"	"Right"
+			"Action_Shoot"	"Shoot / Accept"
+			"Action_Accept"	"Accept"
+			"Action_Pause"	"Pause / Back"
+		}
+		"spanish"
+		{
+			"Set_InGame"	"Jugando"
+			"Set_Menu"		"Navegación de Menú"
+			"Action_Up"		"Arriba"
+			"Action_Down"	"Abajo"
+			"Action_Left"	"Izquierda"
+			"Action_Right"	"Derecha"
+			"Action_Shoot"	"Disparar / Aceptar"
+			"Action_Accept"	"Aceptar"
+			"Action_Pause"	"Pausa / Atrás"
+		}
+	}
+}
