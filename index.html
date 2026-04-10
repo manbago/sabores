@@ -11,12 +11,19 @@
     <script src="lib/phaser.min.js"></script>
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/style.css?v=2">
+    <script src="js/i18n.js"></script>
     <!-- Confetti Library para que se vea sobre el HTML -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script>
         // ======= JUICE SOUND ENGINE (Web Audio API) =======
         // Genera sonidos de UI programáticamente sin necesitar archivos.
         const _ac = new (window.AudioContext || window.webkitAudioContext)();
+
+        // iOS Safari: AudioContext arranca suspendido hasta el primer gesto del usuario.
+        // Chrome lo ignora porque su contexto ya está 'running'.
+        document.addEventListener('touchstart', function() {
+            if (_ac.state === 'suspended') _ac.resume();
+        }, { once: true, passive: true });
 
         function _playTone(freq, type, duration, vol, attack, decay) {
             try {
@@ -66,62 +73,68 @@
     <!-- ======= MENÚ PRINCIPAL ======= -->
     <div id="main-menu-screen">
         <div class="menu-logo-wrap" id="menu-logo-container">
-            <span class="menu-logo-title">🍽️ SABOR DE ESPAÑA</span>
-            <span class="menu-logo-sub">The Hoops Challenge</span>
+            <span class="menu-logo-title" data-i18n="title_main">🍽️ SABOR DE ESPAÑA</span>
+            <span class="menu-logo-sub" data-i18n="title_sub">The Hoops Challenge</span>
         </div>
         
         <!-- VISTA CONTENEDOR GRID -->
         <div class="menu-views-container">
             <!-- VISTA: Botones Principales -->
             <div id="menu-main-view" class="menu-view active">
-                <button class="menu-btn btn-play" id="menu-btn-newgame">▶ NUEVA PARTIDA</button>
-                <button class="menu-btn" id="menu-btn-options">⚙️ OPCIONES</button>
-                <button class="menu-btn" id="menu-btn-about">ℹ️ ACERCA DE</button>
-                <button class="menu-btn btn-danger" id="menu-btn-exit" style="margin-top: 30px; font-size: 16px; padding: 10px 40px; min-width: 180px;">🚪 SALIR AL ESCRITORIO</button>
+                <button class="menu-btn btn-play" id="menu-btn-newgame" data-i18n="btn_newgame">▶ NUEVA PARTIDA</button>
+                <button class="menu-btn" id="menu-btn-options" data-i18n="btn_options">⚙️ OPCIONES</button>
+                <button class="menu-btn" id="menu-btn-about" data-i18n="btn_about">ℹ️ ACERCA DE</button>
+                <button class="menu-btn btn-danger" id="menu-btn-exit" style="margin-top: 30px; font-size: 16px; padding: 10px 40px; min-width: 180px;" data-i18n="btn_exit">🚪 SALIR AL ESCRITORIO</button>
             </div>
 
             <!-- VISTA: Opciones -->
             <div id="menu-options-view" class="menu-view hidden">
-                <h2 class="menu-section-title">Ajustes</h2>
+                <h2 class="menu-section-title" data-i18n="title_options">Ajustes</h2>
                 
                 <div class="menu-settings-box">
-                    <div class="slider-row">
-                        <label>💻 Gráficos (Pantalla)</label>
-                        <button class="menu-small-btn" id="menu-btn-fullscreen" style="width:100%; margin-top:5px; font-size:16px; padding:10px;">⛶ Alternar Pantalla Completa</button>
+                    <div class="slider-row" style="margin-bottom: 10px;">
+                        <label data-i18n="lbl_language">🌐 Idioma</label>
+                        <select id="lang-selector" style="width:100%; padding: 5px; font-family:'Nunito',sans-serif; border-radius:8px; border:2px solid #ccc; font-weight:800; cursor:pointer; background:#fff; color:#333;">
+                        </select>
                     </div>
                     <hr style="border: 1px dashed rgba(255,255,255,0.2); margin: 15px 0;">
                     <div class="slider-row">
-                        <label>🔊 Volumen General</label>
+                        <label data-i18n="lbl_graphics">💻 Gráficos (Pantalla)</label>
+                        <button class="menu-small-btn" id="menu-btn-fullscreen" style="width:100%; margin-top:5px; font-size:16px; padding:10px;" data-i18n="btn_fullscreen">⛶ Alternar Pantalla Completa</button>
+                    </div>
+                    <hr style="border: 1px dashed rgba(255,255,255,0.2); margin: 15px 0;">
+                    <div class="slider-row">
+                        <label data-i18n="lbl_master_vol">🔊 Volumen General</label>
                         <input type="range" id="menu-slider-master" min="0" max="100" value="80" class="vol-slider">
                         <span class="vol-val" id="menu-val-master">80%</span>
                     </div>
                     <div class="slider-row">
-                        <label>🎷 Música</label>
+                        <label data-i18n="lbl_music">🎷 Música</label>
                         <input type="range" id="menu-slider-music" min="0" max="100" value="10" class="vol-slider">
                         <span class="vol-val" id="menu-val-music">10%</span>
                     </div>
                     <div class="slider-row">
-                        <label>💥 Efectos</label>
+                        <label data-i18n="lbl_sfx">💥 Efectos</label>
                         <input type="range" id="menu-slider-sfx" min="0" max="100" value="70" class="vol-slider">
                         <span class="vol-val" id="menu-val-sfx">70%</span>
                     </div>
                 </div>
                 
-                <button class="menu-btn" id="menu-btn-back-options">← VOLVER</button>
+                <button class="menu-btn" id="menu-btn-back-options" data-i18n="btn_back">← VOLVER</button>
             </div>
 
             <!-- VISTA: Acerca De -->
             <div id="menu-about-view" class="menu-view hidden">
-                <h2 class="menu-section-title">Créditos</h2>
+                <h2 class="menu-section-title" data-i18n="title_about">Créditos</h2>
                 <div class="menu-about-box">
                     <p style="font-size:24px; color:#ffd166; font-family:'Fredoka One', cursive; margin-bottom:10px;">Sabor de España: The Hoops Challenge</p>
-                    <p>Desarrollado como una experiencia interactiva para aprender sobre la gastronomía española mientras te diviertes.</p>
+                    <p data-i18n="about_desc1">Desarrollado como una experiencia interactiva para aprender sobre la gastronomía española mientras te diviertes.</p>
                     <br>
-                    <p><small style="color:#06d6a0;">Motor Gráfico: Phaser 3</small></p>
-                    <p><small style="color:#06d6a0;">Creado por <strong>Manuel Bago Cobo</strong></small></p>
-                    <p><small id="about-ver">Cargando versión...</small></p>
+                    <p><small style="color:#06d6a0;" data-i18n="about_engine">Motor Gráfico: Phaser 3</small></p>
+                    <p><small style="color:#06d6a0;" data-i18n="about_created">Creado por <strong>Manuel Bago Cobo</strong></small></p>
+                    <p><small id="about-ver" data-i18n="loading_version">Cargando versión...</small></p>
                 </div>
-                <button class="menu-btn" id="menu-btn-back-about">← VOLVER</button>
+                <button class="menu-btn" id="menu-btn-back-about" data-i18n="btn_back">← VOLVER</button>
             </div>
         </div>
 
@@ -137,46 +150,46 @@
             <img src="assets/images/bull_launcher.png" alt="Bull">
         </div>
         <div class="notification-content">
-            <div class="notification-title" id="notification-title">Aviso</div>
+            <div class="notification-title" id="notification-title" data-i18n="notification_title">Aviso</div>
             <div class="notification-msg" id="notification-msg">...</div>
         </div>
     </div>
 
     <div id="sabias-que-popup">
         <div id="sabias-que-close" onclick="closeSabiasQue()">X</div>
-        <h2 id="sabias-que-title">💡 ¡Sabías que...!</h2>
+        <h2 id="sabias-que-title" data-i18n="sabias_que">💡 ¡Sabías que...!</h2>
         <div id="sabias-que-text">...</div>
     </div>
 
     <!-- Controles de Audio (In-Game) -->
     <div id="audio-settings">
-        <button id="music-toggle" class="audio-btn" onclick="toggleMusic(event)" title="Música Si/No">
+        <button id="music-toggle" class="audio-btn" onclick="toggleMusic(event)" title="Música Si/No" data-i18n-title="tt_music">
             <span class="icon">🎷</span>
         </button>
-        <button id="sfx-toggle" class="audio-btn" onclick="toggleSFX(event)" title="Efectos Si/No">
+        <button id="sfx-toggle" class="audio-btn" onclick="toggleSFX(event)" title="Efectos Si/No" data-i18n-title="tt_sfx">
             <span class="icon">🔊</span>
         </button>
     </div>
 
     <!-- Botón Pantalla Completa -->
-    <button id="fullscreen-btn" onclick="toggleFullscreen(event)" title="Pantalla Completa (F11)">⛶</button>
+    <button id="fullscreen-btn" onclick="toggleFullscreen(event)" title="Pantalla Completa (F11)" data-i18n-title="tt_fullscreen">⛶</button>
 
     <div id="game-stats">
         <div class="stat-box score-points">🍽️ <span id="score-aciertos">0</span> <span style="opacity:0.6;font-size:16px;">/ 52</span></div>
         <div class="stat-box vidas-box" id="vidas-stat-box" title="Vidas Restantes">
             <span id="ui-vidas">🧠🧠🧠🧠🧠🧠🧠</span>
-            <br><span style="font-size:11px;color:#a07550;font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:2px;">VIDAS</span>
+            <br><span style="font-size:11px;color:#a07550;font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:2px;" data-i18n="word_lives">VIDAS</span>
         </div>
-        <div class="stat-box comodines-box" title="Clic para usar Comodín (Pista)"
+        <div class="stat-box comodines-box" title="Clic para usar Comodín (Pista)" data-i18n-title="tt_wildcard"
             onclick="event.stopPropagation(); usarComodin();">
             <span id="ui-comodines">🃏🃏🃏🃏🃏</span>
-            <br><span style="font-size:11px;color:#a07550;font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:2px;">COMODINES</span>
+            <br><span style="font-size:11px;color:#a07550;font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:2px;" data-i18n="word_wildcards">COMODINES</span>
         </div>
     </div>
 
-    <button id="restart-btn" onclick="confirmRestart()">Salir</button>
-    <button id="pause-btn" onclick="togglePause()">⏸ Pausa</button>
-    <button id="edit-btn" onclick="toggleEditMode()" style="display: none;">✎ Modo Edición</button>
+    <button id="restart-btn" onclick="confirmRestart()" data-i18n="btn_leave">Salir</button>
+    <button id="pause-btn" onclick="togglePause()" data-i18n="btn_pause">⏸ Pausa</button>
+    <button id="edit-btn" onclick="toggleEditMode()" style="display: none;" data-i18n="btn_edit_mode">✎ Modo Edición</button>
 
     <div id="hud-container">
         <div id="dashboard">
@@ -184,9 +197,9 @@
                 <div id="food-image"></div>
             </div>
             <div class="dashboard-info">
-                <div class="dash-title">🎯 Siguiente Lanzamiento</div>
-                <div class="dash-subtitle">¿A qué provincia pertenece este plato?</div>
-                <div class="highlight-food" id="current-food">Cargando...</div>
+                <div class="dash-title" data-i18n="dash_title">🎯 Siguiente Lanzamiento</div>
+                <div class="dash-subtitle" data-i18n="dash_subtitle">¿A qué provincia pertenece este plato?</div>
+                <div class="highlight-food" id="current-food" data-i18n="loading_short">Cargando...</div>
                 <div id="comodin-container" class="comodin-options" style="display:none;"></div>
             </div>
         </div>
@@ -194,55 +207,55 @@
 
     <div id="game-over-screen">
         <div id="game-over-box">
-            <h1>¡Juego Terminado!</h1>
-            <p class="final-score">Provincias: <span id="final-aciertos">0</span>/52</p>
+            <h1 data-i18n="game_over">¡Juego Terminado!</h1>
+            <p class="final-score"><span data-i18n="provinces_score">Provincias:</span> <span id="final-aciertos">0</span>/52</p>
             <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
-                <button id="btn-game-over-main" onclick="location.reload()">🔄 Jugar de Nuevo</button>
-                <button id="btn-game-over-about" style="display: none; background: #fff; border: 2px solid #333; color: #333; font-weight: 800; padding: 10px; font-size: 16px; border-radius: 10px; cursor:pointer; box-shadow: 0 4px 0 #999;" onclick="showAboutFromWin()">ℹ️ Acerca de</button>
+                <button id="btn-game-over-main" onclick="location.reload()" data-i18n="btn_play_again">🔄 Jugar de Nuevo</button>
+                <button id="btn-game-over-about" style="display: none; background: #fff; border: 2px solid #333; color: #333; font-weight: 800; padding: 10px; font-size: 16px; border-radius: 10px; cursor:pointer; box-shadow: 0 4px 0 #999;" onclick="showAboutFromWin()" data-i18n="btn_about_short">ℹ️ Acerca de</button>
             </div>
         </div>
     </div>
 
     <div id="confirm-restart-screen">
         <div id="confirm-restart-box">
-            <h1>¿Salir de la Partida?</h1>
-            <p class="final-score" style="font-size: 22px;">Se perderá tu progreso actual.</p>
+            <h1 data-i18n="confirm_quit_title">¿Salir de la Partida?</h1>
+            <p class="final-score" style="font-size: 22px;" data-i18n="confirm_quit_desc">Se perderá tu progreso actual.</p>
             <div>
-                <button class="btn-confirm" onclick="location.reload()">✓ Sí, reiniciar</button>
-                <button class="btn-cancel" onclick="cancelRestart(event)">✕ Cancelar</button>
+                <button class="btn-confirm" onclick="location.reload()" data-i18n="btn_yes_restart">✓ Sí, reiniciar</button>
+                <button class="btn-cancel" onclick="cancelRestart(event)" data-i18n="btn_cancel">✕ Cancelar</button>
             </div>
         </div>
     </div>
     <!-- ======= PAUSA ======= -->
     <div id="pause-screen">
         <div id="pause-box">
-            <h2 id="pause-title">⏸ PAUSA</h2>
+            <h2 id="pause-title" data-i18n="pause_title">⏸ PAUSA</h2>
 
             <!-- Vista: Menú pausa -->
             <div id="pause-menu-view">
-                <button class="pause-btn" id="resume-btn">▶ Reanudar</button>
-                <button class="pause-btn" id="settings-btn">⚙ Ajustes</button>
-                <button class="pause-btn btn-danger" id="goto-menu-btn">🏠 Menú Principal</button>
+                <button class="pause-btn" id="resume-btn" data-i18n="btn_resume">▶ Reanudar</button>
+                <button class="pause-btn" id="settings-btn" data-i18n="btn_settings">⚙ Ajustes</button>
+                <button class="pause-btn btn-danger" id="goto-menu-btn" data-i18n="btn_main_menu">🏠 Menú Principal</button>
             </div>
 
             <!-- Vista: Ajustes -->
             <div id="pause-settings-view" style="display:none;">
                 <div class="slider-row">
-                    <label>🔊 Volumen General</label>
+                    <label data-i18n="lbl_master_vol">🔊 Volumen General</label>
                     <input type="range" id="slider-master" min="0" max="100" value="80" class="vol-slider">
                     <span class="vol-val" id="val-master">80%</span>
                 </div>
                 <div class="slider-row">
-                    <label>🎷 Música</label>
+                    <label data-i18n="lbl_music">🎷 Música</label>
                     <input type="range" id="slider-music" min="0" max="100" value="10" class="vol-slider">
                     <span class="vol-val" id="val-music">10%</span>
                 </div>
                 <div class="slider-row">
-                    <label>💥 Efectos</label>
+                    <label data-i18n="lbl_sfx">💥 Efectos</label>
                     <input type="range" id="slider-sfx" min="0" max="100" value="70" class="vol-slider">
                     <span class="vol-val" id="val-sfx">70%</span>
                 </div>
-                <button class="pause-btn" id="settings-back-btn">← Volver</button>
+                <button class="pause-btn" id="settings-back-btn" data-i18n="btn_back">← Volver</button>
             </div>
         </div>
     </div>
@@ -253,18 +266,33 @@
         // ======= VERSIÓN DINÁMICA (Electron Only) =======
         function syncVersion() {
             let pureVer = "1.0.2"; // Fallback para Web
+            let isElectron = false;
             try {
                 if (typeof require !== 'undefined') {
                     const pkg = require('./package.json');
                     pureVer = pkg.version;
+                    isElectron = true;
                 }
             } catch(e) { console.log("Web mode: using fallback version"); }
             
-            const verText = `v${pureVer} · 52 Provincias`;
+            // Listen for language changes to update this dynamic text
+            window.addEventListener('languageChanged', () => {
+                const verText = t('version_footer', { version: pureVer });
+                const footer = document.getElementById('footer-ver');
+                const about = document.getElementById('about-ver');
+                if(footer) footer.innerText = verText;
+                if(about) about.innerText = verText;
+            });
+
+            // Set initially if translations aren't loaded yet
             const footer = document.getElementById('footer-ver');
-            const about = document.getElementById('about-ver');
-            if(footer) footer.innerText = verText;
-            if(about) about.innerText = "Versión " + pureVer + " · 52 Provincias";
+            if(footer) footer.innerText = `v${pureVer} · 52 Provincias`;
+
+            // Ocultar botón SALIR si no es Electron (Fix Safari/Web)
+            if (!isElectron) {
+                const exitBtn = document.getElementById('menu-btn-exit');
+                if (exitBtn) exitBtn.style.display = 'none';
+            }
         }
         syncVersion();
     </script>
@@ -300,15 +328,14 @@
 
         // Botón Salir
         document.getElementById('menu-btn-exit').addEventListener('click', () => {
-            if (confirm("¿Estás seguro de que quieres salir al escritorio?")) {
-                if (typeof require !== 'undefined') {
-                    // Entorno nativo Electron
+            if (typeof require !== 'undefined') {
+                if (confirm(t('alert_exit_confirm'))) {
                     const { ipcRenderer } = require('electron');
                     ipcRenderer.send('quit-app');
-                } else {
-                    // Entorno Web puro (navegador)
-                    window.close();
                 }
+            } else {
+                // Entorno Web puro (navegador)
+                alert(t('alert_exit_web'));
             }
         });
 
@@ -367,7 +394,8 @@
             document.getElementById('hud-container').style.display = 'flex';
             document.getElementById('restart-btn').style.display = 'block';
             document.getElementById('audio-settings').style.display = 'flex';
-            document.getElementById('fullscreen-btn').style.display = 'flex';
+            // iOS Safari: ocultar el botón de pantalla completa (API no disponible)
+            if (!_isIOS) document.getElementById('fullscreen-btn').style.display = 'flex';
 
             // Habilitar disparos tras la transición de salida del menú
             setTimeout(() => {
@@ -377,13 +405,28 @@
         });
 
         // ======= PANTALLA COMPLETA =======
+        // Detectar iOS: no soporta la Fullscreen API estándar ni webkit en móvil.
+        const _isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
         function toggleFullscreen(e) {
             if (e) e.stopPropagation();
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
-                document.getElementById('fullscreen-btn').textContent = '✕⛶';
+            // iOS Safari: la Fullscreen API no existe → salir silenciosamente.
+            if (_isIOS) return;
+
+            const elem = document.documentElement;
+            const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+
+            if (!isFs) {
+                // Intentar estándar primero, luego prefijo webkit (Safari desktop)
+                const requestFS = elem.requestFullscreen || elem.webkitRequestFullscreen;
+                if (requestFS) {
+                    requestFS.call(elem).catch(() => {});
+                    document.getElementById('fullscreen-btn').textContent = '✕⛶';
+                }
             } else {
-                document.exitFullscreen();
+                const exitFS = document.exitFullscreen || document.webkitExitFullscreen;
+                if (exitFS) exitFS.call(document);
                 document.getElementById('fullscreen-btn').textContent = '⛶';
             }
         }
@@ -412,14 +455,14 @@
                 pauseScreen.classList.add('paused');
                 pauseMenuView.style.display    = 'flex';
                 pauseSettingsView.style.display = 'none';
-                if (pauseBtn) pauseBtn.innerHTML = '▶ Reanudar';
+                if (pauseBtn) pauseBtn.innerHTML = t('btn_resume');
                 // Pausar la música de fondo si existe
                 if (typeof bgMusic !== 'undefined' && bgMusic && bgMusic.isPlaying) {
                     bgMusic.pause();
                 }
             } else {
                 pauseScreen.classList.remove('paused');
-                if (pauseBtn) pauseBtn.innerHTML = '⏸ Pausa';
+                if (pauseBtn) pauseBtn.innerHTML = t('btn_pause');
                 // Reanudar música si está habilitada
                 if (typeof musicEnabled !== 'undefined' && musicEnabled
                     && typeof bgMusic !== 'undefined' && bgMusic) {

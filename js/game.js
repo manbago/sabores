@@ -106,7 +106,7 @@ function create() {
         // Mostrar "Cargando..." en el HUD mientras se cargan las imágenes
         const domCurrentFood = document.getElementById('current-food');
         const domFoodImage = document.getElementById('food-image');
-        if (domCurrentFood) domCurrentFood.innerHTML = '<span class="loading-text">CARGANDO PLATOS...</span>';
+        if (domCurrentFood) domCurrentFood.innerHTML = '<span class="loading-text">' + t('loading_dishes') + '</span>';
         if (domFoodImage) domFoodImage.innerHTML = '<div class="neon-loader"></div>';
 
         let pendingLoad = 0;
@@ -197,6 +197,12 @@ function create() {
             if (window.isPaused) return; // Ignorar si el juego está en pausa
             if (isEditMode) return;
             if (isModalOpen()) return;
+            
+            // Fix Safari/iOS: el hover no existe, así que resaltamos al tocar
+            if (this.sys.game.device.input.touch || navigator.maxTouchPoints > 0) {
+                highlightProvince(pGroup, text, this);
+            }
+
             if (!isShooting) shootAt(prov, pGroup);
         });
 
@@ -313,7 +319,12 @@ function update() {
         if (targetRot < -1.2) targetRot = -1.2;
 
         if (!isShooting) {
-            launcher.bullBot.rotation = targetRot;
+            // Fix Safari/iOS: solo rotar si el puntero está activo (presionado) o si no es táctil
+            // Esto evita que el toro se quede mirando a sitios raros entre disparos en móvil
+            let isTouch = this.sys.game.device.input.touch || navigator.maxTouchPoints > 0;
+            if (!isTouch || pointer.isDown) {
+                launcher.bullBot.rotation = targetRot;
+            }
 
             // ELIMINAR PROYECTIL EN EL TORO (Ocultar mientras está en espera)
             if (projectile && projectile.active) {
@@ -634,7 +645,7 @@ function checkResult(selectedProv, targetSprite, scene) {
         gameQueue.splice(insertIndex, 0, currentTarget);
 
         // Efecto Miss
-        let missText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y + (scene.currentVerticalOffset || 0) - 50, '¡MISS!', {
+        let missText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y + (scene.currentVerticalOffset || 0) - 50, t('miss'), {
             fontFamily: 'Fredoka One', fontSize: '48px', color: '#F44336', stroke: '#fff', strokeThickness: 6
         }).setOrigin(0.5).setDepth(30);
 
@@ -741,18 +752,16 @@ function gameOver() {
     let aboutBtn = document.getElementById('btn-game-over-about');
 
     if (vidas <= 0) {
-        document.querySelector('#game-over-box h1').innerText = "\uD83D\uDC94 Sin Vidas";
-        document.querySelector('#game-over-box p.final-score').innerHTML =
-            `Encestaste <span id="final-aciertos">0</span> platos de 52.`;
-        if(mainBtn) mainBtn.innerText = "🔄 Jugar de Nuevo";
+        document.querySelector('#game-over-box h1').innerText = "\uD83D\uDC94 " + t('no_lives').replace('💔 ', '');
+        document.querySelector('#game-over-box p.final-score').innerHTML = t('score_final_lose', {count: '<span id="final-aciertos">0</span>'});
+        if(mainBtn) mainBtn.innerText = t('btn_play_again');
         if(aboutBtn) aboutBtn.style.display = "none";
         document.getElementById('game-over-box').style.boxShadow = "0 20px 50px rgba(0,0,0,0.5)";
         document.getElementById('game-over-screen').style.backgroundColor = ''; // Restaurar sombra negra normal
     } else {
-        document.querySelector('#game-over-box h1').innerText = "\uD83C\uDF89 \u00A1Ganaste!";
-        document.querySelector('#game-over-box p.final-score').innerHTML =
-            `\u00A1<span id="final-aciertos">0</span> de 52 provincias!`;
-        if(mainBtn) mainBtn.innerText = "🏠 Volver al Menú";
+        document.querySelector('#game-over-box h1').innerText = "\uD83C\uDF89 " + t('win_title').replace('🎉 ', '');
+        document.querySelector('#game-over-box p.final-score').innerHTML = t('score_final_win', {count: '<span id="final-aciertos">0</span>'});
+        if(mainBtn) mainBtn.innerText = t('btn_main_menu');
         if(aboutBtn) aboutBtn.style.display = "block";
         document.getElementById('game-over-box').style.boxShadow = "0 0 80px rgba(255, 209, 102, 0.8)";
         
@@ -861,7 +870,7 @@ function usarComodin() {
         let hint = document.createElement('span');
         hint.className = 'comodin-hint';
         hint.innerText = opc.name;
-        hint.onclick = () => { alert("¡Pista activada!\nAhora busca '" + opc.name + "' en el mapa y haz clic allí para lanzar."); };
+        hint.onclick = () => { alert(t('hint_activated', {name: opc.name})); };
         domComodinOptions.appendChild(hint);
     });
 
@@ -968,28 +977,28 @@ function checkAndShowNotification(checkStreaks = true) {
     // 1. Evaluar Recompensas Positivas (Rachas)
     if (checkStreaks) {
         if (rachaAciertos === 3) {
-            msgObj = { title: "¡En racha!", text: "Llevas 3 seguidas. ¡A los 5 ganas un comodín!", type: "info" };
+            msgObj = { title: t('alert_streak_3'), text: t('alert_streak_3'), type: "info" };
         } else if (rachaAciertos === 4) {
-            msgObj = { title: "¡Buena racha!", text: "Llevas 4 seguidas. ¡A los 5 ganas un comodín!", type: "info" };
+            msgObj = { title: t('alert_streak_4'), text: t('alert_streak_4'), type: "info" };
         } else if (rachaAciertos === 5) {
             if (comodines < 7) {
                 comodines++;
                 updateComodinesUI();
                 triggerRewardAnimation(domComodines.parentElement);
-                msgObj = { title: "¡COMBO x5!", text: "¡Has ganado 1 COMODIN extra!", type: "success" };
+                msgObj = { title: t('alert_streak_5_title'), text: t('alert_streak_5_won'), type: "success" };
             } else {
-                msgObj = { title: "¡COMBO x5!", text: "Comodines al máximo, ¡pero menuda racha llevas!", type: "info" };
+                msgObj = { title: t('alert_streak_5_title'), text: t('alert_streak_5_max'), type: "info" };
             }
         } else if (rachaAciertos === 6) {
-            msgObj = { title: "¡Imparable!", text: "¡Estás a un acierto de conseguir una VIDA extra!", type: "info" };
+            msgObj = { title: t('alert_streak_6_title'), text: t('alert_streak_6'), type: "info" };
         } else if (rachaAciertos === 7) {
             if (vidas < 7) {
                 vidas++;
                 updateVidasUI();
                 triggerRewardAnimation(domVidas.parentElement);
-                msgObj = { title: "¡COMBO x7!", text: "¡Has ganado 1 VIDA extra!", type: "success" };
+                msgObj = { title: t('alert_streak_7_title'), text: t('alert_streak_7_won'), type: "success" };
             } else {
-                msgObj = { title: "¡COMBO x7!", text: "Vidas al máximo. ¡Eres una leyenda!", type: "info" };
+                msgObj = { title: t('alert_streak_7_title'), text: t('alert_streak_7_max'), type: "info" };
             }
             rachaAciertos = 0; // Reiniciar racha tras máxima recompensa (8)
         }
@@ -1000,24 +1009,24 @@ function checkAndShowNotification(checkStreaks = true) {
         // Combinados primero (los más extremos)
         if (vidas <= 3 && comodines <= 3) {
             if (vidas === 1 || comodines === 1) {
-                msgObj = { title: "¡ALERTA MÁXIMA!", text: `¡${vidas} vida(s) y ${comodines} comodín(es)! ¡Suerte y al toro!`, type: "danger" };
+                msgObj = { title: t('alert_danger_title'), text: t('alert_danger_1', {vidas: vidas, comodines: comodines}), type: "danger" };
             } else if (vidas === 2 || comodines === 2) {
-                msgObj = { title: "¡Sudores fríos!", text: `¡Quedan ${vidas} vidas y ${comodines} comodines! Good karma!`, type: "danger" };
+                msgObj = { title: t('alert_danger_2_title'), text: t('alert_danger_2', {vidas: vidas, comodines: comodines}), type: "danger" };
             } else { // 3 y 3
-                msgObj = { title: "¡Uy, uy, uy!", text: `Avisando... 3 vidas y 3 comodines. La cosa se tensa.`, type: "warning" };
+                msgObj = { title: t('alert_warning_3_title'), text: t('alert_warning_3'), type: "warning" };
             }
         }
         // Solo vidas
         else if (vidas <= 3) {
-            if (vidas === 3) msgObj = { title: "¡Friendly reminder!", text: "3 vidas restantes. Aún respiramos, pero ojo.", type: "warning" };
-            else if (vidas === 2) msgObj = { title: "Auug!", text: "2 vidas...", type: "danger" };
-            else if (vidas === 1) msgObj = { title: "¡ÚLTIMO ALIENTO!", text: "¡1 sola vida! ", type: "danger" };
+            if (vidas === 3) msgObj = { title: t('alert_lives_3_title'), text: t('alert_lives_3'), type: "warning" };
+            else if (vidas === 2) msgObj = { title: t('alert_lives_2_title'), text: t('alert_lives_2'), type: "danger" };
+            else if (vidas === 1) msgObj = { title: t('alert_lives_1_title'), text: t('alert_lives_1'), type: "danger" };
         }
         // Solo comodines
         else if (comodines <= 3) {
-            if (comodines === 3) msgObj = { title: "¡Alerta!", text: "Te quedan 3 comodines. ", type: "warning" };
-            else if (comodines === 2) msgObj = { title: "¡Secano total!", text: "Solo 2 comodines... No los gastes a lo loco.", type: "warning" };
-            else if (comodines === 1) msgObj = { title: "¡Última llamada!", text: "¡1 comodín! ¡Resérvalo para una que no sepas!", type: "danger" };
+            if (comodines === 3) msgObj = { title: t('alert_wild_3_title'), text: t('alert_wild_3'), type: "warning" };
+            else if (comodines === 2) msgObj = { title: t('alert_wild_2_title'), text: t('alert_wild_2'), type: "warning" };
+            else if (comodines === 1) msgObj = { title: t('alert_wild_1_title'), text: t('alert_wild_1'), type: "danger" };
         }
     }
 
