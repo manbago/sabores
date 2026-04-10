@@ -13,6 +13,7 @@ let fallos = 0;
 let vidas = 7;
 let comodines = 5;
 let rachaAciertos = 0; // Nueva variable para rachas
+let maxRachaActual = 0; // Histórico de racha en la sesión actual
 
 let isShooting = false;
 let gameStarted = false; // Bloquea disparos hasta que se pulse JUGAR
@@ -22,6 +23,37 @@ let bgMusic = null;
 let hoverIndex = 0; // Para teclado
 let isEditMode = false; // Modo edición
 let projectileMaskGraphics; // Gráfico para la máscara del proyectil
+
+// --- STEAM STATS WRAPPER ---
+function updateSteamStats(hits, misses, maxCombo) {
+    if (typeof gameSwAPI !== 'undefined' && gameSwAPI && gameSwAPI.stats) {
+        try {
+            // 1. Partidas Jugadas
+            let played = gameSwAPI.stats.getInt('STAT_GAMES_PLAYED') || 0;
+            gameSwAPI.stats.setInt('STAT_GAMES_PLAYED', played + 1);
+
+            // 2. Aciertos Acumulados
+            let totalHits = gameSwAPI.stats.getInt('STAT_TOTAL_HITS') || 0;
+            gameSwAPI.stats.setInt('STAT_TOTAL_HITS', totalHits + hits);
+
+            // 3. Fallos Acumulados
+            let totalMisses = gameSwAPI.stats.getInt('STAT_TOTAL_MISSES') || 0;
+            gameSwAPI.stats.setInt('STAT_TOTAL_MISSES', totalMisses + misses);
+
+            // 4. Mejor Racha Máxima Absoluta
+            let bestCombo = gameSwAPI.stats.getInt('STAT_BEST_COMBO') || 0;
+            if (maxCombo > bestCombo) {
+                gameSwAPI.stats.setInt('STAT_BEST_COMBO', maxCombo);
+            }
+
+            // Gurdar en la nube
+            gameSwAPI.stats.store();
+            console.log("Steam Stats actualizadas correctamente.");
+        } catch(e) {
+            console.warn("Fallo al actualizar las estadísticas de Steam:", e);
+        }
+    }
+}
 
 // --- STEAM ACHIEVEMENTS WRAPPER ---
 function unlockAchievement(achId) {
@@ -714,6 +746,9 @@ function checkResult(selectedProv, targetSprite, scene) {
 
         aciertos++;
         rachaAciertos++; // Incrementar racha
+        if (rachaAciertos > maxRachaActual) {
+            maxRachaActual = rachaAciertos;
+        }
         
         // Logros de Racha
         if (rachaAciertos === 5) unlockAchievement('ACH_COMBO_5');
@@ -887,6 +922,9 @@ function navigateKeyboard(direction) {
 }
 
 function gameOver() {
+    // Almacenar estadísticas y guardarlas en Steam en el momento del Game Over
+    updateSteamStats(aciertos, fallos, maxRachaActual);
+
     let mainBtn = document.getElementById('btn-game-over-main');
     let aboutBtn = document.getElementById('btn-game-over-about');
 
