@@ -570,10 +570,11 @@ function update() {
         if (targetRot < -1.2) targetRot = -1.2;
 
         if (!isShooting) {
-            // Fix Safari/iOS: solo rotar si el puntero está activo (presionado) o si no es táctil
-            // Esto evita que el toro se quede mirando a sitios raros entre disparos en móvil
-            let isTouch = this.sys.game.device.input.touch || navigator.maxTouchPoints > 0;
-            if (!isTouch || pointer.isDown) {
+            // Fix Safari/iOS: solo rotar en tiempo real si hay ratón físico.
+            // Usamos matchMedia para detectar ratón de precisión (mouse) vs solo táctil.
+            // navigator.maxTouchPoints > 0 es falso positivo en PCs con Windows Ink.
+            const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+            if (hasFinePointer || pointer.isDown) {
                 launcher.bullBot.rotation = targetRot;
             }
 
