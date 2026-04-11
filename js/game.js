@@ -285,46 +285,46 @@ function create() {
         provinceSprites.push(pGroup);
     });
 
-    // --- OBJETIVO VIRTUAL: BOTÓN DE COMODINES ---
-    // Colocamos un "objetivo" invisible en la esquina superior derecha del mapa (donde está el HTML)
-    let wGroup = this.add.container(1750 - MAP_OFFSET_X, 100 - verticalOffset);
+    // --- OBJETIVOS VIRTUALES (Botones HUD accesibles con flechas/mando) ---
+    // Posiciones en coordenadas del canvas (1920x1080), colocadas en los bordes
+    // donde se encuentran los botones HTML equivalentes.
+
+    // [SUPERIOR DERECHA] Comodines
+    let wGroup = this.add.container(1820 - MAP_OFFSET_X, 80);
     let wText = this.add.text(0, 0, " ", {fontSize: '1px'});
-    wGroup.add(wText);
-    wGroup.mainText = wText;
-    wGroup.isWildcard = true; // Flag especial
-    wGroup.setDepth(-100);
-    mapContainer.add(wGroup);
-    provinceSprites.push(wGroup);
+    wGroup.add(wText); wGroup.mainText = wText; wGroup.isWildcard = true;
+    wGroup.setDepth(-100); mapContainer.add(wGroup); provinceSprites.push(wGroup);
 
-    // Audio: Música (Abajo Izquierda)
-    let mGroup = this.add.container(250 - MAP_OFFSET_X, 850 - verticalOffset);
-    let mText = this.add.text(0, 0, " ", {fontSize: '1px'});
-    mGroup.add(mText);
-    mGroup.mainText = mText;
-    mGroup.isMusic = true;
-    mGroup.setDepth(-100);
-    mapContainer.add(mGroup);
-    provinceSprites.push(mGroup);
+    // [INFERIOR DERECHA - columna] Pausa
+    let pauseGroup = this.add.container(1820 - MAP_OFFSET_X, 680);
+    let pauseText = this.add.text(0, 0, " ", {fontSize: '1px'});
+    pauseGroup.add(pauseText); pauseGroup.mainText = pauseText; pauseGroup.isPauseBtn = true;
+    pauseGroup.setDepth(-100); mapContainer.add(pauseGroup); provinceSprites.push(pauseGroup);
 
-    // Audio: Efectos (Abajo Izquierda)
-    let sGroup = this.add.container(400 - MAP_OFFSET_X, 850 - verticalOffset);
-    let sText = this.add.text(0, 0, " ", {fontSize: '1px'});
-    sGroup.add(sText);
-    sGroup.mainText = sText;
-    sGroup.isSFX = true;
-    sGroup.setDepth(-100);
-    mapContainer.add(sGroup);
-    provinceSprites.push(sGroup);
+    // [INFERIOR DERECHA - columna] Salir
+    let exitGroup = this.add.container(1820 - MAP_OFFSET_X, 760);
+    let exitText = this.add.text(0, 0, " ", {fontSize: '1px'});
+    exitGroup.add(exitText); exitGroup.mainText = exitText; exitGroup.isExitBtn = true;
+    exitGroup.setDepth(-100); mapContainer.add(exitGroup); provinceSprites.push(exitGroup);
 
-    // Pantalla Completa (Abajo Derecha)
-    let fGroup = this.add.container(1500 - MAP_OFFSET_X, 850 - verticalOffset);
+    // [INFERIOR DERECHA] Pantalla Completa
+    let fGroup = this.add.container(1680 - MAP_OFFSET_X, 820);
     let fText = this.add.text(0, 0, " ", {fontSize: '1px'});
-    fGroup.add(fText);
-    fGroup.mainText = fText;
-    fGroup.isFullscreen = true;
-    fGroup.setDepth(-100);
-    mapContainer.add(fGroup);
-    provinceSprites.push(fGroup);
+    fGroup.add(fText); fGroup.mainText = fText; fGroup.isFullscreen = true;
+    fGroup.setDepth(-100); mapContainer.add(fGroup); provinceSprites.push(fGroup);
+
+    // [INFERIOR DERECHA] Audio: Efectos
+    let sGroup = this.add.container(1760 - MAP_OFFSET_X, 820);
+    let sText = this.add.text(0, 0, " ", {fontSize: '1px'});
+    sGroup.add(sText); sGroup.mainText = sText; sGroup.isSFX = true;
+    sGroup.setDepth(-100); mapContainer.add(sGroup); provinceSprites.push(sGroup);
+
+    // [INFERIOR DERECHA] Audio: Música
+    let mGroup = this.add.container(1820 - MAP_OFFSET_X, 820);
+    let mText = this.add.text(0, 0, " ", {fontSize: '1px'});
+    mGroup.add(mText); mGroup.mainText = mText; mGroup.isMusic = true;
+    mGroup.setDepth(-100); mapContainer.add(mGroup); provinceSprites.push(mGroup);
+
 
 
     // --- LANZADOR BULL-BOT ---
@@ -376,6 +376,10 @@ function create() {
                 if (typeof window.toggleSFX === 'function') window.toggleSFX();
             } else if (provinceSprites[hoverIndex].isFullscreen) {
                 if (typeof window.toggleFullscreen === 'function') window.toggleFullscreen();
+            } else if (provinceSprites[hoverIndex].isPauseBtn) {
+                if (typeof window.togglePause === 'function') window.togglePause();
+            } else if (provinceSprites[hoverIndex].isExitBtn) {
+                if (typeof window.confirmRestart === 'function') window.confirmRestart();
             } else {
                 shootAt(provinceSprites[hoverIndex].provinceData, provinceSprites[hoverIndex]);
             }
@@ -940,6 +944,16 @@ function highlightProvince(group, text, scene) {
         if (el) el.classList.add('gamepad-focus');
         return;
     }
+    if (group.isPauseBtn) {
+        let el = document.getElementById('pause-btn');
+        if (el) el.classList.add('gamepad-focus');
+        return;
+    }
+    if (group.isExitBtn) {
+        let el = document.getElementById('restart-btn');
+        if (el) el.classList.add('gamepad-focus');
+        return;
+    }
 
     // Animación suave de aumento y color
     if (group.hoverTween) group.hoverTween.stop();
@@ -976,6 +990,16 @@ function resetProvince(group, text, scene) {
     }
     if (group.isFullscreen) {
         let el = document.getElementById('fullscreen-btn');
+        if (el) el.classList.remove('gamepad-focus');
+        return;
+    }
+    if (group.isPauseBtn) {
+        let el = document.getElementById('pause-btn');
+        if (el) el.classList.remove('gamepad-focus');
+        return;
+    }
+    if (group.isExitBtn) {
+        let el = document.getElementById('restart-btn');
         if (el) el.classList.remove('gamepad-focus');
         return;
     }
