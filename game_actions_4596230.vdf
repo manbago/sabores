@@ -13,6 +13,7 @@
 				"action_right"	{ "title"		"#Action_Right" }
 				"action_shoot"	{ "title"		"#Action_Shoot" }
 				"action_pause"	{ "title"		"#Action_Pause" }
+				"action_wildcard" { "title"		"#Action_Wildcard" }
 			}
 		}
 		"Menu"
@@ -42,6 +43,7 @@
 			"Action_Shoot"	"Shoot / Accept"
 			"Action_Accept"	"Accept"
 			"Action_Pause"	"Pause / Back"
+			"Action_Wildcard" "Use Wildcard (Joker)"
 		}
 		"spanish"
 		{
@@ -54,6 +56,7 @@
 			"Action_Shoot"	"Disparar / Aceptar"
 			"Action_Accept"	"Aceptar"
 			"Action_Pause"	"Pausa / Atrás"
+			"Action_Wildcard" "Usar Comodín"
 		}
 	}
 }

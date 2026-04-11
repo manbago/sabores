@@ -635,9 +635,38 @@
             }, 300);
         }
 
-        // ======= NAVEGACIÓN UI GLOBAL POR MANDO =======
+        // ======= NAVEGACIÓN UI GLOBAL (TECLADO Y MANDO) =======
         let lastUIGamepadTime = 0;
         let focusedButtonIndex = -1;
+
+        window.addEventListener('keydown', (e) => {
+            // Ignorar si estamos jugando activamente y no en un menú
+            if (typeof gameStarted !== 'undefined' && gameStarted && 
+                document.getElementById('main-menu-screen').classList.contains('hidden') &&
+                window.isPaused === false) {
+                return; 
+            }
+
+            const buttons = getFocusableButtons();
+            if (buttons.length === 0) return;
+
+            if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') {
+                focusedButtonIndex = (focusedButtonIndex + 1) % buttons.length;
+                buttons.forEach(b => b.classList.remove('gamepad-focus'));
+                buttons[focusedButtonIndex].classList.add('gamepad-focus');
+            } else if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') {
+                if (focusedButtonIndex < 0) focusedButtonIndex = buttons.length;
+                focusedButtonIndex = (focusedButtonIndex - 1 + buttons.length) % buttons.length;
+                buttons.forEach(b => b.classList.remove('gamepad-focus'));
+                buttons[focusedButtonIndex].classList.add('gamepad-focus');
+            } else if (e.key === 'Enter' || e.key === ' ') {
+                if (focusedButtonIndex >= 0 && focusedButtonIndex < buttons.length) {
+                    buttons[focusedButtonIndex].classList.remove('gamepad-focus');
+                    buttons[focusedButtonIndex].click();
+                }
+            }
+        });
+
         let steamworksAPI = null;
         try {
             if (typeof require !== 'undefined') {

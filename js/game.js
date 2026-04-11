@@ -343,6 +343,13 @@ function create() {
     this.input.keyboard.on('keydown-S', () => { if (getCurrentProfile() === 'wasd') navigateKeyboard('DOWN'); });
     this.input.keyboard.on('keydown-SPACE', () => { if (getCurrentProfile() === 'wasd') doAction(); });
 
+    // Atajos HUD y Accesibilidad
+    this.input.keyboard.on('keydown-SHIFT', () => { if (typeof usarComodin === 'function') usarComodin(); });
+    this.input.keyboard.on('keydown-C', () => { if (typeof usarComodin === 'function') usarComodin(); });
+    this.input.keyboard.on('keydown-M', () => { if (typeof window.toggleMusic === 'function') window.toggleMusic(); });
+    this.input.keyboard.on('keydown-X', () => { if (typeof window.toggleSFX === 'function') window.toggleSFX(); });
+
+
     // Gamepad (Phaser native wrapper)
     this.input.gamepad.on('connected', (pad) => {
         const ind = document.getElementById('gamepad-indicator');
@@ -365,6 +372,11 @@ function create() {
                 if (typeof gameStarted !== 'undefined' && gameStarted && document.getElementById('main-menu-screen').classList.contains('hidden')) {
                     if (typeof window.togglePause === 'function') window.togglePause();
                 }
+            }
+            
+            // Comodín: Botón Y (index 3)
+            if (index === 3) {
+                if (typeof usarComodin === 'function') usarComodin();
             }
         });
     });
@@ -406,7 +418,7 @@ function create() {
 let gameSwAPI = null;
 try { if (typeof require !== 'undefined') gameSwAPI = require('electron').remote ? require('electron').remote.getGlobal('steamworks') : require('steamworks.js'); } catch(e){}
 let swInGameSet = null;
-let swInGameUp = null, swInGameDown = null, swInGameLeft = null, swInGameRight = null, swInGameShoot = null, swInGamePause = null;
+let swInGameUp = null, swInGameDown = null, swInGameLeft = null, swInGameRight = null, swInGameShoot = null, swInGamePause = null, swInGameWildcard = null;
 
 function update() {
     // 0. Gamepad Analog Stick Polling & Steamworks Input
@@ -426,6 +438,7 @@ function update() {
                 if (!swInGameRight) swInGameRight = gameSwAPI.input.getDigitalAction("action_right");
                 if (!swInGameShoot) swInGameShoot = gameSwAPI.input.getDigitalAction("action_shoot");
                 if (!swInGamePause) swInGamePause = gameSwAPI.input.getDigitalAction("action_pause");
+                if (!swInGameWildcard) swInGameWildcard = gameSwAPI.input.getDigitalAction("action_wildcard");
 
                 pad.activateActionSet(swInGameSet);
 
@@ -453,6 +466,15 @@ function update() {
                         this.lastGamepadPause = now;
                     }
                 }
+
+                // Wildcard (Comodín)
+                if (pad.isDigitalActionPressed(swInGameWildcard)) {
+                    if (!this.lastGamepadWildcard || now > this.lastGamepadWildcard + 500) {
+                        if (typeof usarComodin === 'function') usarComodin();
+                        this.lastGamepadWildcard = now;
+                    }
+                }
+
             }
         } catch(e) {}
     }
