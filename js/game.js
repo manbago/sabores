@@ -296,6 +296,36 @@ function create() {
     mapContainer.add(wGroup);
     provinceSprites.push(wGroup);
 
+    // Audio: Música (Abajo Izquierda)
+    let mGroup = this.add.container(250 - MAP_OFFSET_X, 850 - verticalOffset);
+    let mText = this.add.text(0, 0, " ", {fontSize: '1px'});
+    mGroup.add(mText);
+    mGroup.mainText = mText;
+    mGroup.isMusic = true;
+    mGroup.setDepth(-100);
+    mapContainer.add(mGroup);
+    provinceSprites.push(mGroup);
+
+    // Audio: Efectos (Abajo Izquierda)
+    let sGroup = this.add.container(400 - MAP_OFFSET_X, 850 - verticalOffset);
+    let sText = this.add.text(0, 0, " ", {fontSize: '1px'});
+    sGroup.add(sText);
+    sGroup.mainText = sText;
+    sGroup.isSFX = true;
+    sGroup.setDepth(-100);
+    mapContainer.add(sGroup);
+    provinceSprites.push(sGroup);
+
+    // Pantalla Completa (Abajo Derecha)
+    let fGroup = this.add.container(1500 - MAP_OFFSET_X, 850 - verticalOffset);
+    let fText = this.add.text(0, 0, " ", {fontSize: '1px'});
+    fGroup.add(fText);
+    fGroup.mainText = fText;
+    fGroup.isFullscreen = true;
+    fGroup.setDepth(-100);
+    mapContainer.add(fGroup);
+    provinceSprites.push(fGroup);
+
 
     // --- LANZADOR BULL-BOT ---
     // En móvil/tablet lo hacemos más grande (400px) para que se vea mejor, 
@@ -340,6 +370,12 @@ function create() {
         if (!isShooting && provinceSprites[hoverIndex]) {
             if (provinceSprites[hoverIndex].isWildcard) {
                 if (typeof usarComodin === 'function') usarComodin();
+            } else if (provinceSprites[hoverIndex].isMusic) {
+                if (typeof window.toggleMusic === 'function') window.toggleMusic();
+            } else if (provinceSprites[hoverIndex].isSFX) {
+                if (typeof window.toggleSFX === 'function') window.toggleSFX();
+            } else if (provinceSprites[hoverIndex].isFullscreen) {
+                if (typeof window.toggleFullscreen === 'function') window.toggleFullscreen();
             } else {
                 shootAt(provinceSprites[hoverIndex].provinceData, provinceSprites[hoverIndex]);
             }
@@ -884,9 +920,24 @@ function highlightProvince(group, text, scene) {
     // Quitar resalte a todos primero
     provinceSprites.forEach(p => resetProvince(p, p.mainText, scene));
 
-    // Si es el cubo invisible del Comodín, iluminar el HTML!
+    // Eliminar flags HTML (usar getElementById u querySelector de los ID)
     if (group.isWildcard) {
         document.querySelector('.comodines-box').classList.add('gamepad-focus');
+        return;
+    }
+    if (group.isMusic) {
+        let el = document.getElementById('music-toggle');
+        if (el) el.classList.add('gamepad-focus');
+        return;
+    }
+    if (group.isSFX) {
+        let el = document.getElementById('sfx-toggle');
+        if (el) el.classList.add('gamepad-focus');
+        return;
+    }
+    if (group.isFullscreen) {
+        let el = document.getElementById('fullscreen-btn');
+        if (el) el.classList.add('gamepad-focus');
         return;
     }
 
@@ -908,9 +959,24 @@ function highlightProvince(group, text, scene) {
 function resetProvince(group, text, scene) {
     if (!scene) scene = game.scene.scenes[0];
 
-    // Limpiar resaltado HTML del comodín
+    // Limpiar resaltado HTML de objetivos virtuales
     if (group.isWildcard) {
         document.querySelector('.comodines-box').classList.remove('gamepad-focus');
+        return;
+    }
+    if (group.isMusic) {
+        let el = document.getElementById('music-toggle');
+        if (el) el.classList.remove('gamepad-focus');
+        return;
+    }
+    if (group.isSFX) {
+        let el = document.getElementById('sfx-toggle');
+        if (el) el.classList.remove('gamepad-focus');
+        return;
+    }
+    if (group.isFullscreen) {
+        let el = document.getElementById('fullscreen-btn');
+        if (el) el.classList.remove('gamepad-focus');
         return;
     }
 
