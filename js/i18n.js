@@ -81,11 +81,22 @@ function t(key, params = {}) {
     }
     if (!str) return key;
 
-    // Procesar parámetros: {name} -> params.name
+    // 1. Reemplazar por nombre de clave: {vidas} -> params.vidas
     for (const [k, v] of Object.entries(params)) {
-        str = str.replace(new RegExp(`{${k}}`, 'g'), v);
+        str = str.replace(new RegExp(`\\{${k}\\}`, 'g'), v);
     }
-    
+
+    // 2. Reemplazo posicional como fallback: cualquier {placeholder} restante
+    //    se sustituye en orden con los valores del objeto params.
+    //    Esto cubre idiomas con nombres distintos ({lives}, {vies}, {jolly}, etc.)
+    const values = Object.values(params);
+    let posIndex = 0;
+    str = str.replace(/\{[^}]+\}/g, () => {
+        const val = values[posIndex];
+        posIndex++;
+        return val !== undefined ? val : '';
+    });
+
     return str;
 }
 

@@ -1339,9 +1339,9 @@ function checkAndShowNotification(checkStreaks = true) {
         // Combinados primero (los más extremos)
         if (vidas <= 3 && comodines <= 3) {
             if (vidas === 1 || comodines === 1) {
-                msgObj = { title: t('alert_danger_title'), text: t('alert_danger_1', {vidas: vidas, comodines: comodines}), type: "danger" };
+                msgObj = { title: t('alert_danger_title'), text: t('alert_danger_1', {vidas: vidas, comodines: comodines, lives: vidas, wildcards: comodines}), type: "danger" };
             } else if (vidas === 2 || comodines === 2) {
-                msgObj = { title: t('alert_danger_2_title'), text: t('alert_danger_2', {vidas: vidas, comodines: comodines}), type: "danger" };
+                msgObj = { title: t('alert_danger_2_title'), text: t('alert_danger_2', {vidas: vidas, comodines: comodines, lives: vidas, wildcards: comodines}), type: "danger" };
             } else { // 3 y 3
                 msgObj = { title: t('alert_warning_3_title'), text: t('alert_warning_3'), type: "warning" };
             }
