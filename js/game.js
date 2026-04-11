@@ -285,6 +285,18 @@ function create() {
         provinceSprites.push(pGroup);
     });
 
+    // --- OBJETIVO VIRTUAL: BOTÓN DE COMODINES ---
+    // Colocamos un "objetivo" invisible en la esquina superior derecha del mapa (donde está el HTML)
+    let wGroup = this.add.container(1750 - MAP_OFFSET_X, 100 - verticalOffset);
+    let wText = this.add.text(0, 0, " ", {fontSize: '1px'});
+    wGroup.add(wText);
+    wGroup.mainText = wText;
+    wGroup.isWildcard = true; // Flag especial
+    wGroup.setDepth(-100);
+    mapContainer.add(wGroup);
+    provinceSprites.push(wGroup);
+
+
     // --- LANZADOR BULL-BOT ---
     // En móvil/tablet lo hacemos más grande (400px) para que se vea mejor, 
     // pero ajustamos la posición para que su base siga en la misma línea "dorada" del HUD.
@@ -326,7 +338,11 @@ function create() {
         if (isModalOpen() || window.isPaused) return;
         if (document.getElementById('main-menu-screen').style.display !== 'none' && !document.getElementById('main-menu-screen').classList.contains('hidden')) return;
         if (!isShooting && provinceSprites[hoverIndex]) {
-            shootAt(provinceSprites[hoverIndex].provinceData, provinceSprites[hoverIndex]);
+            if (provinceSprites[hoverIndex].isWildcard) {
+                if (typeof usarComodin === 'function') usarComodin();
+            } else {
+                shootAt(provinceSprites[hoverIndex].provinceData, provinceSprites[hoverIndex]);
+            }
         }
     };
 
@@ -868,6 +884,12 @@ function highlightProvince(group, text, scene) {
     // Quitar resalte a todos primero
     provinceSprites.forEach(p => resetProvince(p, p.mainText, scene));
 
+    // Si es el cubo invisible del Comodín, iluminar el HTML!
+    if (group.isWildcard) {
+        document.querySelector('.comodines-box').classList.add('gamepad-focus');
+        return;
+    }
+
     // Animación suave de aumento y color
     if (group.hoverTween) group.hoverTween.stop();
     group.hoverTween = scene.tweens.add({
@@ -885,6 +907,12 @@ function highlightProvince(group, text, scene) {
 
 function resetProvince(group, text, scene) {
     if (!scene) scene = game.scene.scenes[0];
+
+    // Limpiar resaltado HTML del comodín
+    if (group.isWildcard) {
+        document.querySelector('.comodines-box').classList.remove('gamepad-focus');
+        return;
+    }
 
     if (group.scaleX !== 1.0) {
         if (group.hoverTween) group.hoverTween.stop();
