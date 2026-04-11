@@ -294,14 +294,14 @@ function create() {
     wGroup.add(wText); wGroup.mainText = wText; wGroup.isWildcard = true;
     wGroup.setDepth(-100); mapContainer.add(wGroup); provinceSprites.push(wGroup);
 
-    // [COLUMNA DERECHA] Pausa — a la altura de Valencia/Murcia en el mapa
-    let pauseGroup = this.add.container(1650 - MAP_OFFSET_X, 480);
+    // [COLUMNA DERECHA] Pausa — debajo de la fila de audio (y > 820)
+    let pauseGroup = this.add.container(1650 - MAP_OFFSET_X, 920);
     let pauseText = this.add.text(0, 0, " ", {fontSize: '1px'});
     pauseGroup.add(pauseText); pauseGroup.mainText = pauseText; pauseGroup.isPauseBtn = true;
     pauseGroup.setDepth(-100); mapContainer.add(pauseGroup); provinceSprites.push(pauseGroup);
 
-    // [COLUMNA DERECHA] Salir — debajo del de Pausa
-    let exitGroup = this.add.container(1650 - MAP_OFFSET_X, 600);
+    // [COLUMNA DERECHA] Salir — debajo de Pausa
+    let exitGroup = this.add.container(1650 - MAP_OFFSET_X, 1000);
     let exitText = this.add.text(0, 0, " ", {fontSize: '1px'});
     exitGroup.add(exitText); exitGroup.mainText = exitText; exitGroup.isExitBtn = true;
     exitGroup.setDepth(-100); mapContainer.add(exitGroup); provinceSprites.push(exitGroup);
