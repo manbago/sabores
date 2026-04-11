@@ -11,6 +11,7 @@
     <script src="lib/phaser.min.js"></script>
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/style.css?v=2">
+    <script src="js/steam_cloud.js"></script>
     <script src="js/i18n.js"></script>
     <!-- Confetti Library para que se vea sobre el HTML -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -357,50 +358,87 @@
             toggleFullscreen(e);
         });
 
+        // --- CARGA DE AJUSTES (Sincronizado con Steam Cloud) ---
+        function applyCloudToUI() {
+            const settings = window.GlobalSettings;
+            if (!settings) return;
+            
+            const controlSel = document.getElementById('control-profile-selector');
+            if (controlSel) controlSel.value = settings.controlProfile;
+            
+            const updateUI = (sid, vid, val) => {
+                const s = document.getElementById(sid);
+                const v = document.getElementById(vid);
+                if (s) s.value = val;
+                if (v) v.textContent = (val).toFixed(0) + '%';
+            };
+
+            updateUI('menu-slider-master', 'menu-val-master', settings.volumeMaster);
+            updateUI('menu-slider-music', 'menu-val-music', settings.volumeMusic);
+            updateUI('menu-slider-sfx', 'menu-val-sfx', settings.volumeSfx);
+
+            updateUI('slider-master', 'val-master', settings.volumeMaster);
+            updateUI('slider-music', 'val-music', settings.volumeMusic);
+            updateUI('slider-sfx', 'val-sfx', settings.volumeSfx);
+
+            if (typeof updateVolumes === 'function') updateVolumes();
+        }
+
         // Sliders de Audio en Menú (Sincronizan con globales)
         function setupMenuSlider(sliderId, valId, globalUpdateFunc) {
             const slider = document.getElementById(sliderId);
             const valEl = document.getElementById(valId);
+            if (!slider || !valEl) return;
             slider.addEventListener('input', () => {
                 valEl.textContent = slider.value + '%';
                 globalUpdateFunc(slider.value / 100);
             });
-            // Init
             valEl.textContent = slider.value + '%';
         }
 
-        let currentControlProfile = localStorage.getItem('control_profile') || 'arrows';
         const controlSelector = document.getElementById('control-profile-selector');
         if (controlSelector) {
-            controlSelector.value = currentControlProfile;
             controlSelector.addEventListener('change', (e) => {
-                currentControlProfile = e.target.value;
-                localStorage.setItem('control_profile', currentControlProfile);
+                if (window.GlobalSettings) {
+                    window.GlobalSettings.controlProfile = e.target.value;
+                    if (typeof saveCloudSettings === 'function') saveCloudSettings();
+                }
             });
         }
 
-        let menuMasterVol = 0.8;
-        let menuMusicVol  = 0.3;
-        let menuSfxVol    = 0.7;
-
         setupMenuSlider('menu-slider-master', 'menu-val-master', (v) => {
-            menuMasterVol = v;
-            document.getElementById('slider-master').value = v * 100; // sync in-game pause menu
+            if (window.GlobalSettings) {
+                window.GlobalSettings.volumeMaster = Math.round(v * 100);
+                if (typeof saveCloudSettings === 'function') saveCloudSettings();
+            }
+            document.getElementById('slider-master').value = v * 100;
             document.getElementById('val-master').textContent = (v * 100).toFixed(0) + '%';
             if (typeof updateVolumes === 'function') updateVolumes();
         });
         setupMenuSlider('menu-slider-music', 'menu-val-music', (v) => {
-            menuMusicVol = v;
+            if (window.GlobalSettings) {
+                window.GlobalSettings.volumeMusic = Math.round(v * 100);
+                if (typeof saveCloudSettings === 'function') saveCloudSettings();
+            }
             document.getElementById('slider-music').value = v * 100;
             document.getElementById('val-music').textContent = (v * 100).toFixed(0) + '%';
             if (typeof updateVolumes === 'function') updateVolumes();
         });
         setupMenuSlider('menu-slider-sfx', 'menu-val-sfx', (v) => {
-            menuSfxVol = v;
+            if (window.GlobalSettings) {
+                window.GlobalSettings.volumeSfx = Math.round(v * 100);
+                if (typeof saveCloudSettings === 'function') saveCloudSettings();
+            }
             document.getElementById('slider-sfx').value = v * 100;
             document.getElementById('val-sfx').textContent = (v * 100).toFixed(0) + '%';
             if (typeof updateVolumes === 'function') updateVolumes();
         });
+
+        // Inicialización tras carga de Steam Cloud
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(applyCloudToUI, 450); 
+        });
+
 
         // Estado inicial: ocultar el HUD in-game hasta que se juegue
         document.getElementById('game-stats').style.display = 'none';

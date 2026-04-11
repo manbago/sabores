@@ -32,10 +32,17 @@ const i18n_lang_list = [
 ];
 
 let translations = {};
-let currentLanguage = localStorage.getItem('language') || 'es';
+let currentLanguage = 'es';
 
 // Función para inicializar el manejador de idiomas
 async function initI18n() {
+    // Sincronizar con GlobalSettings (Nube) si está disponible
+    if (window.GlobalSettings && window.GlobalSettings.language) {
+        currentLanguage = window.GlobalSettings.language;
+    } else {
+        currentLanguage = localStorage.getItem('language') || 'es';
+    }
+
     try {
         const response = await fetch('data/translations.json');
         translations = await response.json();
@@ -86,6 +93,10 @@ function t(key, params = {}) {
 function setLanguage(lang) {
     if (i18n_lang_list.find(l => l.code === lang)) {
         currentLanguage = lang;
+        if (window.GlobalSettings) {
+            window.GlobalSettings.language = lang;
+            if (typeof saveCloudSettings === 'function') saveCloudSettings();
+        }
         localStorage.setItem('language', lang);
         applyTranslations();
     }
