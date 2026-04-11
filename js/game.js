@@ -286,8 +286,7 @@ function create() {
     });
 
     // --- OBJETIVOS VIRTUALES (Botones HUD accesibles con flechas/mando) ---
-    // Posiciones en coordenadas del canvas (1920x1080), colocadas en los bordes
-    // donde se encuentran los botones HTML equivalentes.
+    // Cada uno se coloca donde está físicamente su botón HTML, pero en coordenadas del canvas.
 
     // [SUPERIOR DERECHA] Comodines
     let wGroup = this.add.container(1820 - MAP_OFFSET_X, 80);
@@ -295,35 +294,36 @@ function create() {
     wGroup.add(wText); wGroup.mainText = wText; wGroup.isWildcard = true;
     wGroup.setDepth(-100); mapContainer.add(wGroup); provinceSprites.push(wGroup);
 
-    // [INFERIOR DERECHA - columna] Pausa
-    let pauseGroup = this.add.container(1820 - MAP_OFFSET_X, 680);
+    // [COLUMNA DERECHA] Pausa — a la altura de Valencia/Murcia en el mapa
+    let pauseGroup = this.add.container(1650 - MAP_OFFSET_X, 480);
     let pauseText = this.add.text(0, 0, " ", {fontSize: '1px'});
     pauseGroup.add(pauseText); pauseGroup.mainText = pauseText; pauseGroup.isPauseBtn = true;
     pauseGroup.setDepth(-100); mapContainer.add(pauseGroup); provinceSprites.push(pauseGroup);
 
-    // [INFERIOR DERECHA - columna] Salir
-    let exitGroup = this.add.container(1820 - MAP_OFFSET_X, 760);
+    // [COLUMNA DERECHA] Salir — debajo del de Pausa
+    let exitGroup = this.add.container(1650 - MAP_OFFSET_X, 600);
     let exitText = this.add.text(0, 0, " ", {fontSize: '1px'});
     exitGroup.add(exitText); exitGroup.mainText = exitText; exitGroup.isExitBtn = true;
     exitGroup.setDepth(-100); mapContainer.add(exitGroup); provinceSprites.push(exitGroup);
 
-    // [INFERIOR DERECHA] Pantalla Completa
-    let fGroup = this.add.container(1680 - MAP_OFFSET_X, 820);
+    // [BORDE INFERIOR DERECHO] Pantalla Completa
+    let fGroup = this.add.container(1620 - MAP_OFFSET_X, 820);
     let fText = this.add.text(0, 0, " ", {fontSize: '1px'});
     fGroup.add(fText); fGroup.mainText = fText; fGroup.isFullscreen = true;
     fGroup.setDepth(-100); mapContainer.add(fGroup); provinceSprites.push(fGroup);
 
-    // [INFERIOR DERECHA] Audio: Efectos
-    let sGroup = this.add.container(1760 - MAP_OFFSET_X, 820);
+    // [BORDE INFERIOR DERECHO] Audio: Música — físicamente a la derecha de Fullscreen
+    let mGroup = this.add.container(1720 - MAP_OFFSET_X, 820);
+    let mText = this.add.text(0, 0, " ", {fontSize: '1px'});
+    mGroup.add(mText); mGroup.mainText = mText; mGroup.isMusic = true;
+    mGroup.setDepth(-100); mapContainer.add(mGroup); provinceSprites.push(mGroup);
+
+    // [BORDE INFERIOR DERECHO] Audio: Efectos — a la derecha de Música
+    let sGroup = this.add.container(1820 - MAP_OFFSET_X, 820);
     let sText = this.add.text(0, 0, " ", {fontSize: '1px'});
     sGroup.add(sText); sGroup.mainText = sText; sGroup.isSFX = true;
     sGroup.setDepth(-100); mapContainer.add(sGroup); provinceSprites.push(sGroup);
 
-    // [INFERIOR DERECHA] Audio: Música
-    let mGroup = this.add.container(1820 - MAP_OFFSET_X, 820);
-    let mText = this.add.text(0, 0, " ", {fontSize: '1px'});
-    mGroup.add(mText); mGroup.mainText = mText; mGroup.isMusic = true;
-    mGroup.setDepth(-100); mapContainer.add(mGroup); provinceSprites.push(mGroup);
 
 
 
@@ -404,7 +404,17 @@ function create() {
     this.input.keyboard.on('keydown-C', () => { if (typeof usarComodin === 'function') usarComodin(); });
     this.input.keyboard.on('keydown-M', () => { if (typeof window.toggleMusic === 'function') window.toggleMusic(); });
     this.input.keyboard.on('keydown-X', () => { if (typeof window.toggleSFX === 'function') window.toggleSFX(); });
-
+    // P = Pausa directa, Q = Salir (confirmación)
+    this.input.keyboard.on('keydown-P', () => {
+        if (typeof gameStarted !== 'undefined' && gameStarted && document.getElementById('main-menu-screen').classList.contains('hidden')) {
+            if (typeof window.togglePause === 'function') window.togglePause();
+        }
+    });
+    this.input.keyboard.on('keydown-Q', () => {
+        if (typeof gameStarted !== 'undefined' && gameStarted && !window.isPaused) {
+            if (typeof window.confirmRestart === 'function') window.confirmRestart();
+        }
+    });
 
     // Gamepad (Phaser native wrapper)
     this.input.gamepad.on('connected', (pad) => {
