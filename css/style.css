@@ -318,6 +318,33 @@ body, html {
     50%       { transform: scale(1.2); opacity: 1;   }
 }
 
+/* ========================
+   LOGO DEL JUEGO (borde izquierdo, horizontal)
+   ======================== */
+#game-logo {
+    position: fixed;
+    left: 0;
+    bottom: 25vh;            /* justo donde termina la zona blanca (encima de la línea amarilla) */
+    z-index: 500;
+    pointer-events: none;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+}
+
+#game-logo img {
+    height: auto;
+    width: clamp(100px, 14vw, 200px);
+    object-fit: contain;
+    display: block;
+    user-select: none;
+}
+
+/* Ocultar el logo en pantallas estrechas */
+@media (max-width: 1199px) {
+    #game-logo {
+        display: none;
+    }
+}
+
 /* Dashboard card — vivid cartoon panel */
 #dashboard {
     display: flex;
