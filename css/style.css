@@ -1136,7 +1136,7 @@ p.final-score {
     .stat-box span[style*="font-size:11px"] { font-size: 9px !important; }
 
     .vidas-box .icon-active, .vidas-box .icon-spent { font-size: 12px; }
-    .score-points { font-size: 14px; flex: 0.6; }
+    .score-points { font-size: 14px; flex: 0.6; flex-direction: row; white-space: nowrap; gap: 4px; }
 
     /* Dashboard Compacto */
     #dashboard {
@@ -1169,7 +1169,7 @@ p.final-score {
         border-width: 3px;
     }
     @media screen and (max-width: 480px) {
-        #sabias-que-popup { top: 88px; } /* Móvil */
+        #sabias-que-popup { top: 90px; } /* Móvil */
     }
     #sabias-que-title { font-size: 13px; margin-bottom: 0px; }
     #sabias-que-text { font-size: 12px; line-height: 1.1; }
