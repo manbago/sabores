@@ -1,0 +1,101 @@
+{
+  "itemid": "1151470",
+  "languages": {
+    "english": {
+      "app[content][legal]": "Copyright © 2006 manbago Manuel Bago Cobo. All rights reserved.",
+      "app[content][about]": "[p][b]Sabor de España: The Hoops Challenge[/b] is a high-octane arcade experience where precision meets culture. Aim, shoot, and conquer Spain through its most iconic flavors.[/p][p]Travel across all 52 provinces using the powerful [b]Bull-Bot Launcher[/b]. Master your aim, chain epic combos, and unlock the secrets of the Mediterranean diet.[/p][h2]Why it’s a must-play:[/h2][list][*][p][b]📍 52 Provinces[/b]: A full map of challenges and regional specialties.[/p][/*][*][p][b]🐂 Pure Skill[/b]: Easy to pick up, satisfyingly hard to master.[/p][/*][*][p][b]🔥 Combo System[/b]: Build streaks to climb the global leaderboards.[/p][/*][/list]",
+      "app[content][short_description]": "🎯 Master the shot! Explore 52 Spanish provinces and their legendary dishes. Pure arcade skill meets culinary discovery!",
+      "app[content][sysreqs][mac][min][osversion]": "macOS 10.13 (High Sierra)",
+      "app[content][sysreqs][mac][min][processor]": "Apple M1 or Intel Core i3",
+      "app[content][sysreqs][mac][min][graphics]": "Metal-capable GPU (Intel HD 4000)",
+      "app[content][sysreqs][mac][min][soundcard]": "Standard Audio",
+      "app[content][sysreqs][mac][min][notes]": "64-bit processor and OS required",
+      "app[content][sysreqs][windows][min][osversion]": "Windows 10 (64-bit)",
+      "app[content][sysreqs][windows][min][processor]": "1.6 GHz Dual Core",
+      "app[content][sysreqs][windows][min][graphics]": "Intel HD Graphics 3000 or equivalent",
+      "app[content][sysreqs][windows][min][soundcard]": "DirectX Compatible Sound Card",
+      "app[content][sysreqs][windows][min][notes]": "1280x720 recommended. 64-bit required.",
+      "app[content][sysreqs][linux][min][osversion]": "Ubuntu 20.04 LTS / SteamOS 3.0",
+      "app[content][sysreqs][linux][min][processor]": "1.6 GHz Dual Core",
+      "app[content][sysreqs][linux][min][graphics]": "OpenGL 3.2+ or Vulkan compatible",
+      "app[content][sysreqs][linux][min][soundcard]": "ALSA/PulseAudio compatible",
+      "app[content][sysreqs][linux][min][notes]": "1280x720 resolution"
+    },
+    "spanish": {
+      "app[content][legal]": "Copyright © 2006 manbago Manuel Bago Cobo. Todos los derechos reservados.",
+      "app[content][about]": "[p][b]Sabor de España: The Hoops Challenge[/b] es una experiencia arcade única donde la puntería se une con la cultura. Apunta, lanza y descubre España a través de sus platos más icónicos.[/p][p]Recorre las 52 provincias con el potente Robot-Toro lanzador. Mejora tu precisión y convierte cada tiro en un acierto perfecto.[/p][h2]¿Por qué te enganchará?:[/h2][list][*][p][b]📍 Descubre España[/b]: Cada provincia, un sabor único.[/p][/*][*][p][b]🐂 Habilidad pura[/b]: Fácil de jugar, difícil de dominar.[/p][/*][*][p][b]🔥 Sistema de combos[/b]: Encadena aciertos y sube tu puntuación.[/p][/*][/list]",
+      "app[content][short_description]": "🚀 ¡Fuego en la cocina! Domina las 52 provincias de España disparando a sus platos más épicos. ¿Puntería de Master Chef?",
+      "app[content][sysreqs][mac][min][osversion]": "macOS 10.13 (High Sierra)",
+      "app[content][sysreqs][mac][min][processor]": "Apple M1 o Intel Core i3",
+      "app[content][sysreqs][mac][min][graphics]": "GPU compatible con Metal (Intel HD 4000)",
+      "app[content][sysreqs][mac][min][soundcard]": "Audio estándar",
+      "app[content][sysreqs][mac][min][notes]": "Se requiere procesador y sistema operativo de 64 bits",
+      "app[content][sysreqs][windows][min][osversion]": "Windows 10 (64 bits)",
+      "app[content][sysreqs][windows][min][processor]": "1.6 GHz Dual Core",
+      "app[content][sysreqs][windows][min][graphics]": "Intel HD Graphics 3000 o equivalente",
+      "app[content][sysreqs][windows][min][soundcard]": "Tarjeta de sonido compatible con DirectX",
+      "app[content][sysreqs][windows][min][notes]": "Se recomienda 1280x720. Se requiere 64 bits.",
+      "app[content][sysreqs][linux][min][osversion]": "Ubuntu 20.04 LTS / SteamOS 3.0",
+      "app[content][sysreqs][linux][min][processor]": "1.6 GHz Dual Core",
+      "app[content][sysreqs][linux][min][graphics]": "Compatible con OpenGL 3.2+ o Vulkan",
+      "app[content][sysreqs][linux][min][soundcard]": "Compatible con ALSA/PulseAudio",
+      "app[content][sysreqs][linux][min][notes]": "Resolución de 1280x720"
+    },
+    "schinese": {
+      "app[content][legal]": "Copyright © 2006 manbago Manuel Bago Cobo.",
+      "app[content][about]": "[p][b]《西班牙之味：篮筐挑战》[/b] 是一款融合操作技巧与文化探索的魔性街机游戏。操控“公牛机器人”发射器，横跨52个地区，解锁顶级地道美食。[/p][h2]游戏特色：[/h2][list][*][p][b]📍 文化探索[/b]：了解西班牙各地特色美食[/p][/*][*][p][b]🐂 爽快操作[/b]：极简上手，极致精通[/p][/*][*][p][b]🔥 连击系统[/b]：提升得分与成就感[/p][/*][/list]",
+      "app[content][short_description]": "🔥 爽快魔性射击！征服全西班牙52个地区。解锁顶级地道美食，你就是终极食神！",
+      "app[content][sysreqs][mac][min][osversion]": "macOS 10.13 (High Sierra)",
+      "app[content][sysreqs][mac][min][processor]": "Apple M1 或 Intel Core i3",
+      "app[content][sysreqs][mac][min][graphics]": "支持 Metal 的 GPU (Intel HD 4000)",
+      "app[content][sysreqs][mac][min][soundcard]": "标准音频",
+      "app[content][sysreqs][mac][min][notes]": "需要 64 位处理器和操作系统",
+      "app[content][sysreqs][windows][min][osversion]": "Windows 10 (64 位)",
+      "app[content][sysreqs][windows][min][processor]": "1.6 GHz 双核",
+      "app[content][sysreqs][windows][min][graphics]": "Intel HD Graphics 3000 或同等配置",
+      "app[content][sysreqs][windows][min][soundcard]": "DirectX 兼容声卡",
+      "app[content][sysreqs][windows][min][notes]": "推荐使用 1280x720。需要 64 位。",
+      "app[content][sysreqs][linux][min][osversion]": "Ubuntu 20.04 LTS / SteamOS 3.0",
+      "app[content][sysreqs][linux][min][processor]": "1.6 GHz 双核",
+      "app[content][sysreqs][linux][min][graphics]": "兼容 OpenGL 3.2+ 或 Vulkan",
+      "app[content][sysreqs][linux][min][soundcard]": "兼容 ALSA/PulseAudio",
+      "app[content][sysreqs][linux][min][notes]": "1280x720 分辨率"
+    },
+    "brazilian": {
+      "app[content][legal]": "Copyright © 2006 manbago Manuel Bago Cobo. Todos os direitos reservados.",
+      "app[content][short_description]": "🎯 Mire, atire e saboreie! Conquiste as 52 províncias da Espanha e descubra pratos icônicos neste arcade viciante.",
+      "app[content][sysreqs][windows][min][osversion]": "Windows 10 (64 bits)",
+      "app[content][sysreqs][windows][min][processor]": "1.6 GHz Dual Core",
+      "app[content][sysreqs][windows][min][graphics]": "Intel HD Graphics 3000 ou equivalente",
+      "app[content][sysreqs][windows][min][soundcard]": "Placa de som compatível com DirectX",
+      "app[content][sysreqs][windows][min][notes]": "1280x720 recomendado. 64 bits necessário."
+    },
+    "russian": {
+      "app[content][legal]": "Copyright © 2006 manbago Manuel Bago Cobo. Все права защищены.",
+      "app[content][short_description]": "🎯 Овладей мастерством стрельбы! Исследуй 52 провинции Испании и их легендарные блюда. Стань королем кухни!",
+      "app[content][sysreqs][windows][min][osversion]": "Windows 10 (64-бит)",
+      "app[content][sysreqs][windows][min][processor]": "1.6 ГГц Dual Core",
+      "app[content][sysreqs][windows][min][graphics]": "Intel HD Graphics 3000 или эквивалент",
+      "app[content][sysreqs][windows][min][soundcard]": "Звуковая карта с поддержкой DirectX",
+      "app[content][sysreqs][windows][min][notes]": "Рекомендуется 1280x720. Требуется 64-бит."
+    },
+    "japanese": {
+      "app[content][legal]": "Copyright © 2006 manbago Manuel Bago Cobo.",
+      "app[content][short_description]": "🎯 狙って、撃って、スペインを味わい尽くせ！全52州の郷土料理を制覇する爽快アクション。",
+      "app[content][sysreqs][windows][min][osversion]": "Windows 10 (64ビット)",
+      "app[content][sysreqs][windows][min][processor]": "1.6 GHz デュアルコア",
+      "app[content][sysreqs][windows][min][graphics]": "Intel HD Graphics 3000 以上",
+      "app[content][sysreqs][windows][min][soundcard]": "DirectX 互換サウンドカード",
+      "app[content][sysreqs][windows][min][notes]": "1280x720 推奨。64ビット必須。"
+    },
+    "german": {
+      "app[content][legal]": "Copyright © 2006 manbago Manuel Bago Cobo. Alle Rechte vorbehalten.",
+      "app[content][short_description]": "🥨 Präzision trifft Genuss! Erobere alle 52 Provinzen Spaniens und entdecke ihre kulinarischen Schätze.",
+      "app[content][sysreqs][windows][min][osversion]": "Windows 10 (64-Bit)",
+      "app[content][sysreqs][windows][min][processor]": "1.6 GHz Dual Core",
+      "app[content][sysreqs][windows][min][graphics]": "Intel HD Graphics 3000 oder gleichwertig",
+      "app[content][sysreqs][windows][min][soundcard]": "DirectX-kompatible Soundkarte",
+      "app[content][sysreqs][windows][min][notes]": "1280x720 empfohlen. 64-Bit erforderlich."
+    }
+  }
+}

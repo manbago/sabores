@@ -155,7 +155,7 @@ function create() {
         // Mostrar "Cargando..." en el HUD mientras se cargan las imágenes
         const domCurrentFood = document.getElementById('current-food');
         const domFoodImage = document.getElementById('food-image');
-        if (domCurrentFood) domCurrentFood.innerHTML = '<span class="loading-text">' + t('loading_dishes') + '</span>';
+        if (domCurrentFood) domCurrentFood.innerHTML = '<span class="loading-text">' + t('loading_dishes') + ' 0%</span>';
         if (domFoodImage) domFoodImage.innerHTML = '<div class="neon-loader"></div>';
 
         let pendingLoad = 0;
@@ -168,13 +168,40 @@ function create() {
         });
 
         if (pendingLoad > 0) {
+            let loadCompleteFired = false;
+            let forceTimeout = setTimeout(() => {
+                if (!loadCompleteFired) {
+                    console.warn("Failsafe: Forzando inicio tras timeout de carga de platos.");
+                    loadCompleteFired = true;
+                    window._dishImagesReady = true;
+                    nextRound();
+                }
+            }, 10000); // 10 segundos de failsafe para evitar bloqueos
+
+            this.load.on('progress', (value) => {
+                if (!loadCompleteFired && domCurrentFood) {
+                    let pct = Math.round(value * 100);
+                    domCurrentFood.innerHTML = '<span class="loading-text">' + t('loading_dishes') + ' ' + pct + '%</span>';
+                }
+            });
+
             this.load.once('complete', () => {
-                // Simular carga para que el usuario vea el estado "Cargando..."
+                if (loadCompleteFired) return;
+                loadCompleteFired = true;
+                clearTimeout(forceTimeout);
+                // Simular carga para que el usuario vea el estado final al 100%
+                if (domCurrentFood) domCurrentFood.innerHTML = '<span class="loading-text">' + t('loading_dishes') + ' 100%</span>';
                 setTimeout(() => {
                     window._dishImagesReady = true;
                     nextRound();
-                }, 1500);
+                }, 1000);
             });
+            
+            // Log de errores en carga individual
+            this.load.on('loaderror', (file) => {
+                console.warn("Error cargando plato:", file.src);
+            });
+
             this.load.start();
         } else {
             // Todas las texturas ya estaban en caché
