@@ -535,6 +535,8 @@
                     bgMusic.resume();
                 }
             }
+        } // <-- Cierre de togglePause()
+        
         function restartGameSafe() {
             if (typeof game !== 'undefined' && game && game.destroy) {
                 // Purga completa de memoria WebGL, texturas y audios
