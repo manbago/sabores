@@ -530,7 +530,8 @@ body, html {
 .vidas-box .icon-spent  { font-size: 22px; }
 
 /* Pulsación de corazón cuando queda 1 vida */
-.vidas-box.danger .icon-active {
+.vidas-box.danger .icon-active,
+.comodines-box.danger .icon-active {
     animation: heartbeat 0.6s ease-in-out infinite;
     display: inline-block;
 }
@@ -1160,11 +1161,11 @@ p.final-score {
 
     /* Popups adaptados */
     #sabias-que-popup {
-        width: auto;
+        width: 210px;
         left: 10px;
-        right: 10px;
+        right: auto;
         top: 85px;
-        padding: 12px;
+        padding: 10px;
     }
     #sabias-que-title { font-size: 16px; }
     #sabias-que-text { font-size: 13px; }

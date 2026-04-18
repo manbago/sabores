@@ -223,8 +223,8 @@ function create() {
     // Fondo / Mapa decorativo
     let mapBg = this.add.image(960 + MAP_OFFSET_X, 540, 'mapa_espana');
     this.map = mapBg; // Referencia para debug
-    // Altura base del mapa recortado es 1536px. Usamos el valor fijo para evitar errores de medición inicial.
-    let scale = 1080 / 1536;
+    // Calculamos escala respecto al alto target (1080px)
+    let scale = 1080 / mapBg.height;
     mapBg.setScale(scale);
     mapBg.setDepth(-10);
     mapContainer.add(mapBg);
@@ -1201,6 +1201,12 @@ function updateComodinesUI() {
         }
     }
     domComodines.innerHTML = html;
+
+    const comodinesBox = document.querySelector('.comodines-box');
+    if (comodinesBox) {
+        if (comodines <= 2) comodinesBox.classList.add('danger');
+        else comodinesBox.classList.remove('danger');
+    }
 }
 
 function usarComodin() {
