@@ -517,7 +517,7 @@ body, html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 85px;
+    height: 68px;
     box-sizing: border-box;
 }
 
@@ -525,6 +525,11 @@ body, html {
     background: #2b2d42;
     color: #ffd166;
     font-size: 22px;
+    border-color: #111;
+    box-shadow: 0 5px 0 #111;
+    flex-direction: row;
+    white-space: nowrap;
+    gap: 8px;
 }
 
 /* Corazones para vidas */
@@ -1143,7 +1148,7 @@ p.final-score {
     .stat-box span[style*="font-size:11px"] { font-size: 9px !important; }
 
     .vidas-box .icon-active, .vidas-box .icon-spent { font-size: 12px; }
-    .score-points { font-size: 14px; flex: 0.6; flex-direction: row; white-space: nowrap; gap: 4px; }
+    .score-points { font-size: 14px; gap: 4px; }
 
     /* Dashboard Compacto */
     #dashboard {
