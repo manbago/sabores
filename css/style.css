@@ -1161,21 +1161,23 @@ p.final-score {
 
     /* Popups adaptados */
     #sabias-que-popup {
-        width: 210px;
+        width: auto;
         left: 10px;
-        right: auto;
-        top: 85px;
-        padding: 10px;
+        right: 10px;
+        top: 75px; 
+        padding: 8px;
     }
-    #sabias-que-title { font-size: 16px; }
-    #sabias-que-text { font-size: 13px; }
+    #sabias-que-title { font-size: 14px; margin-bottom: 2px; }
+    #sabias-que-text { font-size: 12px; line-height: 1.2; }
+    #sabias-que-close { width: 28px; height: 28px; font-size: 14px; top: -10px; right: -10px; }
     
     #notification-popup {
         width: fit-content;
         min-width: 180px;
         max-width: 280px;
         left: 10px;
-        top: 85px; /* Valor base, se ajustará por JS si hay Sabías que */
+        top: auto !important; /* Sobreescribir JS inline top */
+        bottom: 27vh; /* Justo por encima de la zona baja del dashboard, última frontera del canvas blanco */
         padding: 8px 12px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
