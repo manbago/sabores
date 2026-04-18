@@ -775,18 +775,8 @@ function shootAt(targetProv, targetSprite) {
 
 
 
-    // 5. Estela del Proyectil (Trail)
-    projectile.trail = scene.add.particles(0, 0, 'circle', {
-        color: [0x00ffff],
-        scale: { start: 0.3, end: 0 },
-        lifespan: 300,
-        speed: 50,
-        emitZone: { type: 'edge', source: new Phaser.Geom.Circle(0, 0, 40), quantity: 10 },
-        blendMode: 'NORMAL',
-        frequency: 20
-    });
-    projectile.trail.startFollow(projectile);
-    projectile.trail.setDepth(15);
+    // 5. Estela del Proyectil (Trail) - Eliminada por problemas de rendimiento en Safari (Destellos azules / Tirones)
+    // projectile.trail = scene.add.particles(...)
 
     projectile.x = muzzleX;
     projectile.y = muzzleY;
