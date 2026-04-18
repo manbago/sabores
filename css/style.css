@@ -513,12 +513,9 @@ body, html {
     user-select: none;
     min-width: 220px;
     backdrop-filter: blur(4px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     height: 68px;
     box-sizing: border-box;
+    padding-top: 10px;
 }
 
 .score-points {
@@ -527,9 +524,13 @@ body, html {
     font-size: 22px;
     border-color: #111;
     box-shadow: 0 5px 0 #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: row;
     white-space: nowrap;
     gap: 8px;
+    padding-top: 8px; /* Override global padding to maintain center with flex */
 }
 
 /* Corazones para vidas */
