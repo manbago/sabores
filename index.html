@@ -229,7 +229,7 @@
             <h1 data-i18n="game_over">¡Juego Terminado!</h1>
             <p class="final-score"><span data-i18n="provinces_score">Provincias:</span> <span id="final-aciertos">0</span>/52</p>
             <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
-                <button id="btn-game-over-main" onclick="location.reload()" data-i18n="btn_play_again">🔄 Jugar de Nuevo</button>
+                <button id="btn-game-over-main" onclick="restartGameSafe()" data-i18n="btn_play_again">🔄 Jugar de Nuevo</button>
                 <button id="btn-game-over-about" style="display: none; background: #fff; border: 2px solid #333; color: #333; font-weight: 800; padding: 10px; font-size: 16px; border-radius: 10px; cursor:pointer; box-shadow: 0 4px 0 #999;" onclick="showAboutFromWin()" data-i18n="btn_about_short">ℹ️ Acerca de</button>
             </div>
         </div>
@@ -240,7 +240,7 @@
             <h1 data-i18n="confirm_quit_title">¿Salir de la Partida?</h1>
             <p class="final-score" style="font-size: 22px;" data-i18n="confirm_quit_desc">Se perderá tu progreso actual.</p>
             <div>
-                <button class="btn-confirm" onclick="location.reload()" data-i18n="btn_yes_restart">✓ Sí, reiniciar</button>
+                <button class="btn-confirm" onclick="restartGameSafe()" data-i18n="btn_yes_restart">✓ Sí, reiniciar</button>
                 <button class="btn-cancel" onclick="cancelRestart(event)" data-i18n="btn_cancel">✕ Cancelar</button>
             </div>
         </div>
@@ -535,9 +535,16 @@
                     bgMusic.resume();
                 }
             }
+        function restartGameSafe() {
+            if (typeof game !== 'undefined' && game && game.destroy) {
+                // Purga completa de memoria WebGL, texturas y audios
+                game.destroy(true, false);
+            }
+            location.reload();
         }
         window.togglePause = togglePause;
         window.confirmRestart = confirmRestart;
+        window.restartGameSafe = restartGameSafe;
 
         // Botón Reanudar
         document.getElementById('resume-btn').addEventListener('click', (e) => {
@@ -577,7 +584,7 @@
             document.getElementById('fullscreen-btn').style.display = 'none';
             if (typeof gameStarted !== 'undefined') gameStarted = false;
             // Reiniciar la escena de Phaser
-            setTimeout(() => location.reload(), 100);
+            setTimeout(() => restartGameSafe(), 100);
         });
 
         // ======= SLIDERS DE VOLUMEN (Global y Sincronizado) =======
