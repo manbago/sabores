@@ -1164,9 +1164,12 @@ p.final-score {
         width: auto;
         left: 10px;
         right: 10px;
-        top: 82px; 
+        top: 82px; /* Tablet */
         padding: 6px 10px;
         border-width: 3px;
+    }
+    @media screen and (max-width: 480px) {
+        #sabias-que-popup { top: 88px; } /* Móvil */
     }
     #sabias-que-title { font-size: 13px; margin-bottom: 0px; }
     #sabias-que-text { font-size: 12px; line-height: 1.1; }
