@@ -85,7 +85,7 @@
                 <button class="menu-btn btn-play" id="menu-btn-newgame" data-i18n="btn_newgame">▶ NUEVA PARTIDA</button>
                 <button class="menu-btn menu-btn-secondary" id="menu-btn-options" data-i18n="btn_options">⚙️ OPCIONES</button>
                 <button class="menu-btn menu-btn-secondary" id="menu-btn-about" data-i18n="btn_about">ℹ️ ACERCA DE</button>
-                <button class="menu-btn btn-danger menu-btn-secondary" id="menu-btn-exit" style="margin-top: 30px;" data-i18n="btn_exit">🚪 SALIR AL ESCRITORIO</button>
+                <button class="menu-btn btn-danger menu-btn-secondary" id="menu-btn-exit" style="margin-top: 30px; display: none;" data-i18n="btn_exit">🚪 SALIR AL ESCRITORIO</button>
             </div>
 
             <!-- VISTA: Opciones -->
@@ -307,10 +307,10 @@
             const footer = document.getElementById('footer-ver');
             if(footer) footer.innerText = `v${pureVer} · 52 Provincias`;
 
-            // Ocultar botón SALIR si no es Electron (Fix Safari/Web)
-            if (!isElectron) {
+            // Mostrar botón SALIR solo si estamos en cliente local/Steam (Electron)
+            if (isElectron) {
                 const exitBtn = document.getElementById('menu-btn-exit');
-                if (exitBtn) exitBtn.style.display = 'none';
+                if (exitBtn) exitBtn.style.display = 'block';
             }
         }
         syncVersion();

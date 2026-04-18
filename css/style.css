@@ -1164,12 +1164,12 @@ p.final-score {
         width: auto;
         left: 10px;
         right: 10px;
-        top: 100px; 
-        padding: 8px;
+        top: 88px; 
+        padding: 6px 10px;
     }
-    #sabias-que-title { font-size: 14px; margin-bottom: 2px; }
-    #sabias-que-text { font-size: 12px; line-height: 1.2; }
-    #sabias-que-close { width: 28px; height: 28px; font-size: 14px; top: -10px; right: -10px; }
+    #sabias-que-title { font-size: 13px; margin-bottom: 0px; }
+    #sabias-que-text { font-size: 12px; line-height: 1.1; }
+    #sabias-que-close { width: 24px; height: 24px; font-size: 12px; top: -8px; right: -8px; }
     
     #notification-popup {
         width: fit-content;
