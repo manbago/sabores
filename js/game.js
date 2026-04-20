@@ -1267,7 +1267,7 @@ function triggerLossAnimation(el) {
 
     setTimeout(() => {
         el.style.boxShadow = "4px 4px 0px rgba(0, 0, 0, 0.15)";
-        el.style.backgroundColor = "#ffffff";
+        el.style.backgroundColor = "";
         el.style.transform = "scale(1)";
         setTimeout(() => { el.style.transition = ""; }, 300);
     }, 400);
@@ -1284,7 +1284,7 @@ function triggerUseAnimation(el) {
 
     setTimeout(() => {
         el.style.boxShadow = "4px 4px 0px rgba(0, 0, 0, 0.15)";
-        el.style.backgroundColor = "#ffffff";
+        el.style.backgroundColor = "";
         el.style.transform = "scale(1)";
         setTimeout(() => { el.style.transition = ""; }, 300);
     }, 300);
@@ -1319,7 +1319,7 @@ function triggerRewardAnimation(el) {
     setTimeout(() => {
         el.style.transform = "scale(1)";
         el.style.boxShadow = "4px 4px 0px rgba(0, 0, 0, 0.15)";
-        el.style.backgroundColor = "#ffffff";
+        el.style.backgroundColor = "";
         setTimeout(() => { el.style.transition = ""; }, 300);
     }, 600);
 }

@@ -502,35 +502,38 @@ body, html {
 }
 
 .stat-box {
-    background: #ffffff;
+    background: rgba(255,255,255,0.95);
     border: 2px solid #111;
     border-radius: 20px;
-    padding: 8px 16px;
+    padding: 6px 12px;
     box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
     font-family: 'Fredoka One', cursive;
     font-size: 20px;
     text-align: center;
     user-select: none;
-    min-width: 220px;
+    min-width: 180px;
     backdrop-filter: blur(4px);
-    height: 68px;
+    height: auto;
+    min-height: 68px;
     box-sizing: border-box;
-    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .score-points {
-    background: #ffffff;
-    color: #2b2d42;
+    background: #2b2d42;
+    color: #ffd166;
     font-size: 22px;
     border-color: #111;
     box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: row;
+    flex-direction: column;
     white-space: nowrap;
-    gap: 8px;
-    padding-top: 8px; /* Override global padding to maintain center with flex */
+    gap: 2px;
 }
 
 /* Corazones para vidas */
@@ -560,18 +563,44 @@ body, html {
     color: #e8a020;
     cursor: pointer;
     transition: transform 0.1s;
-    background: #ffffff;
+    background: linear-gradient(135deg, #fffde7, #fff3b0);
 }
 
 .comodines-box:hover {
     transform: translateY(-2px);
-    background: #fafafa;
+    background: linear-gradient(135deg, #fff9c4, #ffd740);
 }
 
 .comodines-box:active {
     transform: translateY(3px);
     box-shadow: 2px 2px 0 rgba(0,0,0,0.15);
 }
+
+/* Responsividad para cajas de estadísticas */
+@media (max-width: 768px) {
+    #game-stats {
+        top: 10px;
+        right: 10px;
+        gap: 6px;
+    }
+    .stat-box {
+        min-width: 140px;
+        padding: 4px 8px;
+        font-size: 16px;
+        min-height: 56px;
+    }
+    .vidas-box .icon-active, .vidas-box .icon-spent,
+    .comodines-box .icon-active, .comodines-box .icon-spent {
+        font-size: 16px !important;
+    }
+    .score-points {
+        font-size: 18px;
+    }
+    .score-points span[style*="font-size:16px"] {
+        font-size: 12px !important;
+    }
+}
+
 
 /* ========================
    AUDIO CONTROLS (TOP LEFT)
