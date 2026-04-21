@@ -1,15 +1,15 @@
 {
   "name": "sabor-de-espana",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Sabor de España: The Hoops Challenge",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:desktop": "electron-packager . SaborDeEspana --platform=win32 --arch=x64 --out=dist --icon=assets/images/icon.ico --app-version=1.0.2 --ignore=dist --overwrite",
-    "build:steam:win": "electron-packager . SaborDeEspana --platform=win32 --arch=x64 --out=dist/steam_win --icon=assets/images/icon.ico --app-version=1.0.2 --ignore=dist --overwrite",
-    "build:steam:mac": "electron-packager . SaborDeEspana --platform=darwin --arch=x64 --out=dist/steam_mac --app-version=1.0.2 --ignore=dist --overwrite",
-    "build:steam:linux": "electron-packager . SaborDeEspana --platform=linux --arch=x64 --out=dist/steam_linux --app-version=1.0.2 --ignore=dist --overwrite",
+    "build:steam:win": "electron-packager . SaborDeEspana --platform=win32 --arch=x64 --out=dist/steam_win --icon=assets/images/icon.ico --app-version=1.0.2 --ignore=dist --overwrite && copy /Y game_actions_4596230.vdf dist\\steam_win\\SaborDeEspana-win32-x64\\",
+    "build:steam:mac": "electron-packager . SaborDeEspana --platform=darwin --arch=x64 --out=dist/steam_mac --app-version=1.0.2 --ignore=dist --overwrite && copy /Y game_actions_4596230.vdf dist\\steam_mac\\SaborDeEspana-darwin-x64\\",
+    "build:steam:linux": "electron-packager . SaborDeEspana --platform=linux --arch=x64 --out=dist/steam_linux --app-version=1.0.2 --ignore=dist --overwrite && copy /Y game_actions_4596230.vdf dist\\steam_linux\\SaborDeEspana-linux-x64\\",
     "build:steam:all": "npm run build:steam:win && npm run build:steam:mac && npm run build:steam:linux",
     "dist": "electron-builder --win"
   },

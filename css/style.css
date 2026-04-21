@@ -1258,7 +1258,7 @@ p.final-score {
         font-size: 20px;
     }
     #restart-btn::after {
-        content: "🚪"; /* Icono para salir */
+        content: "🏃"; /* Icono para salir */
         font-size: 20px;
     }
 

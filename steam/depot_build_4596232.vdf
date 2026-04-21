@@ -1,0 +1,11 @@
+"DepotBuild"
+{
+	"DepotID" "4596232"
+	"ContentRoot" "..\\dist\\steam_mac\\SaborDeEspana-darwin-x64\\"
+	"FileMapping"
+	{
+		"LocalPath" "*"
+		"DepotPath" "."
+		"recursive" "1"
+	}
+}

@@ -1,0 +1,11 @@
+"DepotBuild"
+{
+	"DepotID" "4596233"
+	"ContentRoot" "..\\dist\\steam_linux\\SaborDeEspana-linux-x64\\"
+	"FileMapping"
+	{
+		"LocalPath" "*"
+		"DepotPath" "."
+		"recursive" "1"
+	}
+}

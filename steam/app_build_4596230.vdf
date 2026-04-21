@@ -1,0 +1,13 @@
+"AppBuild"
+{
+	"AppID" "4596230"
+	"Desc" "Build 1.1.0"
+	"ContentRoot" "..\\"
+	"BuildOutput" "build_output\\"
+	"Depots"
+	{
+		"4596231" "depot_build_4596231.vdf"
+		"4596232" "depot_build_4596232.vdf"
+		"4596233" "depot_build_4596233.vdf"
+	}
+}
