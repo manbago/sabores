@@ -785,7 +785,7 @@ button:active {
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    z-index: 200;
+    z-index: 1000;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -985,7 +985,7 @@ p.final-score {
     background: rgba(10, 10, 30, 0.75);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    z-index: 500;
+    z-index: 1000;
     justify-content: center;
     align-items: center;
 }
