@@ -1475,11 +1475,32 @@ function showNotification(title, text, type) {
 
     // Breve animación reinicio
     pop.style.display = 'none';
-    setTimeout(() => { pop.style.display = 'flex'; }, 50);
+    pop.classList.remove('notification-out'); // Limpiar clase de salida
+    setTimeout(() => { 
+        pop.style.display = 'flex'; 
+        
+        // Auto-ocultar tras 2.5s con efecto cool
+        if (pop._hideTimeout) clearTimeout(pop._hideTimeout);
+        pop._hideTimeout = setTimeout(() => {
+            pop.classList.add('notification-out');
+            // Esperar a que termine la animación CSS para ocultar el display
+            setTimeout(() => {
+                if (pop.classList.contains('notification-out')) {
+                    pop.style.display = 'none';
+                    pop.classList.remove('notification-out');
+                }
+            }, 500); // 500ms coincide con la transición CSS
+        }, 2500);
+    }, 50);
 }
 
 function hideNotification() {
-    document.getElementById('notification-popup').style.display = 'none';
+    let pop = document.getElementById('notification-popup');
+    pop.classList.add('notification-out');
+    setTimeout(() => {
+        pop.style.display = 'none';
+        pop.classList.remove('notification-out');
+    }, 500);
 }
 
 // --- MODO EDICIÓN ---
