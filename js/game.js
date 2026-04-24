@@ -1254,8 +1254,20 @@ function usarComodin() {
 
 // --- SABÍAS QUE POPUP ---
 function showSabiasQue(infoText) {
+    const pop = document.getElementById('sabias-que-popup');
+    const stats = document.getElementById('game-stats');
+    
     document.getElementById('sabias-que-text').innerText = infoText || "¿Sabías que la gastronomía española es famosa mundialmente?";
-    document.getElementById('sabias-que-popup').style.display = 'block';
+    
+    // Reposicionamiento dinámico si el HUD de estadísticas ocupa más de una línea (wrap)
+    if (window.innerWidth <= 1024 && stats) {
+        // Ponemos el top del popup 10px por debajo del final del contenedor de stats
+        pop.style.top = (stats.offsetTop + stats.offsetHeight + 10) + 'px';
+    } else {
+        pop.style.top = ''; // Volver al valor de CSS
+    }
+    
+    pop.style.display = 'block';
 }
 
 function closeSabiasQue() {
