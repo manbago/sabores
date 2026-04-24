@@ -11,7 +11,8 @@
     "build:steam:mac": "electron-packager . SaborDeEspana --platform=darwin --arch=x64 --out=dist/steam_mac --app-version=1.0.2 --ignore=dist --overwrite && copy /Y game_actions_4596230.vdf dist\\steam_mac\\SaborDeEspana-darwin-x64\\",
     "build:steam:linux": "electron-packager . SaborDeEspana --platform=linux --arch=x64 --out=dist/steam_linux --app-version=1.0.2 --ignore=dist --overwrite && copy /Y game_actions_4596230.vdf dist\\steam_linux\\SaborDeEspana-linux-x64\\",
     "build:steam:all": "npm run build:steam:win && npm run build:steam:mac && npm run build:steam:linux",
-    "dist": "electron-builder --win"
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux AppImage"
   },
   "build": {
     "appId": "com.manbago.sabordeespana",
@@ -21,6 +22,15 @@
     },
     "win": {
       "target": "nsis",
+      "icon": "assets/images/icon.ico"
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Game",
+      "executableName": "SaborDeEspana"
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
       "icon": "assets/images/icon.ico"
     },
     "nsis": {

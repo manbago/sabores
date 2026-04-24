@@ -22,24 +22,29 @@ try {
     console.log("Steamworks API initialized successfully.");
 } catch (e) {
     console.warn("Steamworks API could not be initialized:", e);
-}
-
 function createWindow() {
+    // Detectar si estamos en Steam Deck (Linux)
+    const isSteamDeck = process.platform === 'linux';
+
     // Definimos las características de la ventana del juego
     const win = new BrowserWindow({
-        width: 1920,
-        height: 1080,
+        width: 1280,
+        height: 800, // Steam Deck Native Resolution
         minWidth: 1024,
         minHeight: 576,
-        fullscreen: !isDev, // Fullscreen en producción para Steam
+        fullscreen: !isDev || isSteamDeck, // Fullscreen en producción o Steam Deck
         autoHideMenuBar: true, // Oculta la barra nativa
+        backgroundColor: '#000000', // Fondo negro para transiciones suaves
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false, // Permite comunicarnos desde JS al main
+            contextIsolation: false, // Permite comunicarnos desde JS al main (mantenemos compatibilidad actual)
             devTools: isDev, // Desactivar inspector en el build final
             backgroundThrottling: false // No pausar el juego si se minimiza o pierde foco
         }
     });
+
+    // Desactivar zoom accidental (importante para Deck)
+    win.webContents.setVisualZoomLevelLimits(1, 1);
 
     // Cargar el HTML principal
     win.loadFile('index.html');
