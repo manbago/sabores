@@ -22,6 +22,8 @@ try {
     console.log("Steamworks API initialized successfully.");
 } catch (e) {
     console.warn("Steamworks API could not be initialized:", e);
+}
+
 function createWindow() {
     // Detectar si estamos en Steam Deck (Linux)
     const isSteamDeck = process.platform === 'linux';
