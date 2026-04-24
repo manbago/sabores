@@ -119,7 +119,7 @@ const game = new Phaser.Game(config);
 
 function preload() {
     // Assets finales
-    this.load.image('mapa_espana', 'assets/images/mapa-blanco_cut.png');
+    this.load.image('mapa_espana', 'assets/images/mapa-reduce.png');
     this.load.image('bull_launcher', 'assets/images/bull_launcher.png');
     this.load.json('proximosDatos', 'data/provincesData.json');
 
@@ -220,6 +220,20 @@ function create() {
     const mapContainer = this.add.container(0, verticalOffset);
     this.mapContainer = mapContainer;
 
+    const mapZoomContainer = this.add.container(0, 0);
+    mapContainer.add(mapZoomContainer);
+    this.mapZoomContainer = mapZoomContainer;
+
+    // --- ESCALADO EXTRA PARA MÓVILES ---
+    let mobileScale = 1.0;
+    if (window.innerWidth < window.innerHeight || window.innerWidth <= 1024) {
+        mobileScale = 1.35; // Un 35% más grande en móviles/tablets
+        mapZoomContainer.setScale(mobileScale);
+        mapZoomContainer.x = 960 * (1 - mobileScale);
+        // Empujamos el mapa lo más abajo posible (+160px aprox)
+        mapZoomContainer.y = 540 * (1 - mobileScale) + 160;
+    }
+
     // Fondo / Mapa decorativo
     let mapBg = this.add.image(960 + MAP_OFFSET_X, 540, 'mapa_espana');
     this.map = mapBg; // Referencia para debug
@@ -227,7 +241,7 @@ function create() {
     let scale = 1080 / mapBg.height;
     mapBg.setScale(scale);
     mapBg.setDepth(-10);
-    mapContainer.add(mapBg);
+    mapZoomContainer.add(mapBg);
 
     // Dibujar provincias como textos interactivos
     provincesData.forEach((prov, i) => {
@@ -243,7 +257,7 @@ function create() {
         }).setOrigin(0.5);
 
         pGroup.add(text);
-        mapContainer.add(pGroup);
+        mapZoomContainer.add(pGroup);
 
         // Área interactiva reducida para mayor precisión y menor solapamiento
         let w = text.width + 20; // Hitbox ajustado (10px padding por lado)
@@ -367,7 +381,8 @@ function create() {
 
     // Lo situamos al final del canvas + un offset dinámico para PC vs Mobile
     let bottomOffset = (window.innerWidth <= 1024) ? 110 : 60;
-    launcher = this.add.container(1015 + MAP_OFFSET_X, canvasHeight + bottomOffset); 
+    // Un poco más a la derecha del centro de Málaga (x=800)
+    launcher = this.add.container(800 + MAP_OFFSET_X, canvasHeight + bottomOffset); 
     let bullBot = this.add.sprite(0, bullOffsetY, 'bull_launcher');
     this.bull = bullBot; // Referencia para debug
     bullBot.setDisplaySize(bullSize, bullSize);
@@ -791,23 +806,27 @@ function shootAt(targetProv, targetSprite) {
         ease: 'Quad.easeOut'
     });
 
+    // Calcular coordenadas destino absolutas (teniendo en cuenta el zoom en móvil)
+    let destX = scene.mapZoomContainer.x + (targetProv.x + MAP_OFFSET_X) * scene.mapZoomContainer.scaleX;
+    let destY = scene.mapContainer.y + scene.mapZoomContainer.y + targetProv.y * scene.mapZoomContainer.scaleY;
+
     // Animación unificada del proyectil (Horizontal, Escala y Rotación)
     scene.tweens.add({
         targets: projectile,
-        x: targetProv.x + MAP_OFFSET_X,
+        x: destX,
         scaleX: 0.2, 
         scaleY: 0.2,
         angle: 720,
         duration: 1500,
         ease: 'Linear',
         onComplete: () => {
-            checkResult(targetProv, targetSprite, scene);
+            checkResult(targetProv, targetSprite, scene, destX, destY);
         }
     });
 
     // Parábola (Vertical): Sube a un punto pico y luego baja al objetivo real con offset
-    let peakY = (targetProv.y + scene.currentVerticalOffset) - 300;
-    let finalY = targetProv.y + scene.currentVerticalOffset;
+    let peakY = destY - 300;
+    let finalY = destY;
 
     scene.tweens.add({
         targets: projectile,
@@ -826,14 +845,14 @@ function shootAt(targetProv, targetSprite) {
     });
 }
 
-function checkResult(selectedProv, targetSprite, scene) {
+function checkResult(selectedProv, targetSprite, scene, destX, destY) {
     // --- DESAPARICIÓN INMEDIATA Y EFECTO DE IMPACTO ---
     if (projectile.trail) projectile.trail.destroy();
     if (projectile) projectile.destroy();
     if (projectileMaskGraphics) projectileMaskGraphics.destroy();
 
     // Partículas de "estallido" (Shatter effect) en la posición real del mapa
-    let shatter = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y + scene.currentVerticalOffset, 'circle', {
+    let shatter = scene.add.particles(destX, destY, 'circle', {
         color: [0x000000, 0x333333],
         speed: { min: 50, max: 150 },
         scale: { start: 0.3, end: 0 },
@@ -865,7 +884,7 @@ function checkResult(selectedProv, targetSprite, scene) {
         // Popup SWISH!
         const swishMessages = ['\u00A1SWISH! \uD83C\uDF89', '\uD83D\uDC4F \u00A1Ole!', '\uD83E\uDD73 \u00A1Bien!', '\uD83C\uDF55 \u00A1Correcto!'];
         const swishMsg = swishMessages[aciertos % swishMessages.length];
-        let swishText = scene.add.text(selectedProv.x + MAP_OFFSET_X, selectedProv.y + (scene.currentVerticalOffset || 0) - 50, swishMsg, {
+        let swishText = scene.add.text(destX, destY - 50, swishMsg, {
             fontFamily: 'Fredoka One', fontSize: '52px', color: '#06d6a0',
             stroke: '#073b4c', strokeThickness: 8
         }).setOrigin(0.5).setDepth(30);
@@ -877,14 +896,14 @@ function checkResult(selectedProv, targetSprite, scene) {
         });
 
         // Confeti de colores en partículas — permanece en el mapa como celebración
-        let particles = scene.add.particles(selectedProv.x + MAP_OFFSET_X, selectedProv.y + (scene.currentVerticalOffset || 0), 'circle', {
+        let particles = scene.add.particles(destX, destY, 'circle', {
             color: [0x000000, 0xffd166, 0xef476f, 0x118ab2],
             colorRandom: true,
             speed: { min: 20, max: 60 },
             angle: { min: 0, max: 360 },
-            scale: { start: 0.4, end: 0 },
-            lifespan: 1400,
-            quantity: 14,
+            scale: { start: 0.15, end: 0 },
+            lifespan: 1500,
+            quantity: 30,
             blendMode: 'NORMAL'
         });
 
@@ -1243,8 +1262,8 @@ function closeSabiasQue() {
     document.getElementById('sabias-que-popup').style.display = 'none';
     // Reajustar posición de notificación si existe en móvil
     const pop = document.getElementById('notification-popup');
-    if (window.innerWidth <= 768) {
-        pop.style.top = ''; // Volver al CSS (85px)
+    if (window.innerWidth <= 1024) {
+        pop.style.top = ''; // Volver al CSS (180px)
     }
 }
 
@@ -1445,7 +1464,7 @@ function showNotification(title, text, type) {
 
     // Reposicionamiento dinámico en móvil si el "Sabías que" está abierto
     const sabiasPop = document.getElementById('sabias-que-popup');
-    if (window.innerWidth <= 768 && sabiasPop && sabiasPop.style.display === 'block') {
+    if (window.innerWidth <= 1024 && sabiasPop && sabiasPop.style.display === 'block') {
         const rect = sabiasPop.getBoundingClientRect();
         // Ponemos el top de la notificación después del final del popup de sabias que
         // (En móvil ambos suelen estar a left: 10px, right: 10px)

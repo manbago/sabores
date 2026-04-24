@@ -339,7 +339,7 @@ body, html {
 }
 
 /* Ocultar el logo en pantallas estrechas */
-@media (max-width: 1199px) {
+@media (max-width: 1024px) {
     #game-logo {
         display: none;
     }
@@ -1135,8 +1135,8 @@ p.final-score {
     }
 }
 
-/* Móvil (hasta 768px) */
-@media screen and (max-width: 768px) {
+/* Móvil / Tablet Unificado (hasta 1024px) */
+@media screen and (max-width: 1024px) {
     /* Pegar abajo para que el Toro toque la línea dorada */
     #game-container {
         height: 75vh;
@@ -1180,53 +1180,73 @@ p.final-score {
     .vidas-box .icon-active, .vidas-box .icon-spent { font-size: 12px; }
     .score-points { font-size: 14px; gap: 4px; }
 
-    /* Dashboard Compacto */
-    #dashboard {
-        padding: 8px 16px;
-        gap: 15px;
-        max-width: 95%;
-        border-width: 4px;
-        box-shadow: 4px 4px 0px #2b2d42;
-    }
-    
-    .food-preview {
-        width: 70px; height: 70px;
-        border-width: 4px;
-    }
-    
-    .highlight-food {
-        font-size: 22px;
-    }
-    
-    .dash-title { font-size: 9px; padding: 1px 8px; }
-    .dash-subtitle { font-size: 9px; }
-
-    /* Popups adaptados */
+    /* Popups adaptados - Posición Base 1024px */
     #sabias-que-popup {
         width: auto;
         left: 10px;
         right: 10px;
         top: 82px; /* Tablet */
-        padding: 6px 10px;
+        padding: 8px 12px;
         border-width: 3px;
+        z-index: 9999;
     }
-    @media screen and (max-width: 480px) {
-        #sabias-que-popup { top: 90px; } /* Móvil */
-    }
-    #sabias-que-title { font-size: 13px; margin-bottom: 0px; }
-    #sabias-que-text { font-size: 12px; line-height: 1.1; }
-    #sabias-que-close { width: 24px; height: 24px; font-size: 12px; top: -8px; right: -8px; }
+    #sabias-que-title { font-size: 15px; margin-bottom: 4px; }
+    #sabias-que-text { font-size: 13px; line-height: 1.2; }
+    #sabias-que-close { width: 28px; height: 28px; font-size: 14px; top: -10px; right: -10px; }
     
     #notification-popup {
         width: fit-content;
         min-width: 180px;
         max-width: 280px;
         left: 10px;
-        top: auto !important; /* Sobreescribir JS inline top */
-        bottom: 27vh; /* Justo por encima de la zona baja del dashboard, última frontera del canvas blanco */
+        top: 180px; /* Base superior segura */
+        bottom: auto; /* Anulamos bottom */
         padding: 8px 12px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 9999;
     }
+}
+
+/* Móvil Estricto (hasta 768px) - Reducción de elementos */
+@media screen and (max-width: 768px) {
+    /* Dashboard Compacto */
+    #dashboard {
+        padding: 6px 12px;
+        gap: 10px;
+        max-width: 95%;
+        border-width: 4px;
+        box-shadow: 4px 4px 0px #2b2d42;
+    }
+    
+    .food-preview {
+        width: 60px; height: 60px;
+        border-width: 3px;
+    }
+    
+    .highlight-food {
+        font-size: 18px;
+    }
+    
+    .dash-title { font-size: 9px; padding: 1px 6px; }
+    .dash-subtitle { font-size: 9px; }
+
+    /* Popups más pequeños (alturas reducidas) */
+    #sabias-que-popup { 
+        top: 90px; 
+        padding: 6px 10px; 
+    } 
+
+    #notification-popup {
+        padding: 4px 8px; /* Casi sin padding vertical para ajustarse al icono */
+        min-width: 160px;
+        border-radius: 12px;
+        gap: 8px;
+    }
+    #notification-avatar {
+        width: 36px; height: 36px; /* Icono más pequeño en móvil */
+    }
+    .notification-title { font-size: 12px; }
+    .notification-msg   { font-size: 11px; }
     
     /* Botones de control */
     .audio-btn, #fullscreen-btn {
@@ -1258,8 +1278,8 @@ p.final-score {
         font-size: 20px;
     }
     #restart-btn::after {
-        content: "🏃"; /* Icono para salir */
-        font-size: 20px;
+        content: "✖"; /* Icono de aspa para salir */
+        font-size: 22px;
     }
 
     /* Ubicación base (cuando no hay sabías-que, no afecta visualmente en altura) */
@@ -1284,8 +1304,9 @@ p.final-score {
    NEON LOADER (Cargando Platos)
    ======================== */
 .neon-loader {
-    width: 80px;
-    height: 80px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
     border-radius: 50%;
     border: 6px solid transparent;
     border-top-color: #ffd166;
