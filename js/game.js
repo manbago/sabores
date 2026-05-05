@@ -1255,7 +1255,8 @@ function usarComodin() {
     if (game && game.canvas) game.canvas.focus();
 }
 
-// --- SABÍAS QUE POPUP ---
+let sabiasQueTimeout = null;
+
 function showSabiasQue(infoText) {
     const pop = document.getElementById('sabias-que-popup');
     const stats = document.getElementById('game-stats');
@@ -1271,9 +1272,15 @@ function showSabiasQue(infoText) {
     }
     
     pop.style.display = 'block';
+
+    if (sabiasQueTimeout) clearTimeout(sabiasQueTimeout);
+    sabiasQueTimeout = setTimeout(() => {
+        closeSabiasQue();
+    }, 8000);
 }
 
 function closeSabiasQue() {
+    if (sabiasQueTimeout) clearTimeout(sabiasQueTimeout);
     document.getElementById('sabias-que-popup').style.display = 'none';
     // Reajustar posición de notificación si existe en móvil
     const pop = document.getElementById('notification-popup');
