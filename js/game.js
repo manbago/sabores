@@ -1281,11 +1281,18 @@ function showSabiasQue(infoText) {
 
 function closeSabiasQue() {
     if (sabiasQueTimeout) clearTimeout(sabiasQueTimeout);
-    document.getElementById('sabias-que-popup').style.display = 'none';
-    // Reajustar posición de notificación si existe en móvil
-    const pop = document.getElementById('notification-popup');
-    if (window.innerWidth <= 1024) {
-        pop.style.top = ''; // Volver al CSS (180px)
+    const popup = document.getElementById('sabias-que-popup');
+    if (popup.style.display !== 'none') {
+        popup.classList.add('sabias-que-closing');
+        setTimeout(() => {
+            popup.style.display = 'none';
+            popup.classList.remove('sabias-que-closing');
+            // Reajustar posición de notificación si existe en móvil
+            const notif = document.getElementById('notification-popup');
+            if (window.innerWidth <= 1024) {
+                notif.style.top = ''; // Volver al CSS (180px)
+            }
+        }, 300); // Esperar que termine la animación
     }
 }
 

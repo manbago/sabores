@@ -872,6 +872,16 @@ p.final-score {
     100% { transform: scale(1); opacity: 1; }
 }
 
+.sabias-que-closing {
+    animation: pop-out 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards !important;
+}
+
+@keyframes pop-out {
+    0%   { transform: scale(1); opacity: 1; }
+    40%  { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
 #sabias-que-title {
     font-family: 'Fredoka One', cursive;
     color: #ef476f;
