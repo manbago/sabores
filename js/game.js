@@ -493,6 +493,9 @@ function create() {
         if (this.input.gamepad.total === 0) {
             const ind = document.getElementById('gamepad-indicator');
             if (ind) ind.style.display = 'none';
+            if (typeof gameStarted !== 'undefined' && gameStarted && document.getElementById('main-menu-screen').classList.contains('hidden') && !window.isPaused) {
+                if (typeof window.togglePause === 'function') window.togglePause();
+            }
         }
     });
 

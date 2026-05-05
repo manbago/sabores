@@ -16,6 +16,7 @@ let steamClient = null;
 try {
     const steamworks = require('steamworks.js');
     steamClient = steamworks.init(4596230);
+    steamworks.electronEnableSteamOverlay();
     // Make steamworks available globally so we can check it in renderer
     global.steamworks = steamworks;
     global.steamClient = steamClient;
