@@ -4,3 +4,14 @@ package-lock.json
 .DS_Store
 *.log
 steam/build_output/
+
+# Steam page backups, videos and heavy raw assets
+Steam Page/dist-backups/
+Steam Page/Sabores-VIDEOS/
+Steam Page/Sabores-IMG/
+*.psd
+*.zip
+*.mp4
+*.jnlp
+*.met
+

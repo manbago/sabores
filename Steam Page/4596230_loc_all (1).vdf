@@ -1,0 +1,423 @@
+"lang"
+{
+	"english"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"german"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"french"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"italian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"korean"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"spanish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Primer Bocado"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Juega tu primera partida de Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Racha de Sabor"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Acierta 5 platos de forma consecutiva (sin perder vidas)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Chef Experto"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Acierta 10 platos de forma consecutiva."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Leyenda Culinaria de España"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Domina por completo el mapa y acierta los 52 platos."
+		}
+	}
+	"schinese"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"tchinese"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"russian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"thai"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"japanese"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"portuguese"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"polish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"danish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"dutch"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"finnish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"norwegian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"swedish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"hungarian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"czech"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"romanian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"turkish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"arabic"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"brazilian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"bulgarian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"greek"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"ukrainian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"vietnamese"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"latam"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+	"indonesian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	""
+			"NEW_ACHIEVEMENT_1_0_DESC"	""
+			"NEW_ACHIEVEMENT_1_1_NAME"	""
+			"NEW_ACHIEVEMENT_1_1_DESC"	""
+			"NEW_ACHIEVEMENT_1_2_NAME"	""
+			"NEW_ACHIEVEMENT_1_2_DESC"	""
+			"NEW_ACHIEVEMENT_1_3_NAME"	""
+			"NEW_ACHIEVEMENT_1_3_DESC"	""
+		}
+	}
+}

@@ -1,0 +1,423 @@
+"lang"
+{
+	"english"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"First Bite"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Play your first game of Taste of Spain."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Flavor Streak"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Identify 5 dishes in a row (without losing lives)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Expert Chef"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Identify 10 dishes in a row."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Spanish Culinary Legend"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Completely master the map and identify all 52 dishes."
+		}
+	}
+	"german"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Erster Bissen"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Spiele deine erste Runde Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Geschmackssträhne"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Errate 5 Gerichte hintereinander (ohne Leben zu verlieren)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Meisterkoch"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Errate 10 Gerichte hintereinander."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Kulinarische Legende Spaniens"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Beherrsche die Karte vollständig und errate alle 52 Gerichte."
+		}
+	}
+	"french"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Première Bouchée"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Jouez votre première partie de Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Série de Saveurs"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Réussissez 5 plats consécutifs (sans perdre de vies)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Chef Expert"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Réussissez 10 plats consécutifs."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Légende Culinaire d'Espagne"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Maîtrisez totalement la carte et trouvez les 52 plats."
+		}
+	}
+	"italian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Primo Boccone"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Gioca la tua prima partita a Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Serie di Sapori"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Indovina 5 piatti consecutivamente (senza perdere vite)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Chef Esperto"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Indovina 10 piatti consecutivamente."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Leggenda Culinaria di Spagna"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Domina completamente la mappa e indovina tutti i 52 piatti."
+		}
+	}
+	"korean"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"첫 한 입"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Sabor de España를 처음으로 플레이하세요."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"맛의 연속"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"생명을 잃지 않고 5개의 요리를 연속으로 맞히세요."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"전문 셰프"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"10개의 요리를 연속으로 맞히세요."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"스페인 요리의 전설"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"지도를 완전히 정복하고 52개의 요리를 모두 맞히세요."
+		}
+	}
+	"spanish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Primer Bocado"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Juega tu primera partida de Sabor de España." [cite: 1]
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Racha de Sabor"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Acierta 5 platos de forma consecutiva (sin perder vidas)." [cite: 1]
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Chef Experto"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Acierta 10 platos de forma consecutiva." [cite: 2]
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Leyenda Culinaria de España"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Domina por completo el mapa y acierta los 52 platos." [cite: 2]
+		}
+	}
+	"schinese"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"第一口"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"开始你的第一局 Sabor de España。"
+			"NEW_ACHIEVEMENT_1_1_NAME"	"美味连击"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"连续猜对 5 道菜（不失去生命）。"
+			"NEW_ACHIEVEMENT_1_2_NAME"	"专家厨师"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"连续猜对 10 道菜。"
+			"NEW_ACHIEVEMENT_1_3_NAME"	"西班牙烹饪传奇"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"完全掌握地图并猜对所有 52 道菜。"
+		}
+	}
+	"tchinese"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"第一口"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"開始你的第一局 Sabor de España。"
+			"NEW_ACHIEVEMENT_1_1_NAME"	"美味連擊"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"連續猜對 5 道菜（不失去生命）。"
+			"NEW_ACHIEVEMENT_1_2_NAME"	"專家廚師"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"連續猜對 10 道菜。"
+			"NEW_ACHIEVEMENT_1_3_NAME"	"西班牙烹飪傳奇"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"完全掌握地圖並猜對所有 52 道菜。"
+		}
+	}
+	"russian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Первый кусочек"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Сыграйте свою первую партию в Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Вкусная серия"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Угадайте 5 блюд подряд (не теряя жизней)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Шеф-эксперт"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Угадайте 10 блюд подряд."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Кулинарная легенда Испании"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Полностью освойте карту и угадайте все 52 блюда."
+		}
+	}
+	"thai"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"คำแรก"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"เล่นเกม Sabor de España ครั้งแรกของคุณ"
+			"NEW_ACHIEVEMENT_1_1_NAME"	"รสชาติพุ่งพล่าน"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"ทายชื่ออาหารติดต่อกัน 5 จาน (โดยไม่เสียชีวิต)"
+			"NEW_ACHIEVEMENT_1_2_NAME"	"เชฟผู้เชี่ยวชาญ"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"ทายชื่ออาหารติดต่อกัน 10 จาน"
+			"NEW_ACHIEVEMENT_1_3_NAME"	"ตำนานการปรุงอาหารแห่งสเปน"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"พิชิตแผนที่โดยสมบูรณ์และทายชื่ออาหารครบทั้ง 52 จาน"
+		}
+	}
+	"japanese"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"最初の一口"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Sabor de Españaを初めてプレイする。"
+			"NEW_ACHIEVEMENT_1_1_NAME"	"味覚の連勝"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"ライフを失わずに5皿連続で正解する。"
+			"NEW_ACHIEVEMENT_1_2_NAME"	"エキスパートシェフ"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"10皿連続で正解する。"
+			"NEW_ACHIEVEMENT_1_3_NAME"	"スペイン料理の伝説"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"マップを完全にマスターし、全52皿を正解する。"
+		}
+	}
+	"portuguese"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Primeira Mordida"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Jogue a sua primeira partida de Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Sequência de Sabor"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Acerte 5 pratos consecutivamente (sem perder vidas)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Chef Especialista"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Acerte 10 pratos consecutivamente."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Lenda Culinária da Espanha"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Domine o mapa completamente e acerte todos os 52 pratos."
+		}
+	}
+	"polish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Pierwszy Kęs"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Zagraj swoją pierwszą partię w Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Seria Smaków"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Odgadnij 5 potraw z rzędu (nie tracąc życia)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Ekspert Kuchni"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Odgadnij 10 potraw z rzędu."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Kulinarna Legenda Hiszpanii"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Opanuj mapę w całości i odgadnij wszystkie 52 potrawy."
+		}
+	}
+	"danish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Første Bid"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Spil din første kamp i Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Smagsstribe"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Gæt 5 retter i træk (uden at miste liv)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Ekspertkok"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Gæt 10 retter i træk."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Spaniens Kulinariske Legende"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Mestr kortet fuldstændigt og gæt alle 52 retter."
+		}
+	}
+	"dutch"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Eerste Hap"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Speel je eerste potje Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Smaakreeks"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Raad 5 gerechten achter elkaar (zonder levens te verliezen)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Expert Chef"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Raad 10 gerechten achter elkaar."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Culinaire Legende van Spanje"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Beheers de kaart volledig en raad alle 52 gerechten."
+		}
+	}
+	"finnish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Ensimmäinen Puraisu"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Pelaa ensimmäinen eräsi Sabor de España -peliä."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Makuputki"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Tunnista 5 annosta peräkkäin (menettämättä elämiä)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Eksperttikokki"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Tunnista 10 annosta peräkkäin."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Espanjan Ruokakulttuurin Legenda"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Hallitse kartta täysin ja tunnista kaikki 52 annosta."
+		}
+	}
+	"norwegian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Første Bit"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Spill din første runde med Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Smaksrekke"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Gjett 5 retter på rad (uten å miste liv)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Ekspertkokk"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Gjett 10 retter på rad."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Spanias Kulinariske Legende"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Mestre kartet fullstendig og gjett alle 52 rettene."
+		}
+	}
+	"swedish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Första Tuggan"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Spela din första match i Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Smaksvit"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Gissa rätt på 5 rätter i rad (utan att förlora liv)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Expertkock"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Gissa rätt på 10 rätter i rad."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Spaniens Kulinariska Legend"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Bemästra kartan helt och gissa rätt på alla 52 rätter."
+		}
+	}
+	"hungarian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Első Falat"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Játszd le az első Sabor de España meccsedet."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Ízsorozat"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Találj el 5 ételt egymás után (életvesztés nélkül)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Szakértő Séf"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Találj el 10 ételt egymás után."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Spanyolország Gasztrolegendája"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Urald teljesen a térképet és találd el mind az 52 ételt."
+		}
+	}
+	"czech"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"První Sousto"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Zahrajte si svou první hru Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Chuťová Série"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Uhodněte 5 jídel v řadě (bez ztráty života)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Expert Chef"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Uhodněte 10 jídel v řadě."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Kulinářská Legenda Španělska"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Zcela ovládněte mapu a uhodněte všech 52 jídel."
+		}
+	}
+	"romanian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Prima Îmbucătură"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Joacă prima ta partidă de Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Serie de Gusturi"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Ghicește 5 preparate consecutiv (fără a pierde vieți)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Chef Expert"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Ghicește 10 preparate consecutiv."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Legendă Culinară a Spaniei"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Stăpânește complet harta și ghicește toate cele 52 de preparate."
+		}
+	}
+	"turkish"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"İlk Lokma"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"İlk Sabor de España oyununu oyna."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Lezzet Serisi"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Üst üste 5 yemeği doğru bil (can kaybetmeden)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Uzman Şef"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Üst üste 10 yemeği doğru bil."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"İspanya'nın Mutfak Efsanesi"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Haritaya tamamen hakim ol ve 52 yemeğin tamamını doğru bil."
+		}
+	}
+	"arabic"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"القضمة الأولى"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"العب أول مباراة لك في نكهة إسبانيا."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"سلسلة النكهات"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"خمن 5 أطباق بشكل متتالٍ (دون خسارة أرواح)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"شيف خبير"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"خمن 10 أطباق بشكل متتالٍ."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"أسطورة الطهي في إسبانيا"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"أتقن الخريطة تماماً وخمن جميع الأطباق الـ 52."
+		}
+	}
+	"brazilian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Primeira Mordida"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Jogue sua primeira partida de Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Sequência de Sabor"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Acerte 5 pratos consecutivamente (sem perder vidas)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Chef Especialista"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Acerte 10 pratos consecutivamente."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Lenda Culinária da Espanha"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Domine o mapa completamente e acerte todos os 52 pratos."
+		}
+	}
+	"bulgarian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Първа хапка"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Изиграйте първата си игра на Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Вкусова серия"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Познайте 5 ястия поред (без да губите животи)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Шеф експерт"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Познайте 10 ястия поред."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Кулинарна легенда на Испания"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Овладейте напълно картата и познайте всички 52 ястия."
+		}
+	}
+	"greek"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Πρώτη Μπουκιά"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Παίξτε την πρώτη σας παρτίδα Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Σερί Γεύσης"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Βρείτε 5 πιάτα στη σειρά (χωρίς να χάσετε ζωές)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Έμπειρος Σεφ"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Βρείτε 10 πιάτα στη σειρά."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Γαστρονομικός Θρύλος της Ισπανίας"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Κυριαρχήστε πλήρως στον χάρτη και βρείτε και τα 52 πιάτα."
+		}
+	}
+	"ukrainian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Перший шматочок"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Зіграйте свою першу партію в Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Смакова серія"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Відгадайте 5 страв поспіль (не втрачаючи життів)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Шеф-експерт"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Відгадайте 10 страв поспіль."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Кулінарна легенда Іспанії"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Повністю опануйте карту та відгадайте всі 52 страви."
+		}
+	}
+	"vietnamese"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Miếng Ăn Đầu Tiên"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Chơi ván đầu tiên của Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Chuỗi Hương Vị"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Đoán đúng 5 món liên tiếp (mà không mất mạng)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Đầu Bếp Chuyên Nghiệp"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Đoán đúng 10 món liên tiếp."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Huyền Thoại Ẩm Thực Tây Ban Nha"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Làm chủ hoàn toàn bản đồ và đoán đúng tất cả 52 món ăn."
+		}
+	}
+	"latam"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Primer Bocado"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Juega tu primera partida de Sabor de España."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Racha de Sabor"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Acerta 5 platos de forma consecutiva (sin perder vidas)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Chef Experto"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Acerta 10 platos de forma consecutiva."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Leyenda Culinaria de España"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Domina por completo el mapa y acerta los 52 platos."
+		}
+	}
+	"indonesian"
+	{
+		"Tokens"
+		{
+			"NEW_ACHIEVEMENT_1_0_NAME"	"Suapan Pertama"
+			"NEW_ACHIEVEMENT_1_0_DESC"	"Mainkan sesi pertama Sabor de España Anda."
+			"NEW_ACHIEVEMENT_1_1_NAME"	"Rentetan Rasa"
+			"NEW_ACHIEVEMENT_1_1_DESC"	"Tebak 5 hidangan berturut-turut (tanpa kehilangan nyawa)."
+			"NEW_ACHIEVEMENT_1_2_NAME"	"Koki Ahli"
+			"NEW_ACHIEVEMENT_1_2_DESC"	"Tebak 10 hidangan berturut-turut."
+			"NEW_ACHIEVEMENT_1_3_NAME"	"Legenda Kuliner Spanyol"
+			"NEW_ACHIEVEMENT_1_3_DESC"	"Kuasai peta sepenuhnya dan tebak ke-52 hidangan."
+		}
+	}
+}
